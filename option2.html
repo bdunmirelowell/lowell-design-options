@@ -1,0 +1,426 @@
+<title>Lowell — Golden Hour</title>
+<style>
+  @font-face { font-family: 'Lowell Serif'; src: url(assets/fonts/El-Hidrant-Regular.otf) format('opentype'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Lowell Swash'; src: url(assets/fonts/El-Hidrant-Swash.otf) format('opentype'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Lowell Caps'; src: url(assets/fonts/GothamCondensed-Book.otf) format('opentype'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Lowell Caps'; src: url(assets/fonts/GothamCondensed-Medium.otf) format('opentype'); font-weight: 500; font-display: swap; }
+  @font-face { font-family: 'Lowell Caps'; src: url(assets/fonts/GothamCondensed-Bold.otf) format('opentype'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Lowell Mono'; src: url(assets/fonts/Nitti-Normal.ttf) format('opentype'); font-weight: 400; font-display: swap; }
+  :root {
+    
+    --serif: 'Lowell Serif', "Iowan Old Style", Palatino, Georgia, serif;
+    --swash: 'Lowell Swash', 'Lowell Serif', Georgia, serif;
+    --caps: 'Lowell Caps', Futura, "Avenir Next", sans-serif;
+    --mono: 'Lowell Mono', "SF Mono", ui-monospace, monospace;
+
+    --sun: #F6EFDF;
+    --sun-2: #EFE5CC;
+    --gold: #C89B4B;
+    --ink: #35291A;
+    --ink-soft: #7A6A50;
+    --red: #A5301F;
+    --olive: #6B7350;
+    --line: #DFD3B4;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--sun); color: var(--ink); font-family: var(--serif); font-size: 17.5px; line-height: 1.65; }
+  img { display: block; max-width: 100%; }
+  .caps { font-family: var(--caps); text-transform: uppercase; letter-spacing: 0.3em; font-size: 12px; font-weight: 500; }
+  .mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; }
+
+  /* grain */
+  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 5; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.19 0 0 0 0 0.11 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  .gate { position: fixed; inset: 0; z-index: 90; background: rgba(53,41,26,0.55); backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .gate.hidden { display: none; }
+  .gate-card { background: var(--sun); border: 1px solid var(--line); max-width: 430px; width: 100%;
+    padding: 46px 40px 36px; text-align: center; box-shadow: 0 30px 80px rgba(40,28,12,0.35); border-radius: 200px 200px 0 0; }
+  .gate-card .caps { color: var(--gold); }
+  .gate-card h2 { font-size: 30px; font-weight: 400; margin: 12px 0 10px; }
+  .gate-card p { font-size: 14px; color: var(--ink-soft); margin: 0 0 24px; }
+  .btn { font-family: var(--caps); text-transform: uppercase; letter-spacing: 0.18em; font-size: 12px; font-weight: 500;
+    padding: 14px 26px; cursor: pointer; border: 1px solid var(--ink); background: transparent; color: var(--ink); border-radius: 999px; }
+  .btn.primary { background: var(--ink); color: var(--sun); }
+  .btn.primary:hover { background: var(--red); border-color: var(--red); }
+  .btn:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+  nav { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 36px; background: color-mix(in srgb, var(--sun) 88%, transparent); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line); }
+  .wordmark { font-family: var(--swash); font-size: 30px; color: var(--red); }
+  .navlinks { display: flex; gap: 30px; }
+  .navlinks a { color: var(--ink); text-decoration: none; font-size: 16px; }
+  .navlinks a:hover { color: var(--red); }
+  @media (max-width: 760px) { .navlinks { display: none; } }
+
+  /* HERO — parallax */
+  .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end;
+    overflow: clip; }
+  .hero .media { position: absolute; inset: 0; }
+  .hero .media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; transform: scale(1.08); }
+  .hero::before { content: ""; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(8deg, rgba(46,32,14,0.72) 0%, rgba(46,32,14,0.18) 44%, rgba(46,32,14,0) 72%); }
+  .hero-copy { position: relative; z-index: 2; padding: 0 6vw 9vh; max-width: 900px; }
+  .hero-copy .caps { color: #EAD9AE; }
+  .hero h1 { font-family: var(--serif); font-size: clamp(46px, 7vw, 104px); font-weight: 400; line-height: 0.98;
+    color: #FBF6E9; margin: 18px 0 22px; text-wrap: balance; }
+  .hero h1 .sw { font-family: var(--swash); color: #EAD9AE; }
+  .hero .sub { color: rgba(251,246,233,0.9); font-size: 19px; max-width: 52ch; margin: 0 0 32px; }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; padding-bottom: 4px; }
+  .hero-ctas .btn { border-color: #FBF6E9; color: #FBF6E9; }
+  .hero-ctas .btn.primary { background: #FBF6E9; color: var(--ink); border-color: #FBF6E9; }
+  .hero-ctas .btn.primary:hover { background: var(--gold); border-color: var(--gold); color: #2E2010; }
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hero .media img { animation: heroDrift linear both; animation-timeline: scroll(); animation-range: 0 120vh; }
+      @keyframes heroDrift { from { transform: scale(1.08) translateY(0); } to { transform: scale(1.14) translateY(6%); } }
+    }
+  }
+
+  .purpose { text-align: center; padding: 110px 24px 96px; max-width: 860px; margin: 0 auto; }
+  .purpose .caps { color: var(--gold); }
+  .purpose h2 { font-size: clamp(30px, 4.4vw, 54px); font-weight: 400; line-height: 1.14; margin: 20px 0 0; text-wrap: balance; }
+  .purpose h2 .sw { font-family: var(--swash); color: var(--red); }
+
+  .band { border-top: 1px solid var(--line); }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 96px 36px; }
+  .sect-head { max-width: 720px; margin-bottom: 54px; }
+  .sect-head .caps { color: var(--red); }
+  h2.title { font-size: clamp(30px, 3.6vw, 46px); font-weight: 400; line-height: 1.1; margin: 12px 0 14px; text-wrap: balance; }
+  .lede { font-size: 18px; color: var(--ink-soft); }
+
+  .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+  .pillar { border-top: 1px solid var(--ink); padding-top: 18px; }
+  .pillar .num { font-family: var(--mono); font-size: 12px; color: var(--gold); }
+  .pillar h3 { font-family: var(--caps); text-transform: uppercase; letter-spacing: 0.14em; font-size: 15px; font-weight: 700; margin: 10px 0 10px; }
+  .pillar p { font-size: 15px; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 980px) { .pillars { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .pillars { grid-template-columns: 1fr; } }
+
+  /* States — arches */
+  .blends-band { background: var(--sun-2); }
+  .blends { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
+  .blend { text-align: center; background: var(--sun); border: 1px solid var(--line);
+    border-radius: 200px 200px 0 0; padding: 0 20px 24px; overflow: hidden; transition: transform 0.25s ease; }
+  .blend:hover { transform: translateY(-5px); }
+  .blend .arch { height: 84px; margin: 0 -20px 20px; background: linear-gradient(180deg, #E8DCBB, var(--sun)); border-bottom: 1px solid var(--line); }
+  .blend h3 { font-size: 38px; font-weight: 400; margin: 0 0 2px; letter-spacing: 0.04em; }
+  .blend .desc { font-family: var(--caps); text-transform: uppercase; letter-spacing: 0.22em;
+    font-size: 10.5px; font-weight: 500; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 860px) { .blends { grid-template-columns: repeat(2, 1fr); } }
+
+  /* Unbox */
+  .unbox-band { background: var(--sun); border-top: 1px solid var(--line); }
+  .unbox-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 60px; align-items: center; }
+  .unbox-grid video { width: 100%; max-width: 380px; margin: 0 auto; display: block; border-radius: 190px 190px 12px 12px;
+    border: 1px solid var(--line); box-shadow: 0 30px 60px rgba(70,52,22,0.22); }
+  .feats { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 32px; margin-top: 30px; }
+  .feat h4 { font-family: var(--caps); text-transform: uppercase; letter-spacing: 0.16em; font-size: 12.5px; font-weight: 700; margin: 0 0 6px; }
+  .feat p { font-size: 14.5px; color: var(--ink-soft); margin: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+  .chips .chip { border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px; font-size: 13px; color: var(--ink-soft); background: #FBF7EB; }
+  .chips .chip b { color: var(--red); font-weight: 700; font-family: var(--caps); text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; margin-right: 6px; }
+  @media (max-width: 860px) { .unbox-grid { grid-template-columns: 1fr; } .feats { grid-template-columns: 1fr; } }
+
+  /* Community band */
+  .community { position: relative; min-height: 60vh; overflow: clip; display: flex; align-items: flex-end; }
+  .community img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+  .community::before { content: ""; position: absolute; inset: 0; background: linear-gradient(10deg, rgba(46,32,14,0.6), rgba(46,32,14,0) 55%); }
+  .community .cap { position: relative; z-index: 2; padding: 0 6vw 7vh; color: #FBF6E9; max-width: 620px; }
+  .community .cap h2 { font-family: var(--swash); font-size: clamp(28px, 4vw, 46px); font-weight: 400; margin: 0 0 8px; }
+  .community .cap p { color: rgba(251,246,233,0.88); margin: 0; }
+
+  /* Packaging ritual — parallax feature */
+  .ritual { position: relative; min-height: 92vh; display: flex; align-items: center; overflow: clip; }
+  .ritual .media { position: absolute; inset: -10% 0; }
+  .ritual .media img { width: 100%; height: 120%; object-fit: cover; object-position: 50% 55%; }
+  .ritual::before { content: ""; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(90deg, rgba(40,28,12,0.66) 0%, rgba(40,28,12,0.28) 52%, rgba(40,28,12,0.05) 78%); }
+  .ritual-copy { position: relative; z-index: 2; padding: 80px 6vw; max-width: 620px; }
+  .ritual-copy .caps { color: #EAD9AE; }
+  .ritual-copy h2 { font-size: clamp(30px, 4vw, 50px); font-weight: 400; color: #FBF6E9; line-height: 1.08; margin: 14px 0 16px; }
+  .ritual-copy p { color: rgba(251,246,233,0.88); font-size: 17.5px; margin: 0 0 26px; }
+  @supports (animation-timeline: view()) {
+    .ritual .media { animation: drift linear both; animation-timeline: view(); }
+    @keyframes drift { from { transform: translateY(-4%); } to { transform: translateY(4%); } }
+  }
+
+  /* Farm store */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+  .card { text-decoration: none; color: var(--ink); background: #FBF7EB; border: 1px solid var(--line);
+    border-radius: 14px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .card:hover { transform: translateY(-5px); box-shadow: 0 24px 50px rgba(70,52,22,0.16); }
+  .card .im { aspect-ratio: 4/5; overflow: hidden; }
+  .card .im img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.45s ease; }
+  .card:hover .im img { transform: scale(1.045); }
+  .card .meta { padding: 18px 20px 20px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .card h3 { font-size: 17px; font-weight: 400; margin: 0; }
+  .card .price { font-family: var(--mono); font-size: 12.5px; color: var(--ink-soft); white-space: nowrap; }
+  @media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
+
+  .values-row { display: flex; flex-wrap: wrap; gap: 10px 14px; justify-content: center; padding: 0 24px 90px; max-width: 900px; margin: 0 auto; }
+  .values-row span { font-family: var(--caps); text-transform: uppercase; letter-spacing: 0.22em; font-size: 11px; font-weight: 500;
+    border: 1px solid var(--line); border-radius: 999px; padding: 9px 18px; color: var(--ink-soft); }
+
+  .fields { background: var(--ink); color: var(--sun); }
+  .fields .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; }
+  .fields .caps { color: var(--gold); }
+  .fields h2 { font-size: clamp(26px, 3vw, 38px); font-weight: 400; margin: 10px 0 12px; }
+  .fields p { color: #CDBFA3; font-size: 16px; max-width: 46ch; }
+  .zip { display: flex; max-width: 400px; margin-top: 22px; border-radius: 999px; overflow: hidden; border: 1px solid #CDBFA3; }
+  .zip input { flex: 1; min-width: 0; padding: 15px 20px; font-family: var(--serif); font-size: 16px; background: var(--sun); border: 0; color: var(--ink); }
+  .zip button { font-family: var(--caps); text-transform: uppercase; letter-spacing: 0.16em; font-size: 11px; font-weight: 500;
+    background: var(--red); color: var(--sun); border: 0; padding: 0 26px; cursor: pointer; }
+  .states { font-size: 13px; color: #A8987A; margin-top: 16px; font-style: italic; }
+  @media (max-width: 820px) { .fields .wrap { grid-template-columns: 1fr; gap: 48px; } }
+
+  .press { text-align: center; padding: 84px 24px; max-width: 880px; margin: 0 auto; }
+  .press .quote { font-size: clamp(20px, 2.6vw, 27px); line-height: 1.5; margin: 0 0 24px; text-wrap: balance; }
+  .press .logos { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
+  .press .logos span { font-family: var(--caps); letter-spacing: 0.24em; font-size: 12px; color: var(--ink-soft); text-transform: uppercase; }
+
+  footer { background: var(--ink); color: var(--sun); }
+  .foot { max-width: 1200px; margin: 0 auto; padding: 80px 36px 46px; }
+  .signup { max-width: 560px; margin-bottom: 60px; }
+  .signup h2 { font-family: var(--swash); font-size: 34px; font-weight: 400; margin: 0 0 8px; color: var(--sun); }
+  .signup p { font-size: 15px; color: #CDBFA3; margin: 0 0 20px; }
+  .foot-cols { display: flex; gap: 64px; flex-wrap: wrap; border-top: 1px solid #4C3F2A; padding-top: 40px; }
+  .foot-cols h4 { font-family: var(--caps); text-transform: uppercase; letter-spacing: 0.24em; font-size: 10.5px; color: var(--gold); margin: 0 0 14px; }
+  .foot-cols a { display: block; color: #CDBFA3; text-decoration: none; font-size: 14.5px; margin-bottom: 9px; }
+  .foot-cols a:hover { color: var(--sun); }
+  .legal { margin-top: 48px; font-size: 12px; color: #8A7A5C; max-width: 76ch; line-height: 1.65; }
+
+  .reveal { opacity: 1; }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal { animation: rise 1ms linear both; animation-timeline: view(); animation-range: entry 0% entry 42%; }
+      @keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+    }
+  }
+</style>
+
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-h">
+  <div class="gate-card">
+    <p class="caps">Lowell Herb Co &middot; Est. 1909</p>
+    <h2 id="gate-h">Let&rsquo;s keep this legal.</h2>
+    <p>You must be 21 or older to enter. By entering, you confirm you’re of legal age and agree to our Terms and Privacy Policy.</p>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button class="btn primary" id="gate-yes">Yes, I&rsquo;m 21+</button>
+      <button class="btn" id="gate-no">Not yet</button>
+    </div>
+  </div>
+</div>
+
+<nav>
+  <div class="wordmark">Lowell</div>
+  <div class="navlinks">
+    <a href="#shop">Farm Store</a><a href="#apart">What Sets Us Apart</a><a href="#unbox">The Pack</a><a href="#fields">Find Lowell</a>
+  </div>
+  <button class="btn" style="padding: 10px 20px">Cart &middot; 0</button>
+</nav>
+
+<header class="hero">
+  <div class="media"><img src="assets/roses.jpg" alt="Lowell Smokes packs styled with roses in warm light"></div>
+  <div class="hero-copy">
+    <span class="caps">Great American Cannabis</span>
+    <h1>Grown with intention.<br><span class="sw">Blended</span> to perfection.</h1>
+    <p class="sub">We don’t want to reinvent how you smoke — just make it better. From the methods we use to grow our cannabis to how we roll, package, and ship it, every detail is considered to enhance your ritual and live at your pace.</p>
+    <div class="hero-ctas">
+      <button class="btn primary">Shop the Farm Store</button>
+      <button class="btn">Find our pre-rolls</button>
+    </div>
+  </div>
+</header>
+
+<section class="purpose">
+  <span class="caps">Why we exist</span>
+  <h2>&ldquo;To bring great American cannabis to <span class="sw">everyone</span>.&rdquo;</h2>
+</section>
+
+<section class="band" id="apart">
+  <div class="wrap">
+    <div class="sect-head">
+      <span class="caps">What Sets Us Apart</span>
+      <h2 class="title">Every product, crafted with respect for the plant, our planet, and you.</h2>
+      <p class="lede">We sweat the details so you don&rsquo;t need to.</p>
+    </div>
+    <div class="pillars"><div class="pillar reveal">
+      <span class="num">01</span>
+      <h3>Quality First</h3><p>We start with really good artisan craft cannabis. We source from hundreds of growers and only take in product that meets rigorous criteria.</p>
+    </div>
+<div class="pillar reveal">
+      <span class="num">02</span>
+      <h3>Always Blended</h3><p>We purposefully blend our flower strains to add terpene diversity and flavor. Single strains are a gamble — blends are a recipe.</p>
+    </div>
+<div class="pillar reveal">
+      <span class="num">03</span>
+      <h3>A Better Smoke</h3><p>Every aspect of our pre-rolls is relentlessly engineered for a smoother smoke with an easy draw. With Lowell, you will never lose a cherry again.</p>
+    </div>
+<div class="pillar reveal">
+      <span class="num">04</span>
+      <h3>Ready and Able</h3><p>Cannabis is a gift that enhances our journey through this world. Our packaging is always travel-friendly — complete with matches.</p>
+    </div></div>
+  </div>
+</section>
+
+<section class="band blends-band" id="blends">
+  <div class="wrap">
+    <div class="sect-head">
+      <span class="caps">Where to find us</span>
+      <h2 class="title">Eight states and counting.</h2>
+      <p class="lede">Grown and rolled with local partners, state by state. Every market gets its own menu — ask your budtender what Lowell is rolling near you.</p>
+    </div>
+    <div class="blends"><div class="blend reveal">
+      <div class="arch"></div>
+      <h3>CA</h3>
+      <p class="desc">California</p>
+    </div>
+<div class="blend reveal">
+      <div class="arch"></div>
+      <h3>CO</h3>
+      <p class="desc">Colorado</p>
+    </div>
+<div class="blend reveal">
+      <div class="arch"></div>
+      <h3>NM</h3>
+      <p class="desc">New Mexico</p>
+    </div>
+<div class="blend reveal">
+      <div class="arch"></div>
+      <h3>IL</h3>
+      <p class="desc">Illinois</p>
+    </div>
+<div class="blend reveal">
+      <div class="arch"></div>
+      <h3>NJ</h3>
+      <p class="desc">New Jersey</p>
+    </div>
+<div class="blend reveal">
+      <div class="arch"></div>
+      <h3>NY</h3>
+      <p class="desc">New York</p>
+    </div>
+<div class="blend reveal">
+      <div class="arch"></div>
+      <h3>MO</h3>
+      <p class="desc">Missouri</p>
+    </div>
+<div class="blend reveal">
+      <div class="arch"></div>
+      <h3>OH</h3>
+      <p class="desc">Ohio</p>
+    </div></div>
+  </div>
+</section>
+
+<section class="ritual">
+  <div class="media"><img src="assets/ritual.jpg" alt="A Lowell Smokes pack and pre-roll styled on burlap"></div>
+  <div class="ritual-copy">
+    <span class="caps">The Pack</span>
+    <h2>Lighting up is a ritual. We built the box for it.</h2>
+    <p>Flip open the signature magnetic flap, slide out the tray, and reveal your stash — along with space for some emergency matches. Every box is wax-lined to hold the ideal moisture for our pre-rolls.</p>
+    <button class="btn" style="border-color:#FBF6E9; color:#FBF6E9">Explore the range</button>
+  </div>
+</section>
+
+<section class="band unbox-band" id="unbox">
+  <div class="wrap unbox-grid">
+    <div>
+      <video src="assets/farm-to-pack.mp4" controls muted loop playsinline preload="metadata" aria-label="Farm to pack — how a Lowell pre-roll gets made and boxed"></video>
+    </div>
+    <div>
+      <span class="caps" style="color: var(--red)">From farm to pack</span>
+      <h2 class="title">Open the box. This is what different feels like.</h2>
+      <div class="feats"><div class="feat"><h4>The magnetic flap</h4><p>Flip open the signature closure — sturdy, organic packaging that's ready for any outdoor adventure.</p></div>
+<div class="feat"><h4>The slide-out tray</h4><p>Remove the tray and reveal your stash, arranged like the good silverware.</p></div>
+<div class="feat"><h4>Emergency matches</h4><p>Every pack ships with them. Prepared beats lucky.</p></div>
+<div class="feat"><h4>The wax liner</h4><p>Holds the ideal moisture level so the last smoke in the pack is as fresh as the first.</p></div></div>
+      <div class="chips"><span class="chip"><b>2017</b> The first pack of pre-rolls, period — the format we introduced to the cannabis consumer.</span>
+<span class="chip"><b>2019</b> The world's first cannabis caf&eacute; — Lowell Caf&eacute;, West Hollywood.</span>
+<span class="chip"><b>Blended by design</b> Purposeful strain blends for terpene diversity, back when the market was chasing single strains.</span>
+<span class="chip"><b>The easy draw</b> Engineered to burn even, draw easy, and never lose a cherry.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="community">
+  <img src="assets/roof-laugh.jpg" alt="Two friends laughing on a city rooftop">
+  <div class="cap">
+    <h2>Bring people together.</h2>
+    <p>That&rsquo;s the whole mission — the best and most distinctive American-grown products that bring people together.</p>
+  </div>
+</section>
+
+<section class="band" id="shop">
+  <div class="wrap">
+    <div class="sect-head" style="display:flex; justify-content:space-between; align-items:flex-end; max-width:none; gap:20px; flex-wrap:wrap;">
+      <div>
+        <span class="caps">The Farm Store</span>
+        <h2 class="title">Timeless goods. No gimmicks.</h2>
+      </div>
+      <a href="#" style="color:var(--red); font-size:17px;">Shop everything &rarr;</a>
+    </div>
+    <div class="cards">
+      <a class="card reveal" href="#"><div class="im"><img src="assets/tee-olive.jpg" alt="Green Bull's Head tee"></div>
+        <div class="meta"><h3>Green Bull&rsquo;s Head Tee</h3><span class="price">$30</span></div></a>
+      <a class="card reveal" href="#"><div class="im"><img src="assets/still.jpg" alt="Ceramic accessories still life"></div>
+        <div class="meta"><h3>Smoke Accessories</h3><span class="price">FROM $25</span></div></a>
+      <a class="card reveal" href="#"><div class="im"><img src="assets/tees.jpg" alt="Stack of Lowell tees" style="object-position: 76% center"></div>
+        <div class="meta"><h3>All Apparel</h3><span class="price">&rarr;</span></div></a>
+    </div>
+  </div>
+</section>
+
+<div class="values-row"><span>Freedom</span> <span>Confidence</span> <span>No Bullshit</span> <span>Generosity</span> <span>Originality</span> <span>Family</span> <span>Good Vibes</span></div>
+
+<section class="fields" id="fields">
+  <div class="wrap">
+    <div>
+      <span class="caps">Between Harvests</span>
+      <h2>The flower is resting.</h2>
+      <p>Federal rules changed in 2026, so our smokable flower is off the site for now — not gone. Leave your email and be the first to know when something changes.</p>
+      <form class="zip" onsubmit="return false"><input type="email" placeholder="Your email" aria-label="Email address"><button type="submit">Keep me posted</button></form>
+    </div>
+    <div>
+      <span class="caps">Store Locator</span>
+      <h2>Find Lowell near you.</h2>
+      <p>Our pre-rolls live behind the counter at 700+ licensed shops. Drop your zip — we’ll point you to the closest one.</p>
+      <form class="zip" onsubmit="return false"><input type="text" inputmode="numeric" placeholder="Zip code" aria-label="Zip code"><button type="submit">Search</button></form>
+      <p class="states">California &middot; New Jersey &middot; Michigan &middot; Colorado &middot; Illinois &middot; Missouri &amp; more</p>
+    </div>
+  </div>
+</section>
+
+<section class="press">
+  <p class="quote">&ldquo;Lowell is one of the most widely recognized names in American cannabis, with a trailblazing legacy.&rdquo;</p>
+  <div class="logos"><span>Forbes</span><span>Robb Report</span><span>Page Six</span><span>Newsweek</span></div>
+</section>
+
+<footer>
+  <div class="foot">
+    <div class="signup">
+      <h2>Letters from the farm</h2>
+      <p>New goods, restock news, and word when the flower returns.</p>
+      <form class="zip" onsubmit="return false"><input type="email" placeholder="Your email" aria-label="Email address"><button type="submit">Sign up</button></form>
+    </div>
+    <div class="foot-cols">
+      <div><h4>Shop</h4><a href="#">Farm Store</a><a href="#">Luggage</a><a href="#">Apparel</a><a href="#">Smoke Accessories</a></div>
+      <div><h4>Lowell</h4><a href="#">What Sets Us Apart</a><a href="#">The Range</a><a href="#">Store Locator</a><a href="#">Journal</a><a href="#">FAQ</a></div>
+      <div><h4>Help</h4><a href="#">Contact</a><a href="#">Shipping &amp; Returns</a><a href="#">Privacy</a><a href="#">Terms</a></div>
+      <div><h4>Follow</h4><a href="#">@lowellherbco</a><a href="#">@lowellfarms</a></div>
+    </div>
+    <p class="legal">For adults 21 and over. Nothing sold in the Farm Store contains cannabis. Lowell pre-rolls and flower are sold only through licensed dispensaries. Product availability varies by state. [Licensee name &amp; license number displayed here per state marketing rules.] &copy; 2026 Lowell Herb Co.</p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var gate = document.getElementById('gate');
+    document.getElementById('gate-yes').addEventListener('click', function () { gate.classList.add('hidden'); });
+    document.getElementById('gate-no').addEventListener('click', function () {
+      this.previousElementSibling && (this.parentElement.previousElementSibling.textContent = 'Come back when you’re of age — the farm isn’t going anywhere.');
+    });
+  })();
+</script>

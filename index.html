@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Lowell — Four Design Directions</title></head><body>
+<style>
+  :root {
+    --paper: #F6F1E5; --ink: #262016; --ink-soft: #6E6250; --red: #A5301F; --line: #D8CCB2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #1E1913; --ink: #EBE3D1; --ink-soft: #A79B84; --red: #D4735E; --line: #443B2B; }
+  }
+  :root[data-theme="dark"] { --paper: #1E1913; --ink: #EBE3D1; --ink-soft: #A79B84; --red: #D4735E; --line: #443B2B; }
+  :root[data-theme="light"] { --paper: #F6F1E5; --ink: #262016; --ink-soft: #6E6250; --red: #A5301F; --line: #D8CCB2; }
+  body { background: var(--paper); color: var(--ink); margin: 0; padding: 60px 24px 90px;
+    font-family: "Iowan Old Style", Palatino, Georgia, serif; line-height: 1.6; }
+  .sheet { max-width: 680px; margin: 0 auto; }
+  .kicker { font-family: Futura, "Avenir Next", sans-serif; text-transform: uppercase; letter-spacing: 0.3em;
+    font-size: 11px; color: var(--red); text-align: center; }
+  h1 { text-align: center; font-size: clamp(30px, 5vw, 44px); font-weight: 600; margin: 12px 0 10px; }
+  .dek { text-align: center; color: var(--ink-soft); font-style: italic; margin: 0 0 50px; }
+  a.option { display: block; text-decoration: none; color: var(--ink); border: 1px solid var(--line);
+    padding: 26px 28px; margin-bottom: 18px; transition: transform 0.2s ease, box-shadow 0.2s ease; background: color-mix(in srgb, var(--paper) 70%, transparent); }
+  a.option:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
+  .num { font-family: Futura, "Avenir Next", sans-serif; font-size: 11px; letter-spacing: 0.2em; color: var(--red); }
+  h2 { font-size: 24px; margin: 4px 0 6px; font-weight: 600; }
+  .go { color: var(--red); font-style: italic; white-space: nowrap; }
+  p.desc { margin: 0; color: var(--ink-soft); font-size: 15.5px; }
+  .note { margin-top: 44px; font-size: 13.5px; color: var(--ink-soft); border-top: 1px solid var(--line); padding-top: 20px; }
+</style>
+<div class="sheet">
+  <p class="kicker">Lowell Herb Co · Homepage Refresh</p>
+  <h1>Four design directions.</h1>
+  <p class="dek">Same brand, same real photography and fonts — four different rooms. Click any option; enter through the age gate and scroll. Every version now includes the eight-state footprint, the farm-to-pack film, and the anatomy of the box.</p>
+
+  <a class="option" href="option1.html">
+    <div class="row"><span class="num">OPTION 01</span><span class="go">View &rarr;</span></div>
+    <h2>Midnight Editorial</h2>
+    <p class="desc">Dark, cinematic, lifestyle-led. The moody portrait hero, cream craft sections, a full-bleed pack moment. The most "fashion brand" of the four.</p>
+  </a>
+
+  <a class="option" href="option2.html">
+    <div class="row"><span class="num">OPTION 02</span><span class="go">View &rarr;</span></div>
+    <h2>Golden Hour</h2>
+    <p class="desc">Warm, sunlit, holistic. Parallax hero, arched blend cards, the brand-bible purpose line front and center. The most "farm stand meets Flamingo Estate."</p>
+  </a>
+
+  <a class="option" href="option3.html">
+    <div class="row"><span class="num">OPTION 03</span><span class="go">View &rarr;</span></div>
+    <h2>High Noon</h2>
+    <p class="desc">Bold, Cali-cool, poster-loud. Giant condensed type, stacking panels that layer as you scroll, a spinning "never lose a cherry" stamp. The most energetic.</p>
+  </a>
+
+  <a class="option" href="option4.html">
+    <div class="row"><span class="num">OPTION 04</span><span class="go">View &rarr;</span></div>
+    <h2>The Standard</h2>
+    <p class="desc">Gallery-minimal, product-first. Museum-plinth pack hero, hairline spec columns, a horizontal collection rail. The most "premium like a fine spirit."</p>
+  </a>
+
+  <p class="note">All four use Lowell's actual typefaces (El Hidrant, Gotham Condensed, Nitti) and photography from the brand archive, with copy drawn from lowellherbco.com, the Lowell Supply site, and Brand Bible v5.1. Product prices are live catalog prices. Every version keeps the 21+ gate, the store locator, the "Between Harvests" message, and the merch store structure — only the personality changes.</p>
+</div>
+</body></html>
