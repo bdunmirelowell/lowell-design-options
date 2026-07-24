@@ -99,7 +99,16 @@
   .unbox-band { border-top: 1px solid var(--line-2); }
   .unbox-in { max-width: 1200px; margin: 0 auto; padding: 96px 36px; display: grid;
     grid-template-columns: 0.75fr 1.25fr; gap: 70px; align-items: start; }
-  .unbox-in video { width: 100%; max-width: 360px; display: block; margin: 0 auto; border: 1px solid var(--ink); }
+  .pann { position: relative; max-width: 360px; margin: 0 auto; }
+  .pann img { width: 100%; display: block; border: 1px solid var(--ink); }
+  .pann .mk { position: absolute; width: 26px; height: 26px; border-radius: 50%; transform: translate(-50%,-50%);
+    display: flex; align-items: center; justify-content: center; font-family: var(--caps); font-weight: 700;
+    font-size: 12px; background: var(--paper); color: var(--red); border: 1px solid var(--ink); }
+  .fnum { font-family: var(--caps); font-weight: 700; color: var(--red); margin-right: 8px; }
+  .farmfilm { display: flex; gap: 26px; align-items: center; justify-content: center; flex-wrap: wrap;
+    max-width: 1200px; margin: 0 auto; padding: 0 36px 96px; }
+  .farmfilm video { width: 100%; max-width: 300px; display: block; border: 1px solid var(--ink); }
+  .farmfilm p { max-width: 34ch; font-size: 14.5px; color: var(--ink-soft); }
   .ufeat { display: grid; grid-template-columns: 40px 1fr; gap: 14px; border-top: 1px solid var(--line-2); padding: 20px 0; }
   .ufeat:first-of-type { border-top: 1px solid var(--ink); }
   .ufeat h4 { font-size: 19px; font-weight: 400; margin: 0 0 6px; }
@@ -121,17 +130,28 @@
 
   /* States ledger */
   .states-band { border-top: 1px solid var(--line-2); }
-  .states-in { max-width: 900px; margin: 0 auto; padding: 96px 36px; }
-  .sline { display: grid; grid-template-columns: 90px 1fr auto; gap: 20px; align-items: baseline;
-    border-bottom: 1px solid var(--line-2); padding: 16px 2px; }
-  .sline:first-of-type { border-top: 1px solid var(--ink); margin-top: 40px; }
-  .sline .code { font-family: var(--caps); font-weight: 700; font-size: 30px; letter-spacing: 0.04em; }
-  .sline .sname { font-size: 18px; }
-  .sline:hover { background: var(--paper-2); }
-  @media (max-width: 560px) { .sline { grid-template-columns: 70px 1fr; } .sline .mono { display: none; } }
+  .states-in { max-width: 1000px; margin: 0 auto; padding: 96px 36px; text-align: center; }
+  .usmap { width: 100%; max-width: 860px; display: block; margin: 44px auto 0; }
+  .usmap .dot { fill: var(--ink); opacity: 0.13; }
+  .usmap .stmark .halo { fill: var(--red); }
+  .usmap .stmark .core { fill: var(--red); }
+  .usmap .stmark text { font-family: var(--caps); font-weight: 700; font-size: 17px; fill: var(--ink); letter-spacing: 0.05em; }
+  .mapstats b { font-family: var(--serif); color: var(--ink); }
+  .mapstats span { font-family: var(--mono); color: var(--ink-soft); }
+  
+  .usmap .stmark .halo { opacity: 0.35; }
+  @media (prefers-reduced-motion: no-preference) {
+    .usmap .stmark .halo { transform-box: fill-box; transform-origin: center;
+      animation: mkpulse 2.6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+    @keyframes mkpulse { 0%, 100% { transform: scale(0.55); opacity: 0.45; } 50% { transform: scale(1); opacity: 0.15; } }
+  }
+  .mapstats { display: flex; gap: 54px; justify-content: center; margin-top: 34px; flex-wrap: wrap; }
+  .mapstats b { display: block; font-size: 40px; font-weight: 400; line-height: 1; }
+  .mapstats span { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; }
+
 
   .fields { border-top: 1px solid var(--ink); }
-  .fields .in { max-width: 1200px; margin: 0 auto; padding: 90px 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .fields .in { max-width: 700px; margin: 0 auto; padding: 90px 36px; display: grid; grid-template-columns: 1fr; }
   .fields h2 { font-size: clamp(26px, 3vw, 40px); font-weight: 400; margin: 10px 0 12px; }
   .fields p { color: var(--ink-soft); font-size: 16px; max-width: 46ch; }
   .zip { display: flex; max-width: 400px; margin-top: 22px; border-bottom: 1px solid var(--ink); }
@@ -140,7 +160,7 @@
   .zip button { font-family: var(--caps); text-transform: uppercase; letter-spacing: 0.18em; font-size: 11px; font-weight: 500;
     background: transparent; color: var(--red); border: 0; padding: 0 2px 0 18px; cursor: pointer; }
   .states { font-size: 13px; font-style: italic; color: var(--ink-soft); margin-top: 16px; }
-  @media (max-width: 820px) { .fields .in { grid-template-columns: 1fr; gap: 52px; } }
+  
 
   .press { text-align: center; padding: 84px 24px; border-top: 1px solid var(--line-2); }
   .press .quote { font-size: clamp(20px, 2.6vw, 28px); line-height: 1.5; max-width: 34ch; margin: 0 auto 26px; text-wrap: balance; }
@@ -216,7 +236,8 @@
 
 <section class="rail-band" id="shop">
   <div class="rail-head">
-    <h2>The collection.</h2>
+    <div><h2>The collection.</h2>
+    <p style="color: var(--ink-soft); font-size: 16px; max-width: 62ch; margin: 10px 0 0;">The Farm Store is our own shop — Lowell-designed goods, made to our spec and shipped by us, direct to your door, nationwide. It's the only place we sell direct.</p></div>
     <span class="mono">SCROLL &rarr;</span>
   </div>
   <div class="rail"><a class="slide" href="#">
@@ -228,7 +249,7 @@
       <div class="slide-meta"><h3>Lowell Smokes</h3><span class="mono">The pack that started it · matches included</span></div>
     </a>
 <a class="slide" href="#">
-      <div class="im"><img src="assets/still.jpg" alt="Smoke Accessories"></div>
+      <div class="im"><img src="assets/ritual.jpg" alt="Smoke Accessories"></div>
       <div class="slide-meta"><h3>Smoke Accessories</h3><span class="mono">Objects for the ritual · from $25</span></div>
     </a>
 <a class="slide" href="#">
@@ -240,16 +261,20 @@
       <div class="slide-meta"><h3>The Gear Wall</h3><span class="mono">Apparel & canvas goods</span></div>
     </a>
 <a class="slide" href="#">
-      <div class="im"><img src="assets/ritual.jpg" alt="The Range"></div>
-      <div class="slide-meta"><h3>The Range</h3><span class="mono">Blended pre-rolls · at licensed shops</span></div>
+      <div class="im"><img src="assets/pack-tray.jpg" alt="The Pre-Roll"></div>
+      <div class="slide-meta"><h3>The Pre-Roll</h3><span class="mono">Blended · easy draw · at licensed shops</span></div>
     </a></div>
 </section>
 
 <section class="unbox-band" id="range">
   <div class="unbox-in">
-    <div>
-      <video src="assets/farm-to-pack.mp4" controls muted loop playsinline preload="metadata" aria-label="Farm to pack — how a Lowell pre-roll gets made and boxed"></video>
-    </div>
+    <div class="pann">
+        <img src="assets/pack-open.jpg" alt="An open Lowell Smokes pack: flap up, pre-rolls in the tray, matches alongside">
+        <span class="mk" style="left:33%; top:11%">1</span>
+        <span class="mk" style="left:46%; top:40%">2</span>
+        <span class="mk" style="left:61%; top:25%">3</span>
+        <span class="mk" style="left:52%; top:63%">4</span>
+      </div>
     <div>
       <span class="caps" style="color: var(--red)">From farm to pack</span>
       <h2 style="font-size: clamp(30px, 3.6vw, 48px); font-weight: 400; margin: 10px 0 10px;">Open the box.</h2>
@@ -262,12 +287,17 @@
   </div>
   <div class="fgrid"><div class="fcol"><span class="mono" style="color: var(--red)">2017</span><p>The first pack of pre-rolls, period — the format we introduced to the cannabis consumer.</p></div>
 <div class="fcol"><span class="mono" style="color: var(--red)">2019</span><p>The world's first cannabis caf&eacute; — Lowell Caf&eacute;, West Hollywood.</p></div>
-<div class="fcol"><span class="mono" style="color: var(--red)">BLENDED BY DESIGN</span><p>Purposeful strain blends for terpene diversity, back when the market was chasing single strains.</p></div>
-<div class="fcol"><span class="mono" style="color: var(--red)">THE EASY DRAW</span><p>Engineered to burn even, draw easy, and never lose a cherry.</p></div></div>
+<div class="fcol"><span class="mono" style="color: var(--red)">2021</span><p>Beyond California — the multi-state expansion begins.</p></div>
+<div class="fcol"><span class="mono" style="color: var(--red)">2023</span><p>Lowell Quicks — the mini that goes everywhere.</p></div>
+<div class="fcol"><span class="mono" style="color: var(--red)">TODAY</span><p>Eight states, 700+ licensed shops, one standard.</p></div></div>
+  <div class="farmfilm">
+    <video src="assets/farm-to-pack.mp4" controls muted loop playsinline preload="metadata" aria-label="From the farm — 45 seconds from greenhouse to sealed tray"></video>
+    <p><span class="caps" style="color: var(--red); display:block; margin-bottom:8px">From the farm</span>Forty-five seconds from greenhouse to sealed tray — how every Lowell gets made.</p>
+  </div>
 </section>
 
 <section class="edit-band">
-  <div class="im"><img src="assets/brigitte-roof.jpg" alt="A woman at a rooftop table with a Lowell jar and pack, city skyline behind"></div>
+  <div class="im"><img src="assets/beach-drift.jpg" alt="Two friends talking on driftwood at a misty California beach"></div>
   <div class="edit-copy">
     <span class="caps" style="color: var(--red)">The Company We Keep</span>
     <h2>Mainstream, but still premium &mdash; like a fine spirit.</h2>
@@ -280,25 +310,13 @@
     <span class="caps" style="color: var(--red)">Where to find us</span>
     <h2 style="font-size: clamp(30px, 3.6vw, 48px); font-weight: 400; margin: 10px 0 8px;">Eight states and counting.</h2>
     <p style="color: var(--ink-soft); font-size: 16.5px; max-width: 60ch;">Grown and rolled with local partners, state by state. Every market gets its own menu — ask your budtender what Lowell is rolling near you.</p>
-    <div class="sline"><span class="code">CA</span><span class="sname">California</span><span class="mono">LICENSED RETAIL</span></div>
-<div class="sline"><span class="code">CO</span><span class="sname">Colorado</span><span class="mono">LICENSED RETAIL</span></div>
-<div class="sline"><span class="code">NM</span><span class="sname">New Mexico</span><span class="mono">LICENSED RETAIL</span></div>
-<div class="sline"><span class="code">IL</span><span class="sname">Illinois</span><span class="mono">LICENSED RETAIL</span></div>
-<div class="sline"><span class="code">NJ</span><span class="sname">New Jersey</span><span class="mono">LICENSED RETAIL</span></div>
-<div class="sline"><span class="code">NY</span><span class="sname">New York</span><span class="mono">LICENSED RETAIL</span></div>
-<div class="sline"><span class="code">MO</span><span class="sname">Missouri</span><span class="mono">LICENSED RETAIL</span></div>
-<div class="sline"><span class="code">OH</span><span class="sname">Ohio</span><span class="mono">LICENSED RETAIL</span></div>
+    <svg class="usmap" viewBox="0 0 676 364" role="img" aria-label="Map of the United States marking Lowell&#39;s eight states"><circle class="dot" cx="13" cy="39" r="5.2"/><circle class="dot" cx="39" cy="39" r="4.2"/><circle class="dot" cx="65" cy="39" r="6.2"/><circle class="dot" cx="91" cy="39" r="5.2"/><circle class="dot" cx="117" cy="39" r="4.2"/><circle class="dot" cx="273" cy="39" r="4.2"/><circle class="dot" cx="299" cy="39" r="6.2"/><circle class="dot" cx="325" cy="39" r="5.2"/><circle class="dot" cx="351" cy="39" r="4.2"/><circle class="dot" cx="429" cy="39" r="4.2"/><circle class="dot" cx="455" cy="39" r="6.2"/><circle class="dot" cx="481" cy="39" r="5.2"/><circle class="dot" cx="637" cy="39" r="5.2"/><circle class="dot" cx="663" cy="39" r="4.2"/><circle class="dot" cx="13" cy="65" r="6.2"/><circle class="dot" cx="39" cy="65" r="5.2"/><circle class="dot" cx="65" cy="65" r="4.2"/><circle class="dot" cx="91" cy="65" r="6.2"/><circle class="dot" cx="117" cy="65" r="5.2"/><circle class="dot" cx="143" cy="65" r="4.2"/><circle class="dot" cx="221" cy="65" r="4.2"/><circle class="dot" cx="247" cy="65" r="6.2"/><circle class="dot" cx="273" cy="65" r="5.2"/><circle class="dot" cx="299" cy="65" r="4.2"/><circle class="dot" cx="325" cy="65" r="6.2"/><circle class="dot" cx="351" cy="65" r="5.2"/><circle class="dot" cx="377" cy="65" r="4.2"/><circle class="dot" cx="403" cy="65" r="6.2"/><circle class="dot" cx="429" cy="65" r="5.2"/><circle class="dot" cx="455" cy="65" r="4.2"/><circle class="dot" cx="481" cy="65" r="6.2"/><circle class="dot" cx="507" cy="65" r="5.2"/><circle class="dot" cx="533" cy="65" r="4.2"/><circle class="dot" cx="611" cy="65" r="4.2"/><circle class="dot" cx="637" cy="65" r="6.2"/><circle class="dot" cx="663" cy="65" r="5.2"/><circle class="dot" cx="13" cy="91" r="4.2"/><circle class="dot" cx="39" cy="91" r="6.2"/><circle class="dot" cx="65" cy="91" r="5.2"/><circle class="dot" cx="91" cy="91" r="4.2"/><circle class="dot" cx="117" cy="91" r="6.2"/><circle class="dot" cx="143" cy="91" r="5.2"/><circle class="dot" cx="169" cy="91" r="4.2"/><circle class="dot" cx="195" cy="91" r="6.2"/><circle class="dot" cx="221" cy="91" r="5.2"/><circle class="dot" cx="247" cy="91" r="4.2"/><circle class="dot" cx="273" cy="91" r="6.2"/><circle class="dot" cx="299" cy="91" r="5.2"/><circle class="dot" cx="325" cy="91" r="4.2"/><circle class="dot" cx="351" cy="91" r="6.2"/><circle class="dot" cx="377" cy="91" r="5.2"/><circle class="dot" cx="403" cy="91" r="4.2"/><circle class="dot" cx="429" cy="91" r="6.2"/><circle class="dot" cx="455" cy="91" r="5.2"/><circle class="dot" cx="481" cy="91" r="4.2"/><circle class="dot" cx="507" cy="91" r="6.2"/><circle class="dot" cx="533" cy="91" r="5.2"/><circle class="dot" cx="559" cy="91" r="4.2"/><circle class="dot" cx="585" cy="91" r="6.2"/><circle class="dot" cx="611" cy="91" r="5.2"/><circle class="dot" cx="637" cy="91" r="4.2"/><circle class="dot" cx="663" cy="91" r="6.2"/><circle class="dot" cx="13" cy="117" r="5.2"/><circle class="dot" cx="39" cy="117" r="4.2"/><circle class="dot" cx="65" cy="117" r="6.2"/><circle class="dot" cx="91" cy="117" r="5.2"/><circle class="dot" cx="117" cy="117" r="4.2"/><circle class="dot" cx="143" cy="117" r="6.2"/><circle class="dot" cx="169" cy="117" r="5.2"/><circle class="dot" cx="195" cy="117" r="4.2"/><circle class="dot" cx="221" cy="117" r="6.2"/><circle class="dot" cx="247" cy="117" r="5.2"/><circle class="dot" cx="273" cy="117" r="4.2"/><circle class="dot" cx="299" cy="117" r="6.2"/><circle class="dot" cx="325" cy="117" r="5.2"/><circle class="dot" cx="351" cy="117" r="4.2"/><circle class="dot" cx="377" cy="117" r="6.2"/><circle class="dot" cx="403" cy="117" r="5.2"/><circle class="dot" cx="429" cy="117" r="4.2"/><circle class="dot" cx="455" cy="117" r="6.2"/><circle class="dot" cx="481" cy="117" r="5.2"/><circle class="dot" cx="507" cy="117" r="4.2"/><circle class="dot" cx="533" cy="117" r="6.2"/><circle class="dot" cx="559" cy="117" r="5.2"/><circle class="dot" cx="585" cy="117" r="4.2"/><circle class="dot" cx="611" cy="117" r="6.2"/><circle class="dot" cx="637" cy="117" r="5.2"/><circle class="dot" cx="13" cy="143" r="6.2"/><circle class="dot" cx="39" cy="143" r="5.2"/><circle class="dot" cx="65" cy="143" r="4.2"/><circle class="dot" cx="91" cy="143" r="6.2"/><circle class="dot" cx="117" cy="143" r="5.2"/><circle class="dot" cx="143" cy="143" r="4.2"/><circle class="dot" cx="169" cy="143" r="6.2"/><circle class="dot" cx="195" cy="143" r="5.2"/><circle class="dot" cx="221" cy="143" r="4.2"/><circle class="dot" cx="247" cy="143" r="6.2"/><circle class="dot" cx="273" cy="143" r="5.2"/><circle class="dot" cx="299" cy="143" r="4.2"/><circle class="dot" cx="325" cy="143" r="6.2"/><circle class="dot" cx="351" cy="143" r="5.2"/><circle class="dot" cx="377" cy="143" r="4.2"/><circle class="dot" cx="403" cy="143" r="6.2"/><circle class="dot" cx="429" cy="143" r="5.2"/><circle class="dot" cx="455" cy="143" r="4.2"/><circle class="dot" cx="481" cy="143" r="6.2"/><circle class="dot" cx="507" cy="143" r="5.2"/><circle class="dot" cx="533" cy="143" r="4.2"/><circle class="dot" cx="559" cy="143" r="6.2"/><circle class="dot" cx="585" cy="143" r="5.2"/><circle class="dot" cx="39" cy="169" r="6.2"/><circle class="dot" cx="65" cy="169" r="5.2"/><circle class="dot" cx="91" cy="169" r="4.2"/><circle class="dot" cx="117" cy="169" r="6.2"/><circle class="dot" cx="143" cy="169" r="5.2"/><circle class="dot" cx="169" cy="169" r="4.2"/><circle class="dot" cx="195" cy="169" r="6.2"/><circle class="dot" cx="221" cy="169" r="5.2"/><circle class="dot" cx="247" cy="169" r="4.2"/><circle class="dot" cx="273" cy="169" r="6.2"/><circle class="dot" cx="299" cy="169" r="5.2"/><circle class="dot" cx="325" cy="169" r="4.2"/><circle class="dot" cx="351" cy="169" r="6.2"/><circle class="dot" cx="377" cy="169" r="5.2"/><circle class="dot" cx="403" cy="169" r="4.2"/><circle class="dot" cx="429" cy="169" r="6.2"/><circle class="dot" cx="455" cy="169" r="5.2"/><circle class="dot" cx="481" cy="169" r="4.2"/><circle class="dot" cx="507" cy="169" r="6.2"/><circle class="dot" cx="533" cy="169" r="5.2"/><circle class="dot" cx="559" cy="169" r="4.2"/><circle class="dot" cx="39" cy="195" r="4.2"/><circle class="dot" cx="65" cy="195" r="6.2"/><circle class="dot" cx="91" cy="195" r="5.2"/><circle class="dot" cx="117" cy="195" r="4.2"/><circle class="dot" cx="143" cy="195" r="6.2"/><circle class="dot" cx="169" cy="195" r="5.2"/><circle class="dot" cx="195" cy="195" r="4.2"/><circle class="dot" cx="221" cy="195" r="6.2"/><circle class="dot" cx="247" cy="195" r="5.2"/><circle class="dot" cx="273" cy="195" r="4.2"/><circle class="dot" cx="299" cy="195" r="6.2"/><circle class="dot" cx="325" cy="195" r="5.2"/><circle class="dot" cx="351" cy="195" r="4.2"/><circle class="dot" cx="377" cy="195" r="6.2"/><circle class="dot" cx="403" cy="195" r="5.2"/><circle class="dot" cx="429" cy="195" r="4.2"/><circle class="dot" cx="455" cy="195" r="6.2"/><circle class="dot" cx="481" cy="195" r="5.2"/><circle class="dot" cx="507" cy="195" r="4.2"/><circle class="dot" cx="65" cy="221" r="4.2"/><circle class="dot" cx="91" cy="221" r="6.2"/><circle class="dot" cx="117" cy="221" r="5.2"/><circle class="dot" cx="143" cy="221" r="4.2"/><circle class="dot" cx="169" cy="221" r="6.2"/><circle class="dot" cx="195" cy="221" r="5.2"/><circle class="dot" cx="221" cy="221" r="4.2"/><circle class="dot" cx="247" cy="221" r="6.2"/><circle class="dot" cx="273" cy="221" r="5.2"/><circle class="dot" cx="299" cy="221" r="4.2"/><circle class="dot" cx="325" cy="221" r="6.2"/><circle class="dot" cx="351" cy="221" r="5.2"/><circle class="dot" cx="377" cy="221" r="4.2"/><circle class="dot" cx="403" cy="221" r="6.2"/><circle class="dot" cx="429" cy="221" r="5.2"/><circle class="dot" cx="455" cy="221" r="4.2"/><circle class="dot" cx="91" cy="247" r="4.2"/><circle class="dot" cx="117" cy="247" r="6.2"/><circle class="dot" cx="143" cy="247" r="5.2"/><circle class="dot" cx="169" cy="247" r="4.2"/><circle class="dot" cx="195" cy="247" r="6.2"/><circle class="dot" cx="221" cy="247" r="5.2"/><circle class="dot" cx="247" cy="247" r="4.2"/><circle class="dot" cx="273" cy="247" r="6.2"/><circle class="dot" cx="299" cy="247" r="5.2"/><circle class="dot" cx="325" cy="247" r="4.2"/><circle class="dot" cx="351" cy="247" r="6.2"/><circle class="dot" cx="377" cy="247" r="5.2"/><circle class="dot" cx="403" cy="247" r="4.2"/><circle class="dot" cx="429" cy="247" r="6.2"/><circle class="dot" cx="455" cy="247" r="5.2"/><circle class="dot" cx="117" cy="273" r="4.2"/><circle class="dot" cx="143" cy="273" r="6.2"/><circle class="dot" cx="169" cy="273" r="5.2"/><circle class="dot" cx="195" cy="273" r="4.2"/><circle class="dot" cx="273" cy="273" r="4.2"/><circle class="dot" cx="299" cy="273" r="6.2"/><circle class="dot" cx="325" cy="273" r="5.2"/><circle class="dot" cx="351" cy="273" r="4.2"/><circle class="dot" cx="377" cy="273" r="6.2"/><circle class="dot" cx="403" cy="273" r="5.2"/><circle class="dot" cx="429" cy="273" r="4.2"/><circle class="dot" cx="455" cy="273" r="6.2"/><circle class="dot" cx="273" cy="299" r="5.2"/><circle class="dot" cx="299" cy="299" r="4.2"/><circle class="dot" cx="325" cy="299" r="6.2"/><circle class="dot" cx="351" cy="299" r="5.2"/><circle class="dot" cx="377" cy="299" r="4.2"/><circle class="dot" cx="403" cy="299" r="6.2"/><circle class="dot" cx="429" cy="299" r="5.2"/><circle class="dot" cx="325" cy="325" r="4.2"/><circle class="dot" cx="351" cy="325" r="6.2"/><circle class="dot" cx="377" cy="325" r="5.2"/><circle class="dot" cx="403" cy="325" r="4.2"/><circle class="dot" cx="325" cy="351" r="5.2"/><circle class="dot" cx="351" cy="351" r="4.2"/><g class="stmark" style="--d:0.0s"><title>California</title><circle class="halo" cx="54" cy="174" r="18"/><circle class="core" cx="54" cy="174" r="9"/><text x="54" y="152" text-anchor="middle">CA</text></g><g class="stmark" style="--d:0.35s"><title>Colorado</title><circle class="halo" cx="208" cy="153" r="18"/><circle class="core" cx="208" cy="153" r="9"/><text x="208" y="131" text-anchor="middle">CO</text></g><g class="stmark" style="--d:0.7s"><title>New Mexico</title><circle class="halo" cx="215" cy="236" r="18"/><circle class="core" cx="215" cy="236" r="9"/><text x="215" y="214" text-anchor="middle">NM</text></g><g class="stmark" style="--d:1.0499999999999998s"><title>Missouri</title><circle class="halo" cx="356" cy="184" r="18"/><circle class="core" cx="356" cy="184" r="9"/><text x="356" y="162" text-anchor="middle">MO</text></g><g class="stmark" style="--d:1.4s"><title>Illinois</title><circle class="halo" cx="392" cy="143" r="18"/><circle class="core" cx="392" cy="143" r="9"/><text x="392" y="121" text-anchor="middle">IL</text></g><g class="stmark" style="--d:1.75s"><title>Ohio</title><circle class="halo" cx="470" cy="127" r="18"/><circle class="core" cx="470" cy="127" r="9"/><text x="470" y="105" text-anchor="middle">OH</text></g><g class="stmark" style="--d:2.0999999999999996s"><title>New York</title><circle class="halo" cx="548" cy="75" r="18"/><circle class="core" cx="548" cy="75" r="9"/><text x="548" y="53" text-anchor="middle">NY</text></g><g class="stmark" style="--d:2.4499999999999997s"><title>New Jersey</title><circle class="halo" cx="569" cy="117" r="18"/><circle class="core" cx="569" cy="117" r="9"/><text x="569" y="95" text-anchor="middle">NJ</text></g></svg>
+    <div class="mapstats"><div><b>8</b><span>states</span></div><div><b>700+</b><span>licensed shops</span></div><div><b>1</b><span>standard</span></div></div>
   </div>
 </section>
 
 <section class="fields" id="fields">
   <div class="in">
-    <div>
-      <span class="caps" style="color: var(--red)">Between Harvests</span>
-      <h2>The flower is resting.</h2>
-      <p>Federal rules changed in 2026, so our smokable flower is off the site for now — not gone. Leave your email and be the first to know when something changes.</p>
-      <form class="zip" onsubmit="return false"><input type="email" placeholder="Your email" aria-label="Email address"><button type="submit">Notify me</button></form>
-    </div>
     <div>
       <span class="caps" style="color: var(--red)">Store Locator</span>
       <h2>Find Lowell near you.</h2>
@@ -318,7 +336,7 @@
   <div class="foot">
     <div class="signup">
       <h2>Letters from the farm</h2>
-      <p>New goods, restock news, and word when the flower returns.</p>
+      <p>New goods, restock news, and first word on drops.</p>
       <form class="zip" onsubmit="return false"><input type="email" placeholder="Your email" aria-label="Email address"><button type="submit">Sign up</button></form>
     </div>
     <div class="foot-cols">
