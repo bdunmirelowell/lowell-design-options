@@ -1,4 +1,22 @@
-<title>Lowell — Golden Hour</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lowell Herb Co — New Site Concept</title>
+<meta name="description" content="Homepage concept for the new lowellherbco.com — Great American Cannabis, the Farm Store, and the pack that started it all.">
+<meta property="og:title" content="Lowell Herb Co — New Site Concept">
+<meta property="og:description" content="Golden Hour direction: the new lowellherbco.com homepage concept, built with Lowell's own photography, typefaces, and voice.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bdunmirelowell.github.io/lowell-design-options/option2.html">
+<meta property="og:image" content="https://bdunmirelowell.github.io/lowell-design-options/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://bdunmirelowell.github.io/lowell-design-options/assets/og.jpg">
+<meta name="theme-color" content="#35291A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23F6EFDF' stroke='%2335291A' stroke-width='3'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='36' fill='%23A5301F'%3EL%3C/text%3E%3C/svg%3E">
+</head>
+<body>
 <style>
   @font-face { font-family: 'Lowell Serif'; src: url(assets/fonts/El-Hidrant-Regular.otf) format('opentype'); font-weight: 400; font-display: swap; }
   @font-face { font-family: 'Lowell Swash'; src: url(assets/fonts/El-Hidrant-Swash.otf) format('opentype'); font-weight: 400; font-display: swap; }
@@ -218,6 +236,34 @@
   .foot-cols a:hover { color: var(--sun); }
   .legal { margin-top: 48px; font-size: 12px; color: #8A7A5C; max-width: 76ch; line-height: 1.65; }
 
+  /* Film strip */
+  .filmstrip { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--sun-2); }
+  .filmstrip-track { display: flex; gap: 18px; width: max-content; padding: 26px 0; animation: filmslide 60s linear infinite; }
+  .filmstrip img { height: 240px; width: auto; border-radius: 10px; border: 1px solid var(--line); }
+  @media (prefers-reduced-motion: reduce) { .filmstrip-track { animation: none; } }
+  @media (max-width: 700px) { .filmstrip img { height: 160px; } }
+  @keyframes filmslide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* Journal */
+  .jcards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+  .jcard { text-decoration: none; color: var(--ink); display: block; }
+  .jcard .jim { aspect-ratio: 16/10; overflow: hidden; border-radius: 12px; border: 1px solid var(--line); margin-bottom: 16px; }
+  .jcard .jim img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.45s ease; }
+  .jcard:hover .jim img { transform: scale(1.05); }
+  .jcard h3 { font-size: 21px; font-weight: 400; margin: 8px 0 6px; }
+  .jcard p { font-size: 14.5px; color: var(--ink-soft); margin: 0; }
+  @media (max-width: 860px) { .jcards { grid-template-columns: 1fr; } }
+
+  /* Hero scroll cue */
+  .scrollcue { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 2;
+    color: rgba(251,246,233,0.75); font-family: var(--caps); font-size: 10px; letter-spacing: 0.34em;
+    text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .scrollcue::after { content: ""; width: 1px; height: 34px; background: linear-gradient(rgba(251,246,233,0.75), transparent); }
+  @media (prefers-reduced-motion: no-preference) {
+    .scrollcue { animation: cuebob 2.4s ease-in-out infinite; }
+    @keyframes cuebob { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
+  }
+
   .reveal { opacity: 1; }
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
@@ -242,7 +288,7 @@
 <nav>
   <div class="wordmark">Lowell</div>
   <div class="navlinks">
-    <a href="#shop">Farm Store</a><a href="#apart">What Sets Us Apart</a><a href="#unbox">The Pack</a><a href="#fields">Find Lowell</a>
+    <a href="#shop">Farm Store</a><a href="#apart">What Sets Us Apart</a><a href="#unbox">The Pack</a><a href="#journal">Journal</a><a href="#fields">Find Lowell</a>
   </div>
   <button class="btn" style="padding: 10px 20px">Cart &middot; 0</button>
 </nav>
@@ -258,6 +304,7 @@
       <button class="btn">Find our pre-rolls</button>
     </div>
   </div>
+  <div class="scrollcue">Scroll</div>
 </header>
 
 <section class="purpose">
@@ -365,11 +412,17 @@
       <a href="#" style="color:var(--red); font-size:17px;">Shop everything &rarr;</a>
     </div>
     <div class="cards">
-      <a class="card reveal" href="#"><div class="im"><img src="assets/tee-olive.jpg" alt="Green Bull's Head tee"></div>
+      <a class="card reveal" href="#"><div class="im"><img src="assets/denim-jacket.jpg" alt="Lowell denim jacket product still" loading="lazy"></div>
+        <div class="meta"><h3>Lowell Denim Jacket</h3><span class="price">$125</span></div></a>
+      <a class="card reveal" href="#"><div class="im"><img src="assets/duffel.jpg" alt="Wax canvas duffel bag with leather trim" loading="lazy"></div>
+        <div class="meta"><h3>Wax Canvas Duffel</h3><span class="price">$150</span></div></a>
+      <a class="card reveal" href="#"><div class="im"><img src="assets/tee-olive.jpg" alt="Green Bull's Head tee" loading="lazy"></div>
         <div class="meta"><h3>Green Bull&rsquo;s Head Tee</h3><span class="price">$30</span></div></a>
-      <a class="card reveal" href="#"><div class="im"><img src="assets/ritual.jpg" alt="Lowell ashtray and pack on burlap"></div>
+      <a class="card reveal" href="#"><div class="im"><img src="assets/tee-black.jpg" alt="Bull roundel tee in black" loading="lazy"></div>
+        <div class="meta"><h3>Bull Roundel Tee</h3><span class="price">$30</span></div></a>
+      <a class="card reveal" href="#"><div class="im"><img src="assets/ritual.jpg" alt="Lowell ashtray and pack on burlap" loading="lazy"></div>
         <div class="meta"><h3>Smoke Accessories</h3><span class="price">FROM $25</span></div></a>
-      <a class="card reveal" href="#"><div class="im"><img src="assets/tees.jpg" alt="Stack of Lowell tees" style="object-position: 76% center"></div>
+      <a class="card reveal" href="#"><div class="im"><img src="assets/model-tee.jpg" alt="Model wearing the Lowell crest tee" loading="lazy" style="object-position: 50% 22%"></div>
         <div class="meta"><h3>All Apparel</h3><span class="price">&rarr;</span></div></a>
     </div>
   </div>
@@ -384,7 +437,7 @@
       <h2>Find Lowell near you.</h2>
       <p>Our pre-rolls live behind the counter at 700+ licensed shops. Drop your zip — we’ll point you to the closest one.</p>
       <form class="zip" onsubmit="return false"><input type="text" inputmode="numeric" placeholder="Zip code" aria-label="Zip code"><button type="submit">Search</button></form>
-      <p class="states">California &middot; New Jersey &middot; Michigan &middot; Colorado &middot; Illinois &middot; Missouri &amp; more</p>
+      <p class="states">California &middot; Colorado &middot; New Mexico &middot; Illinois &middot; New Jersey &middot; New York &middot; Missouri &middot; Ohio</p>
     </div>
   </div>
 </section>
@@ -392,6 +445,31 @@
 <section class="press">
   <p class="quote">&ldquo;Lowell is one of the most widely recognized names in American cannabis, with a trailblazing legacy.&rdquo;</p>
   <div class="logos"><span>Forbes</span><span>Robb Report</span><span>Page Six</span><span>Newsweek</span></div>
+</section>
+
+<div class="filmstrip" aria-hidden="true"><div class="filmstrip-track">
+  <img src="assets/chey.jpg" alt="" loading="lazy"><img src="assets/beach-drift.jpg" alt="" loading="lazy"><img src="assets/packs.jpg" alt="" loading="lazy"><img src="assets/greenhouse.jpg" alt="" loading="lazy"><img src="assets/model-tee.jpg" alt="" loading="lazy"><img src="assets/pack-tray.jpg" alt="" loading="lazy">
+  <img src="assets/chey.jpg" alt="" loading="lazy"><img src="assets/beach-drift.jpg" alt="" loading="lazy"><img src="assets/packs.jpg" alt="" loading="lazy"><img src="assets/greenhouse.jpg" alt="" loading="lazy"><img src="assets/model-tee.jpg" alt="" loading="lazy"><img src="assets/pack-tray.jpg" alt="" loading="lazy">
+</div></div>
+
+<section class="band" id="journal">
+  <div class="wrap" style="padding-top: 84px">
+    <div class="sect-head">
+      <span class="caps">The Journal</span>
+      <h2 class="title">Letters from the farm.</h2>
+    </div>
+    <div class="jcards">
+      <a class="jcard reveal" href="#"><div class="jim"><img src="assets/greenhouse.jpg" alt="Inside a Lowell greenhouse" loading="lazy"></div>
+        <span class="caps" style="color: var(--red); letter-spacing: 0.22em">Field Notes</span>
+        <h3>Farming Cannabis</h3><p>George Allen on sun-grown flower, local farmers, and doing it the slow way.</p></a>
+      <a class="jcard reveal" href="#"><div class="jim"><img src="assets/jars.jpg" alt="The Farmer's Eighth jars" loading="lazy"></div>
+        <span class="caps" style="color: var(--red); letter-spacing: 0.22em">Craft</span>
+        <h3>Why We Blend</h3><p>Single strains are a gamble. Blends are a recipe. The case for terpene diversity.</p></a>
+      <a class="jcard reveal" href="#"><div class="jim"><img src="assets/pack-tray.jpg" alt="Open Lowell pack tray" loading="lazy" style="object-position: 50% 40%"></div>
+        <span class="caps" style="color: var(--red); letter-spacing: 0.22em">Design</span>
+        <h3>The Craft of the Box</h3><p>Magnetic flap, wax liner, emergency matches — why the pack is engineered like the smoke.</p></a>
+    </div>
+  </div>
 </section>
 
 <footer>
@@ -420,3 +498,5 @@
     });
   })();
 </script>
+</body>
+</html>
