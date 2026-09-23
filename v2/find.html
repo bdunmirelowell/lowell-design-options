@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Find Lowell · Store locator · Lowell Herb Co. (v2 preview)</title>
+<meta name="description" content="Find licensed dispensaries carrying Lowell pre-rolls near you, in California, Colorado, New Mexico, Missouri, Illinois, Ohio, New York and New Jersey.">
+<meta property="og:title" content="Find Lowell · Store locator · Lowell Herb Co. (v2 preview)">
+<meta property="og:description" content="Find licensed dispensaries carrying Lowell pre-rolls near you, in California, Colorado, New Mexico, Missouri, Illinois, Ohio, New York and New Jersey.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bdunmirelowell.github.io/lowell-design-options/v2/find.html">
+<meta property="og:image" content="https://bdunmirelowell.github.io/lowell-design-options/v2/img/og-v2.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://bdunmirelowell.github.io/lowell-design-options/v2/img/og-v2.jpg">
+<meta name="theme-color" content="#F6EFDF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23F6EFDF' stroke='%2335291A' stroke-width='3'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='36' fill='%23A5301F'%3EL%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="../assets/fonts/El-Hidrant-Regular.otf" as="font" type="font/otf" crossorigin>
+<link rel="stylesheet" href="assets/site.v1.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="preconnect" href="https://brya8385.github.io" crossorigin>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-h" aria-describedby="gate-d" hidden>
+  <div class="gate-card">
+    <span class="eyebrow red">Lowell Herb Co.</span>
+    <h2 class="h2" id="gate-h">Let&rsquo;s keep this legal.</h2>
+    <p class="small" id="gate-d">You must be 21 or older to enter. By entering you confirm you&rsquo;re of legal age and agree to our Terms and Privacy Policy.</p>
+    <div class="gate-actions">
+      <button class="btn" type="button" id="gate-yes">Yes, I&rsquo;m 21+</button>
+      <button class="btn line" type="button" id="gate-no">Not yet</button>
+    </div>
+    <p class="small gate-no-msg" id="gate-msg" aria-live="polite"></p>
+  </div>
+</div>
+<aside class="ribbon" aria-label="Preview notice"><span class="long">Design preview for team feedback &middot; not the live site &middot; </span><span class="short">Preview &middot; not the live site &middot; </span><a href="../index.html">All directions</a></aside>
+<header class="site-head" id="top">
+  <div class="container">
+    <a class="wordmark" href="index.html" aria-label="Lowell Herb Co. home">Lowell</a>
+    <nav class="nav" aria-label="Main"><a href="shop.html">Farm Store</a><a href="index.html#pack">The Pack</a><a href="index.html#journal">Journal</a></nav>
+    <div class="head-actions">
+      <a class="btn sm" href="find.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Find Lowell</a>
+      <a class="icon-btn" href="shop.html" aria-label="Cart, 0 items (checkout arrives with the Shopify build)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 7h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9L5 7Z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg><span class="cart-count" aria-hidden="true">0</span></a>
+      <button class="icon-btn menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="sheet" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+  <div class="sheet-top"><a class="wordmark" href="index.html">Lowell</a>
+    <button class="icon-btn" type="button" id="menu-close" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <nav aria-label="Main"><a href="index.html">Home</a><a href="shop.html">Farm Store</a><a href="find.html" aria-current="page">Find Lowell</a><a href="index.html#pack">The Pack</a><a href="index.html#journal">Journal</a></nav>
+  <div class="sheet-zip">
+    <span class="eyebrow">Find Lowell near you</span>
+    <form class="field js-zip" action="find.html" method="get" role="search" aria-label="Find Lowell by ZIP code">
+      <label class="sr-only" for="zip-sheet">ZIP code</label>
+      <input id="zip-sheet" name="zip" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{5}" maxlength="5" placeholder="Your ZIP code" required>
+      <button type="submit">Find</button>
+    </form>
+    <p class="field-note" aria-live="polite"></p>
+  </div>
+</div>
+<main id="main" class="fl" data-doors="https://brya8385.github.io/find-lowell/data/doors.json">
+<section class="page-head fl-head" aria-labelledby="fl-h">
+  <div class="container fl-headgrid">
+    <div class="fl-intro">
+      <p class="crumbs"><a href="index.html">Home</a> / Find Lowell</p>
+      <h1 class="fl-title" id="fl-h">Find Lowell</h1>
+      <p class="small">Every licensed shop carrying Lowell, with what&rsquo;s on its shelf today wherever the shop&rsquo;s own menu tells us.</p>
+    </div>
+    <form class="fl-search" id="fl-form" role="search" aria-label="Search stores">
+      <span class="fl-asof mono" id="fl-asof">Loading store list&hellip;</span>
+      <div class="field">
+        <label class="sr-only" for="fl-q">ZIP code or city</label>
+        <input id="fl-q" name="q" autocomplete="postal-code" placeholder="ZIP code or city" enterkeyhint="search">
+        <button type="submit">Search</button>
+      </div>
+      <p class="field-note" id="fl-note" aria-live="polite"></p>
+    </form>
+  </div>
+  <div class="container">
+    <details class="fl-filters" id="fl-filters" hidden>
+      <summary class="chip" id="fl-fsum">Filters<span class="mono" id="fl-fcount"></span></summary>
+      <div class="fl-fbody">
+      <div class="fl-group" role="group" aria-labelledby="g-rad"><span class="fl-lbl" id="g-rad">Within</span><div id="fl-rad"></div></div>
+      <div class="fl-group" role="group" aria-labelledby="g-line"><span class="fl-lbl" id="g-line">Line</span><div id="fl-line"></div></div>
+      <div class="fl-group" role="group" aria-labelledby="g-lean"><span class="fl-lbl" id="g-lean">Type</span><div id="fl-lean"></div></div>
+      <div class="fl-group" role="group" aria-labelledby="g-st"><span class="fl-lbl" id="g-st">State</span><div id="fl-st"></div></div>
+      </div>
+    </details>
+  </div>
+</section>
+<section class="fl-body" aria-labelledby="fl-results-h">
+  <div class="fl-panel">
+    <h2 class="sr-only" id="fl-results-h">Stores</h2>
+    <div class="fl-resulthead"><p class="fl-count" id="fl-count" aria-live="polite"></p>
+      <label class="fl-toggle"><input type="checkbox" id="fl-stock" checked> In stock only</label></div>
+    <div class="fl-reveal" id="fl-reveal" hidden></div>
+    <div class="fl-list" id="fl-list"><div class="fl-loading">Loading stores&hellip;</div></div>
+  </div>
+  <div class="fl-mapwrap"><div id="fl-map" role="region" aria-label="Map of stores"></div></div>
+</section>
+<section class="section sand fl-key" aria-labelledby="key-h">
+  <div class="container">
+    <h2 class="h3" id="key-h">How to read the list</h2>
+    <ul class="fl-keylist">
+      <li><span class="kdot k-stock" aria-hidden="true"></span><div><b>In stock</b><p class="small">Listed on the shop&rsquo;s own online menu today, at the shelf price that menu quotes.</p></div></li>
+      <li><span class="kdot k-out" aria-hidden="true"></span><div><b>Listed, out today</b><p class="small">The shop carries Lowell but its menu shows none in stock right now.</p></div></li>
+      <li><span class="kdot k-ship" aria-hidden="true"></span><div><b>Carries Lowell &middot; shipped &lt;date&gt;</b><p class="small">We delivered to this shop on that date. No live menu feed, so no stock or price: call ahead.</p></div></li>
+      <li><span class="kdot k-partner" aria-hidden="true"></span><div><b>Partner-reported</b><p class="small">From our retail partner&rsquo;s monthly report. Placed by city, not street address. No price shown.</p></div></li>
+    </ul>
+  </div>
+</section>
+</main>
+<footer class="site-foot on-ink">
+  <div class="container">
+    <div class="foot-top">
+      <div>
+        <h2 class="h2">Letters from the farm</h2>
+        <p>New goods, restock news and first word on drops. One email a month, at most.</p>
+        <form class="field js-signup" action="#" aria-label="Email sign-up">
+          <label class="sr-only" for="signup-email">Email address</label>
+          <input id="signup-email" type="email" autocomplete="email" placeholder="Your email" required>
+          <button type="submit">Sign up</button>
+        </form>
+        <p class="field-note" aria-live="polite"></p>
+      </div>
+      <div class="foot-cols">
+        <div><h3>Shop</h3><a href="shop.html">Farm Store</a><a href="shop.html?c=apparel">Apparel</a><a href="shop.html?c=luggage">Luggage</a><a href="shop.html?c=accessories">Accessories</a></div>
+        <div><h3>Lowell</h3><a href="find.html">Find Lowell</a><a href="index.html#apart">What sets us apart</a><a href="index.html#pack">The Pack</a><a href="index.html#journal">Journal</a></div>
+        <div><h3>Help</h3><a href="#top">Contact</a><a href="#top">Shipping &amp; returns</a><a href="#top">Privacy</a><a href="#top">Terms</a><a href="#top">Instagram</a></div>
+      </div>
+    </div>
+    <ul class="values" aria-label="What we value"><li>Freedom</li><li>Confidence</li><li>No Bullshit</li><li>Generosity</li><li>Originality</li><li>Family</li><li>Good Vibes</li></ul>
+    <div class="foot-legal">
+      <p>For adults 21 and over. Nothing sold in the Farm Store contains cannabis. Lowell pre-rolls and flower are sold only through licensed dispensaries, and availability varies by state. [Licensee name and license number shown here per state marketing rules.] &copy; 2026 Lowell Herb Co.</p>
+      <a class="wordmark" href="#top" aria-label="Back to top">Lowell</a>
+    </div>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="assets/find.v1.js"></script>
+<script src="assets/site.v1.js"></script>
+</body>
+</html>

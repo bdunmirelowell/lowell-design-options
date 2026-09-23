@@ -1,0 +1,191 @@
+[
+ {
+  "slug": "lowell-herb-mill-grinder",
+  "title": "Lowell Herb Mill Grinder",
+  "price": 40.0,
+  "price_hi": 40.0,
+  "cat": "Accessories",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "lowell-leather-rolling-tray",
+  "title": "Lowell Leather Rolling Tray",
+  "price": 50.0,
+  "price_hi": 50.0,
+  "cat": "Accessories",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "lowell-heritage-belt-buckle",
+  "title": "Lowell Heritage Belt Buckle",
+  "price": 35.0,
+  "price_hi": 35.0,
+  "cat": "Accessories",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "luggage-bundle",
+  "title": "Luggage Bundle",
+  "price": 350.0,
+  "price_hi": 350.0,
+  "cat": "Luggage",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "lowell-hockey-jersey",
+  "title": "Lowell Hockey Jersey",
+  "price": 150.0,
+  "price_hi": 150.0,
+  "cat": "Apparel",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "great-american-cannabis-hoodie",
+  "title": "Great American Cannabis Hoodie",
+  "price": 70.0,
+  "price_hi": 70.0,
+  "cat": "Apparel",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "wax-canvas-briefcase",
+  "title": "Waxed Canvas Briefcase",
+  "price": 120.0,
+  "price_hi": 120.0,
+  "cat": "Luggage",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "wax-canvas-dop-kit",
+  "title": "Waxed Canvas Dop Kit",
+  "price": 40.0,
+  "price_hi": 40.0,
+  "cat": "Luggage",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "wax-canvas-backpack",
+  "title": "Waxed Canvas Backpack",
+  "price": 135.0,
+  "price_hi": 135.0,
+  "cat": "Luggage",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "wax-canvas-duffel-bag",
+  "title": "Wax Canvas Duffel Bag",
+  "price": 150.0,
+  "price_hi": 150.0,
+  "cat": "Luggage",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "raspberry-linen-farmer-jacket",
+  "title": "Raspberry Red Linen Farmer Jacket",
+  "price": 87.5,
+  "price_hi": 87.5,
+  "cat": "Apparel",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "waxed-canvas-detroit-jacket",
+  "title": "Waxed Canvas Detroit Jacket",
+  "price": 150.0,
+  "price_hi": 150.0,
+  "cat": "Apparel",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "grey-rope-hat",
+  "title": "Grey Rope Hat",
+  "price": 28.0,
+  "price_hi": 28.0,
+  "cat": "Apparel",
+  "avail": false,
+  "opaque": false
+ },
+ {
+  "slug": "flip-top-metal-lighter",
+  "title": "Flip Top Metal Lighter",
+  "price": 25.0,
+  "price_hi": 25.0,
+  "cat": "Accessories",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "preroll-hoodie",
+  "title": "Preroll? Hoodie",
+  "price": 70.0,
+  "price_hi": 70.0,
+  "cat": "Apparel",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "lowell-denim-jacket",
+  "title": "Lowell Denim Jacket",
+  "price": 125.0,
+  "price_hi": 125.0,
+  "cat": "Apparel",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "wax-canvas-stash-bag",
+  "title": "Waxed Canvas Stash Bag",
+  "price": 25.0,
+  "price_hi": 25.0,
+  "cat": "Luggage",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "green-bulls-head-tee",
+  "title": "Green Bull's Head Tee",
+  "price": 30.0,
+  "price_hi": 30.0,
+  "cat": "Apparel",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "bulls-head-cigar-lighter",
+  "title": "Bull's Head Cigar Lighter",
+  "price": 30.0,
+  "price_hi": 30.0,
+  "cat": "Accessories",
+  "avail": true,
+  "opaque": false
+ },
+ {
+  "slug": "green-distressed-hat",
+  "title": "Green Distressed Hat",
+  "price": 28.0,
+  "price_hi": 28.0,
+  "cat": "Apparel",
+  "avail": false,
+  "opaque": false
+ },
+ {
+  "slug": "bulls-head-metal-ashtray",
+  "title": "Signature Metal Ashtray",
+  "price": 25.0,
+  "price_hi": 25.0,
+  "cat": "Accessories",
+  "avail": true,
+  "opaque": false
+ }
+]
