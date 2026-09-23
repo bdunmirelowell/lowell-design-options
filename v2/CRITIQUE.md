@@ -16,7 +16,6 @@ The direction holds up: warm paper, oxblood red, El Hidrant headlines, sunlit ph
 | `jars.jpg` | Journal card "Why We Blend" | Jar labels carry three strain names |
 | `roof-laugh.jpg` (hero, og.jpg), `beanies.jpg`, `chey.jpg`, `beach-drift.jpg`, `greenhouse.jpg` | Hero, community band, film strip, Journal | Unconfirmed-rights shoots (see v2 README for the full list) |
 | "Bull Roundel Tee $30" | Farm Store grid | Not in the store catalog (lowell-farms.myshopify.com lists 21 merch items; this is not one of them) |
-| Footer "@lowellfarms" | Follow column | Reads as the Lowell Farms Inc. name, a separate company |
 
 ## Usability
 

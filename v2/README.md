@@ -13,6 +13,18 @@ This is a static design preview for team feedback, not the Shopify build. Every 
 
 The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
 
+## Round 2 (23 Sep, after Bryan's review: "too much white space, need more/better images; locator looks nice")
+
+- **Less white space.** Section padding went from 72–128px to 48–88px, and heading-to-content gaps from 64px to 32px. The purpose line, press quote and footer are compact bands. The home page is about 12% shorter (8,050px vs 9,120px at 1440px wide) while carrying 25 photos instead of 18.
+- **Full-bleed photo hero**, as in the July page the CEO picked: a dusk bonfire at a 2025 Lowell farm party, with the headline over the sky.
+- **Farm Store bento:** eight products plus two lifestyle tiles (the Wax Canvas Duffel in use; the Lowell Denim Jacket at the farm party).
+- **"Bring people together" mosaic:** four photos and the mission line on a dark band.
+- **The Pack:** photo, features and film side by side instead of stacked.
+- **Edge-to-edge photo band** above the footer: farm, people, product.
+- **Farm Store page:** a photo header and photo category tiles, replacing cream cards with cutouts.
+- **Find Lowell:** unchanged.
+- **@lowellfarms** is linked in the footer. Bryan confirmed it's the brand's Instagram handle.
+
 ## What changed and why
 
 **Rules the old page broke**
@@ -22,19 +34,18 @@ The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
 - The age gate's "Est. 1909" line is removed.
 - The "Smoke Accessories" card sold the stone ashtray from the Eunbi shoot, which isn't a Lowell product. The Farm Store now shows the real Signature Metal Ashtray, and the stone ashtray is never captioned as a Lowell product.
 - "Bull Roundel Tee" (not in the catalog) is gone. Every product name and price now matches the live Farm Store catalog (lowell-farms.myshopify.com, pulled 23 Sep 2026).
-- The footer's "@lowellfarms" handle is removed because it reads as the separate public company. "Instagram" is a placeholder link.
 - **All photos from the two unconfirmed shoots are out.** See the rights table below.
 
 **Sharper, same direction**
 - Type is on one seven-step scale; the old page had 18 fixed sizes plus 7 clamps.
 - Spacing is on one 8-pt scale, and every section uses the same rhythm.
 - Colour tokens are unchanged except two text tones darkened to pass WCAG AA: eyebrows went from 2.2:1 to 5.0:1, and secondary text on sand from 4.2:1 to 5.3:1.
-- Hero is a split layout: a 100px headline beside an arched photo (the arch motif from the age gate). The paragraph is cut from 43 to 30 words, and the CTAs are real links.
+- Hero paragraph is cut from 43 to 20 words, and the CTAs are real links (round 2 restored the full-bleed photo hero; see above).
 - Merged sections:
   - The two pack sections are one: annotated photo, four features, and the film.
   - The map band and the ZIP band are one "Find Lowell" band: ZIP box, state chips and map.
 - The Farm Store moved from seventh section to fourth and uses the store's transparent product cutouts on a single card style.
-- The auto-scrolling film strip is now a swipeable strip with no animation.
+- The auto-scrolling film strip is gone; round 2 replaced it with a static edge-to-edge photo band.
 
 **Works on a phone**
 - A menu button opens a full-screen sheet with the nav and a ZIP box.
@@ -47,10 +58,10 @@ The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
 - axe-core (WCAG 2.1 AA + best practice) reports **0 violations** on Home, Find Lowell, Farm Store and Product, at 1440px and 390px.
 
 **Load weight**
-- Home first view: **0.56 MB, down from 2.1 MB**. Full scroll: **1.2 MB, down from 3.9 MB**, not counting the video.
+- Home first view: **0.65 MB, down from 2.1 MB**. Full scroll: **1.2 MB, down from 3.9 MB**, not counting the video (round 2, with 25 photos).
 - Film: **4.7 MB, down from 26.7 MB**. It has a poster and `preload="none"`, so it downloads only when played. The old page requested it on load.
 - WebP with `srcset`; only the hero image loads eagerly.
-- CSS and JS filenames are versioned per deploy (`site.v1.css`, `find.v1.js`), because GitHub Pages ignores `?v=`.
+- CSS and JS filenames are versioned per deploy (`site.v2.css`, `find.v2.js` as of round 2), because GitHub Pages ignores `?v=`.
 
 **Find Lowell**
 - Uses the find-lowell app's behaviour as its spec:
@@ -80,7 +91,7 @@ Brief rule: swap out the Erica Danger 2021 shoot and the 2021 Summer Lifestyle S
 
 How this was checked:
 - Each July image was traced to its Drive original by perceptual hash across 4,818 Drive images.
-- Each v2 source file was searched by filename across all five flagged-shoot folders: 0 hits.
+- Each v2 source file was searched by filename across all five flagged-shoot folders: 0 hits. In round 2, the prefix `LHC_35s_` matched 5 files there, but those are 2022 holiday frames filed inside a copy of the 2021 folder, not files v2 uses.
 - The two Hero Pack Shots were hash-compared against the flagged shoot's own product frames (`Lowell Farms Photoshoot/Selects/GREENHOUSE/Product Additions`): no match. Distances were 111–134 of 256 bits; a copy scores under about 30.
 - **Not done:** a full perceptual sweep of v2's sources against all 1,589 flagged-shoot images. Drive streaming made it take hours, so I stopped it. A renamed copy of a flagged frame would get past the filename search.
 
@@ -90,14 +101,20 @@ Every image v2 uses (sources under `Shared drives/Graphic Design/Photography` un
 
 | v2 file | Where it's used | Source | Rights status |
 |---|---|---|---|
-| `hero-pack-*`, `og-v2.jpg` | Hero, share card | `Eunbi Ashtray, Hex Pipe Bundles/Ashtray, Pack/Export186576.jpg`. Strain name retouched off the label. | Eunbi accessory shoot, listed in the brief as a replacement source. The ashtray is stone, not a Lowell product, and isn't captioned as one. |
-| `film-pack.webp` | Photo strip | `Eunbi …/Ashtray, Pack/Export186582.jpg`, label retouched | Same shoot |
+| `hero-dusk-*`, `og-v2.jpg` | Home hero, share card | `2025/2025 Events/New York/6-5-25 Lowell Bonfire Party/Thank You Carousel Assets/Lowell x Revelry-15.jpg` | Lowell's own event photography (the 132A camera series). Guests are identifiable: **confirm likeness releases**. |
+| `mo-sunset-*` | People mosaic | Same folder, `Lowell x Revelry-14.jpg` (a hand holding a pre-roll against the sun) | Same as above; no face shown. |
+| `ls-denim-*` | Farm Store tile, Shop "Apparel" | Same party, `Photos/Kwesi's Raw Photos/132A0091.JPG` | Same as above: **confirm likeness releases**. |
+| `mo-pass-*`, `mo-smoke-*`, `band-greens-*` | People mosaic, photo band | `35s/House Shoot/Finals/…` (files named `Lowell Farms3421_F.jpg`, `Lowell Farms3934_F.jpg`, `Lowell Farms2803 _F.jpg`) | 2022 commissioned 35's lifestyle shoot with professional models. The filenames say it was shot under Lowell Farms Inc.: **confirm the licence carried over to the brand**. In `mo-pass` the blend name on the pack spine is blurred. |
+| `mo-pool-*`, `band-light-*` | People mosaic, photo band | `35s/2023 Lifestyle Sanitized/LHC_35s_…_Sanitized_010623.jpg` | Same shoot, "sanitized" versions: no blend name is legible on the packs. Same licence question. |
+| `ls-luggage-*`, `shop-head-*` | Farm Store tile, Shop header | `2025/Merch/Luggae Photoshoot - Lifestyle and Product Photography/BackPackShootB10.jpg` | In-house 2025 merch shoot. Model release not in Drive: **confirm**. |
+| `ls-backpack-*` | Shop "Luggage" | Same folder, `BackPackshootA-23.jpg` | Same as above. Source is 859px wide, so it's used small. |
+| `ls-ashtray-*` | Shop "Accessories" | `2026/Packs   Tins/New York/The Outlaw/132A0810.JPG` | In-house product photography of the Signature Metal Ashtray. |
+| `journal-hudson-*`, `band-tractor-*` | Journal, photo band | `2025/2025 Events/New York/10-9-25 Hudson Farm Harvest/` (video stills 132A0037, 132A0042) | In-house, Lowell's NY farm harvest. |
+| `hero-pack-*` | Photo band | `Eunbi Ashtray, Hex Pipe Bundles/Ashtray, Pack/Export186576.jpg`. Strain name retouched off the label. | Eunbi accessory shoot, listed in the brief as a replacement source. The ashtray is stone, not a Lowell product, and isn't captioned as one. |
 | `preroll-*` | Pre-roll diagram | `D2C Digital Images/PNGS/HYBRID_Single_…_25.png` (the July asset; the filename carries a strain name). Strain name retouched off the tube. | In-house product render |
 | `pack-tray-*` | The Pack | `Hero Pack Shots/ne1jQrmg.jpeg` | Not a flagged shoot. Photographer not recorded in Drive: **confirm**. |
 | `journal-box-*` | Journal | `Hero Pack Shots/2S7HO84w.jpeg`, blend name retouched off the label | Same as above: **confirm** |
-| `journal-farm-*`, `journal-blend-*`, `film-canopy`, `film-prerolls`, `film-leaf` | Journal, photo strip | `FarmVisit_121421` (iPhone and Canon 5D) | Farm visit, Dec 2021. Listed in the brief as a replacement source. |
-| `people-*` | "Bring people together" | `2025/2025 Events/New York/6-5-25 Lowell Bonfire Party/Photos/Kwesi's Raw Photos/132A0081.JPG` | Lowell's own event photography. Attendees are identifiable, and one jacket shows an embroidered first name: **confirm a likeness release**. |
-| `film-tee.webp` | Photo strip | `Merchandise Lifestyle Shots/Green Lowell Shirt/132A9928.JPG` | Same in-house camera series (132A) as the 2025 event shoots. Model release not in Drive: **confirm**. |
+| `journal-blend-*`, `film-canopy` | Journal, photo band | `FarmVisit_121421` (iPhone) | Farm visit, Dec 2021. Listed in the brief as a replacement source. |
 | `farm-to-pack-v2.mp4`, poster | The Pack | The July `farm-to-pack.mp4` (from a 140 MB Drive original), trimmed | In-house production footage, not a flagged shoot. |
 | `p/*.webp` (21 products) | Farm Store | Product cutouts from the live Shopify catalog CDN | Lowell's own product photography |
 
@@ -116,6 +133,9 @@ Images that "confirm" doesn't cover: none. The v1 pages (option1–4) still use 
 
 **Locator setup**
 - The map uses the public OpenStreetMap tile server. That's fine for a preview, but OSM's usage policy rules it out for production traffic, so the live site needs a tile provider.
+
+**Imagery and state rules**
+- Several photos show people smoking: the mosaic, the photo band, and the July page's hero did too. Check each launch state's cannabis marketing rules on depicting consumption before the real site goes live.
 
 **Placeholders and unverified copy**
 - Farm Store product pages, cart, checkout and email sign-up are placeholders.

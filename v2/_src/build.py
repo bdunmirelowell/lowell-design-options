@@ -10,7 +10,7 @@ and ignores ?v= query strings.
 """
 import html, json, pathlib, re, shutil
 
-VER = "v1"
+VER = "v2"
 SRC = pathlib.Path(__file__).resolve().parent
 OUT = SRC.parent
 BASE = "https://bdunmirelowell.github.io/lowell-design-options/v2/"
@@ -134,7 +134,7 @@ def footer():
       <div class="foot-cols">
         <div><h3>Shop</h3><a href="shop.html">Farm Store</a><a href="shop.html?c=apparel">Apparel</a><a href="shop.html?c=luggage">Luggage</a><a href="shop.html?c=accessories">Accessories</a></div>
         <div><h3>Lowell</h3><a href="find.html">Find Lowell</a><a href="index.html#apart">What sets us apart</a><a href="index.html#pack">The Pack</a><a href="index.html#journal">Journal</a></div>
-        <div><h3>Help</h3><a href="#top">Contact</a><a href="#top">Shipping &amp; returns</a><a href="#top">Privacy</a><a href="#top">Terms</a><a href="#top">Instagram</a></div>
+        <div><h3>Help</h3><a href="#top">Contact</a><a href="#top">Shipping &amp; returns</a><a href="#top">Privacy</a><a href="#top">Terms</a><a href="https://www.instagram.com/lowellfarms/" rel="noopener">Instagram @lowellfarms</a></div>
       </div>
     </div>
     <ul class="values" aria-label="What we value"><li>Freedom</li><li>Confidence</li><li>No Bullshit</li><li>Generosity</li><li>Originality</li><li>Family</li><li>Good Vibes</li></ul>
@@ -174,9 +174,13 @@ def pcard(p, sizes="(max-width: 760px) 46vw, 30vw"):
 
 
 # ---------------------------------------------------------------- home
+def lstile(name, widths, alt, label, href, sizes, cls=""):
+    return (f'<a class="ls-tile {cls}" href="{href}">{pic(name, widths, alt, sizes)}'
+            f'<span class="ls-cap"><span>{label}</span><span aria-hidden="true">&rarr;</span></span></a>')
+
+
 def page_home():
     usmap = (SRC / "partials" / "usmap.svg").read_text()
-    names = dict(STATES)
     for st, name in STATES:
         s = st.lower()
         usmap = re.sub(rf'(<path class="{s}" d="[^"]*">\s*</path>)',
@@ -185,29 +189,31 @@ def page_home():
     # the state chips are the accessible control; the map is decoration for sighted mouse users
     usmap = usmap.replace('role="img" aria-labelledby="map-title"', 'aria-hidden="true" focusable="false"')
     usmap = re.sub(r'<title id="map-title">.*?</title>', '', usmap)
-    home6 = ["lowell-denim-jacket", "wax-canvas-duffel-bag", "green-bulls-head-tee",
-             "bulls-head-metal-ashtray", "lowell-leather-rolling-tray", "great-american-cannabis-hoodie"]
+    first4 = ["lowell-denim-jacket", "wax-canvas-duffel-bag", "green-bulls-head-tee", "bulls-head-metal-ashtray"]
+    next4 = ["lowell-leather-rolling-tray", "great-american-cannabis-hoodie", "wax-canvas-backpack", "lowell-hockey-jersey"]
+    psz = "(max-width: 760px) 46vw, 22vw"
     chips = "".join(f'<a class="chip" href="find.html?st={st}" data-st="{st}">{name}</a>' for st, name in STATES)
     body = f"""<main id="main">
-<section class="hero" aria-labelledby="hero-h">
-  <div class="container">
-    <div class="hero-copy">
-      <span class="eyebrow red">Great American Cannabis</span>
-      <h1 class="display" id="hero-h">Grown with intention. <em>Blended</em> to perfection.</h1>
-      <p class="lede">We don&rsquo;t want to reinvent how you smoke, just make it better. From how we grow our cannabis to how we roll, pack and ship it, every detail is considered.</p>
-      <div class="hero-ctas">
-        <a class="btn" href="shop.html">Shop the Farm Store</a>
-        <a class="btn line" href="find.html">{ICON_PIN}Find Lowell near you</a>
-      </div>
+<section class="hero-full on-photo" aria-labelledby="hero-h">
+  <picture>
+    <source media="(max-width: 760px)" type="image/webp" srcset="img/hero-dusk-tall-640.webp 640w, img/hero-dusk-tall-960.webp 960w" sizes="100vw">
+    <source type="image/webp" srcset="img/hero-dusk-1440.webp 1440w, img/hero-dusk-2200.webp 2200w" sizes="100vw">
+    <img src="img/hero-dusk-1600.jpg" alt="Friends talking in the firelight on a Lowell farm at dusk" fetchpriority="high">
+  </picture>
+  <div class="container hero-inner">
+    <div class="hero-top">
+      <span class="eyebrow">Great American Cannabis</span>
+      <h1 class="display" id="hero-h">Grown with intention.<br><em>Blended</em> to perfection.</h1>
+      <p class="lede">We don&rsquo;t want to reinvent how you smoke, just make it better. Every detail, from the farm to the pack, is considered.</p>
     </div>
-    <figure class="hero-media" style="margin:0">
-      <div class="arch">{pic("hero-pack", [720, 1200], "A Lowell Smokes pack and a stone ashtray with a pre-roll on a walnut table, matches beside them, in warm afternoon light", "(max-width: 860px) 90vw, 540px", eager=True, jpg=1200)}</div>
-      <div class="hero-stamp" aria-hidden="true">Natura<br>Arte<br>Aucta</div>
-    </figure>
+    <div class="hero-ctas">
+      <a class="btn" href="shop.html">Shop the Farm Store</a>
+      <a class="btn line" href="find.html">{ICON_PIN}Find Lowell near you</a>
+    </div>
   </div>
 </section>
 
-<section class="section sand purpose" aria-labelledby="purpose-h">
+<section class="purpose-band" aria-labelledby="purpose-h">
   <div class="container">
     <span class="eyebrow" id="purpose-h">Why we exist</span>
     <blockquote>&ldquo;To bring great American cannabis to <em>everyone</em>.&rdquo;</blockquote>
@@ -215,12 +221,28 @@ def page_home():
   </div>
 </section>
 
-<section class="section" id="apart" aria-labelledby="apart-h">
+<section class="section" id="shop" aria-labelledby="shop-h">
+  <div class="container">
+    <div class="sect-head row">
+      <span class="eyebrow red">The Farm Store</span>
+      <h2 class="h2" id="shop-h">Timeless goods. No gimmicks.</h2>
+      <p class="lede">Lowell-designed goods, made to our spec and shipped by us, direct to your door, nationwide. It&rsquo;s the only place we sell direct.</p>
+      <a class="link-arrow" href="shop.html">Shop all {len(PRODUCTS)}</a>
+    </div>
+    <div class="bento">
+      {lstile("ls-luggage", [640, 1000], "A woman in a green jacket carrying the Wax Canvas Duffel Bag", "Waxed canvas luggage", "shop.html?c=luggage#all", "(max-width: 760px) 92vw, 46vw", "a")}
+      {"".join(pcard(BY_SLUG[s], psz) for s in first4)}
+      {"".join(pcard(BY_SLUG[s], psz) for s in next4)}
+      {lstile("ls-denim", [640, 1000], "Friends at a Lowell farm party, one wearing the Lowell Denim Jacket with its bull's-head back print", "Apparel", "shop.html?c=apparel#all", "(max-width: 760px) 92vw, 46vw", "b")}
+    </div>
+  </div>
+</section>
+
+<section class="section sand" id="apart" aria-labelledby="apart-h">
   <div class="container">
     <div class="sect-head">
       <span class="eyebrow red">What sets us apart</span>
       <h2 class="h2" id="apart-h">Every product, crafted with respect for the plant, our planet, and you.</h2>
-      <p class="lede">We sweat the details so you don&rsquo;t need to.</p>
     </div>
     <div class="diagram">
       <ol class="points left" aria-label="Details, part one">
@@ -228,7 +250,7 @@ def page_home():
         <li class="point"><span class="num" aria-hidden="true">2</span><h3>Always blended</h3><p>A purposeful blend inside: terpene diversity, flavor, balance.</p></li>
       </ol>
       <figure class="diagram-figure">
-        <picture><source type="image/webp" srcset="img/preroll-560.webp 560w, img/preroll-900.webp 900w" sizes="(max-width: 900px) 340px, 420px">
+        <picture><source type="image/webp" srcset="img/preroll-560.webp 560w, img/preroll-900.webp 900w" sizes="(max-width: 900px) 300px, 380px">
           <img src="img/preroll-700.png" alt="A Lowell pre-roll beside its glass travel tube and a Lowell matchbook" loading="lazy" decoding="async" width="700" height="700"></picture>
         <span class="pin-mark" style="left:52%;top:30%" aria-hidden="true">1</span>
         <span class="pin-mark" style="left:52%;top:55%" aria-hidden="true">2</span>
@@ -243,15 +265,18 @@ def page_home():
   </div>
 </section>
 
-<section class="section sand" id="shop" aria-labelledby="shop-h">
-  <div class="container">
-    <div class="sect-head row">
-      <span class="eyebrow red">The Farm Store</span>
-      <h2 class="h2" id="shop-h">Timeless goods. No gimmicks.</h2>
-      <p class="lede">Our own shop: Lowell-designed goods, made to our spec and shipped by us, direct to your door, nationwide. It&rsquo;s the only place we sell direct.</p>
-      <a class="link-arrow" href="shop.html">Shop all {len(PRODUCTS)}</a>
+<section class="mosaic-sec on-ink" aria-labelledby="people-h">
+  <div class="mosaic">
+    <figure class="mo mo-a">{pic("mo-pass", [800, 1400], "Friends on a leather couch passing a pack of Lowell 35's across a table of snacks", "(max-width: 760px) 100vw, 50vw")}</figure>
+    <div class="mo mo-t">
+      <span class="eyebrow">The whole point</span>
+      <h2 class="h2" id="people-h">Bring people together.</h2>
+      <p>That&rsquo;s the whole mission: the best and most distinctive American-grown products, made to be shared.</p>
+      <a class="btn line" href="find.html">{ICON_PIN}Find Lowell near you</a>
     </div>
-    <div class="products">{"".join(pcard(BY_SLUG[s]) for s in home6)}</div>
+    <figure class="mo mo-b">{pic("mo-sunset", [480, 800], "A hand holding up a lit pre-roll against a low sun", "(max-width: 760px) 50vw, 25vw")}</figure>
+    <figure class="mo mo-c">{pic("mo-pool", [480, 800], "A pack of Lowell 35's and an amber ashtray on the edge of a pool", "(max-width: 760px) 50vw, 25vw")}</figure>
+    <figure class="mo mo-d">{pic("mo-smoke", [800, 1400], "A woman exhaling smoke against a warm wood wall, pre-roll in hand", "(max-width: 760px) 100vw, 50vw")}</figure>
   </div>
 </section>
 
@@ -259,16 +284,15 @@ def page_home():
   <div class="container">
     <div class="pack">
       <figure class="pack-figure">
-        <div class="arch">{pic("pack-tray", [640, 1000], "An open Lowell Smokes pack: the tray of six pre-rolls slid out, emergency matches in the top slot, the magnetic flap behind", "(max-width: 900px) 90vw, 460px", jpg=1000)}</div>
+        <div class="arch">{pic("pack-tray", [640, 1000], "An open Lowell Smokes pack: the tray of six pre-rolls slid out, emergency matches in the top slot, the magnetic flap behind", "(max-width: 900px) 90vw, 440px", jpg=1000)}</div>
         <span class="pin-mark" style="left:24%;top:9%" aria-hidden="true">1</span>
         <span class="pin-mark" style="left:40%;top:60%" aria-hidden="true">2</span>
         <span class="pin-mark" style="left:74%;top:21%" aria-hidden="true">3</span>
         <span class="pin-mark" style="left:9%;top:31%" aria-hidden="true">4</span>
       </figure>
-      <div>
+      <div class="pack-copy">
         <span class="eyebrow red">The Pack</span>
-        <h2 class="h2" id="pack-h" style="margin-top:var(--s4)">Lighting up is a ritual. We built the box for it.</h2>
-        <p class="lede" style="margin-top:var(--s4)">Flip open the flap, slide out the tray and there&rsquo;s your stash, with emergency matches alongside. Every box is wax-lined to hold the right moisture for our pre-rolls.</p>
+        <h2 class="h2" id="pack-h">Lighting up is a ritual. We built the box for it.</h2>
         <ol class="feats">
           <li class="feat"><span class="pin-mark" aria-hidden="true">1</span><h3>The magnetic flap</h3><p>The signature closure: sturdy, organic packaging that&rsquo;s ready for any outdoor adventure.</p></li>
           <li class="feat"><span class="pin-mark" aria-hidden="true">2</span><h3>The slide-out tray</h3><p>Pull the tray and your pre-rolls sit in a row, like the good silverware.</p></li>
@@ -276,15 +300,11 @@ def page_home():
           <li class="feat"><span class="pin-mark" aria-hidden="true">4</span><h3>The wax liner</h3><p>Holds the moisture, so the last smoke in the pack is as fresh as the first.</p></li>
         </ol>
       </div>
-    </div>
-    <div class="film">
-      <video controls muted playsinline preload="none" poster="img/farm-to-pack-poster.webp" aria-describedby="film-d">
-        <source src="img/farm-to-pack-v2.mp4" type="video/mp4">
-      </video>
-      <div class="copy">
-        <span class="eyebrow red">From the farm</span>
-        <h3 class="h3">Greenhouse to sealed tray.</h3>
-        <p class="small" id="film-d">Clones potted, plants grown and hung to dry, flower trimmed and weighed, cones filled, and every pre-roll set into its tray by hand. Silent film, 41 seconds.</p>
+      <div class="film">
+        <video controls muted playsinline preload="none" poster="img/farm-to-pack-poster.webp" aria-describedby="film-d">
+          <source src="img/farm-to-pack-v2.mp4" type="video/mp4">
+        </video>
+        <p class="small" id="film-d"><span class="eyebrow red">From the farm</span><br>Greenhouse to sealed tray: plants grown and dried, flower trimmed and weighed, every pre-roll set into its tray by hand. Silent, 41 seconds.</p>
       </div>
     </div>
   </div>
@@ -298,35 +318,23 @@ def page_home():
       <p class="lede">Our pre-rolls are sold only through licensed dispensaries. Give us your ZIP and we&rsquo;ll show the shops near you, nearest first, with what&rsquo;s on their shelf today.</p>
       <div style="width:100%;max-width:440px">{zip_form("home")}</div>
       <nav class="state-links" aria-label="Find Lowell by state">{chips}</nav>
-      <div class="map-stats"><div><b>8</b><span>states</span></div><div><b>700+</b><span>licensed shops</span></div><div><b>1</b><span>standard</span></div></div>
     </div>
-    <div class="usmap-wrap">{usmap}</div>
-  </div>
-</section>
-
-<section class="people on-ink" aria-labelledby="people-h">
-  <div class="people-img">
-    <picture><source type="image/webp" srcset="img/people-720.webp 720w, img/people-1000.webp 1000w, img/people-1400.webp 1400w" sizes="(max-width: 760px) 100vw, 50vw">
-      <img src="img/people-1000.jpg" alt="Three friends laughing on hay bales at a Lowell farm party, one in a Lowell denim jacket" loading="lazy" decoding="async" width="1000" height="1250"></picture>
-  </div>
-  <div class="people-copy">
-    <div class="copy">
-      <span class="eyebrow">The whole point</span>
-      <h2 class="h2" id="people-h">Bring people together.</h2>
-      <p>That&rsquo;s the whole mission: the best and most distinctive American-grown products, made to be shared.</p>
-      <a class="btn line" href="shop.html">Shop the Farm Store</a>
+    <div class="usmap-wrap">{usmap}
+      <div class="map-stats"><div><b>8</b><span>states</span></div><div><b>700+</b><span>licensed shops</span></div><div><b>1</b><span>standard</span></div></div>
     </div>
   </div>
 </section>
 
 <section class="section" id="journal" aria-labelledby="journal-h">
   <div class="container">
-    <div class="sect-head">
+    <div class="sect-head row">
       <span class="eyebrow red">The Journal</span>
       <h2 class="h2" id="journal-h">Letters from the farm.</h2>
+      <p class="lede">Field notes, craft and design, from the people who make Lowell.</p>
+      <span></span>
     </div>
     <div class="jcards">
-      <article class="jcard"><div class="im">{pic("journal-farm", [480, 960], "A greenhouse aisle between rows of cannabis plants in warm light", "(max-width: 900px) 92vw, 30vw")}</div>
+      <article class="jcard"><div class="im">{pic("journal-hudson", [480, 960], "Rows of sun-grown cannabis under an open hoop house at harvest", "(max-width: 900px) 92vw, 30vw")}</div>
         <span class="eyebrow red">Field notes</span><h3 class="h3">Farming cannabis</h3><p>George Allen on sun-grown flower, local farmers, and doing it the slow way.</p></article>
       <article class="jcard"><div class="im">{pic("journal-blend", [480, 960], "Freshly rolled Lowell pre-rolls spread across a sorting tray", "(max-width: 900px) 92vw, 30vw")}</div>
         <span class="eyebrow red">Craft</span><h3 class="h3">Why we blend</h3><p>Single strains are a gamble. Blends are a recipe. The case for terpene diversity.</p></article>
@@ -336,23 +344,21 @@ def page_home():
   </div>
 </section>
 
-<section class="strip-wrap" aria-label="Photographs from the farm and the Farm Store" style="padding-bottom:var(--section)">
-  <div class="strip" tabindex="0">
-    <ul>
-      <li><img src="img/film-canopy.webp" alt="Cannabis canopy under warm greenhouse lights" loading="lazy" decoding="async" width="540" height="720"></li>
-      <li><img src="img/film-tee.webp" alt="A woman in a Lowell Smokes tee and waxed jacket among redwoods" loading="lazy" decoding="async" width="480" height="720"></li>
-      <li><img src="img/film-leaf.webp" alt="A hand holding a single fan leaf up to the greenhouse roof" loading="lazy" decoding="async" width="1080" height="720"></li>
-      <li><img src="img/film-pack.webp" alt="A Lowell Smokes pack, stone ashtray and three matches from above" loading="lazy" decoding="async" width="480" height="720"></li>
-      <li><img src="img/film-prerolls.webp" alt="Pre-rolls being sorted by hand on the packing line" loading="lazy" decoding="async" width="540" height="720"></li>
-    </ul>
-  </div>
-</section>
-
-<section class="section sand press" aria-label="Press">
+<section class="press-band on-ink" aria-label="Press">
   <div class="container">
     <blockquote>&ldquo;Lowell is one of the most widely recognized names in American cannabis, with a trailblazing legacy.&rdquo;</blockquote>
     <ul class="press-names" aria-label="As featured in"><li>Forbes</li><li>Robb Report</li><li>Page Six</li><li>Newsweek</li></ul>
   </div>
+</section>
+
+<section class="band" aria-label="Photographs from the farm and the community">
+  <ul>
+    <li>{pic("band-tractor", [480, 720], "A tractor hauling harvested plants on a Lowell farm road", "(max-width: 760px) 50vw, 20vw")}</li>
+    <li>{pic("band-light", [480, 720], "A man lighting a pre-roll over an amber ashtray", "(max-width: 760px) 50vw, 20vw")}</li>
+    <li>{pic("hero-pack", [720, 1200], "A Lowell Smokes pack, three matches and a pre-roll resting in a stone ashtray on a walnut table", "(max-width: 760px) 50vw, 20vw")}</li>
+    <li>{pic("band-greens", [480, 720], "A man in a mustard tee smoking a pre-roll among tropical leaves", "(max-width: 760px) 50vw, 20vw")}</li>
+    <li class="band-5"><img src="img/film-canopy.webp" alt="Cannabis canopy under warm greenhouse lights" loading="lazy" decoding="async" width="540" height="720"></li>
+  </ul>
 </section>
 </main>
 """
@@ -364,27 +370,30 @@ def page_home():
 
 # ---------------------------------------------------------------- shop
 def page_shop():
-    cats = [("apparel", "Apparel", "lowell-denim-jacket"), ("luggage", "Luggage", "wax-canvas-duffel-bag"),
-            ("accessories", "Accessories", "bulls-head-metal-ashtray")]
-    counts = {c: sum(1 for p in PRODUCTS if p["cat"].lower() == c) for c, _, _ in cats}
+    cats = [("apparel", "Apparel", "ls-denim", "Friends at a Lowell farm party, one in the Lowell Denim Jacket"),
+            ("luggage", "Luggage", "ls-backpack", "A man wearing the Waxed Canvas Backpack"),
+            ("accessories", "Accessories", "ls-ashtray", "The Signature Metal Ashtray with a pre-roll, on a cinder block beside work gloves")]
+    counts = {c: sum(1 for p in PRODUCTS if p["cat"].lower() == c) for c, _, _, _ in cats}
     tiles = "".join(
-        f'<a class="cat" href="shop.html?c={c}#all" data-cat="{c}"><div class="im"><img src="img/p/{img}-640.webp" alt="" loading="lazy" width="640" height="640"></div>'
-        f'<div class="label"><h2 class="h3">{label}</h2><span>{counts[c]} items</span></div></a>' for c, label, img in cats)
+        f'<a class="cat" href="shop.html?c={c}#all" data-cat="{c}"><img src="img/{img}-640.webp" alt="{esc(alt)}" loading="lazy" width="640" height="800">'
+        f'<span class="cat-label"><span class="h3">{label}</span><span class="mono">{counts[c]} items &rarr;</span></span></a>' for c, label, img, alt in cats)
     order = {"Apparel": 0, "Luggage": 1, "Accessories": 2}
     prods = sorted(PRODUCTS, key=lambda p: (not p["avail"], order[p["cat"]], -p["price"]))
     grid = "".join(pcard(p, "(max-width: 760px) 46vw, (max-width: 1000px) 30vw, 22vw").replace('<a class="pcard', f'<a data-cat="{p["cat"].lower()}" class="pcard', 1) for p in prods)
     chips = f'<button class="chip" type="button" data-filter="all" aria-pressed="true">All <span class="mono">{len(PRODUCTS)}</span></button>' + "".join(
-        f'<button class="chip" type="button" data-filter="{c}" aria-pressed="false">{label} <span class="mono">{counts[c]}</span></button>' for c, label, _ in cats)
+        f'<button class="chip" type="button" data-filter="{c}" aria-pressed="false">{label} <span class="mono">{counts[c]}</span></button>' for c, label, _, _ in cats)
     body = f"""<main id="main">
-<section class="page-head" aria-labelledby="shop-h">
+<section class="shop-hero on-photo" aria-labelledby="shop-h">
+  <picture><source type="image/webp" srcset="img/shop-head-1440.webp 1440w, img/shop-head-2200.webp 2200w" sizes="100vw">
+    <img src="img/shop-head-1600.jpg" alt="A woman in a green jacket with the Wax Canvas Duffel Bag" fetchpriority="high"></picture>
   <div class="container">
     <p class="crumbs"><a href="index.html">Home</a> / Farm Store</p>
-    <span class="eyebrow red">The Farm Store</span>
+    <span class="eyebrow">The Farm Store</span>
     <h1 class="display" id="shop-h">Timeless goods. No&nbsp;gimmicks.</h1>
     <p class="lede">Lowell-designed goods, made to our spec and shipped by us, direct to your door, nationwide. Nothing here contains cannabis.</p>
   </div>
 </section>
-<section class="section shop-cats" aria-label="Shop by category">
+<section class="shop-cats" aria-label="Shop by category">
   <div class="container"><div class="cats">{tiles}</div></div>
 </section>
 <section class="section sand" id="all" aria-labelledby="all-h">
