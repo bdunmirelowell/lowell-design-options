@@ -10,7 +10,7 @@ and ignores ?v= query strings.
 """
 import html, json, pathlib, re, shutil
 
-VER = "v2"
+VER = "v3"
 SRC = pathlib.Path(__file__).resolve().parent
 OUT = SRC.parent
 BASE = "https://bdunmirelowell.github.io/lowell-design-options/v2/"
@@ -122,7 +122,7 @@ def footer():
   <div class="container">
     <div class="foot-top">
       <div>
-        <h2 class="h2">Letters from the farm</h2>
+        <h2 class="h2">Letters from Lowell</h2>
         <p>New goods, restock news and first word on drops. One email a month, at most.</p>
         <form class="field js-signup" action="#" aria-label="Email sign-up">
           <label class="sr-only" for="signup-email">Email address</label>
@@ -194,17 +194,17 @@ def page_home():
     psz = "(max-width: 760px) 46vw, 22vw"
     chips = "".join(f'<a class="chip" href="find.html?st={st}" data-st="{st}">{name}</a>' for st, name in STATES)
     body = f"""<main id="main">
-<section class="hero-full on-photo" aria-labelledby="hero-h">
+<section class="hero-full hero-right on-photo" aria-labelledby="hero-h">
   <picture>
-    <source media="(max-width: 760px)" type="image/webp" srcset="img/hero-dusk-tall-640.webp 640w, img/hero-dusk-tall-960.webp 960w" sizes="100vw">
-    <source type="image/webp" srcset="img/hero-dusk-1440.webp 1440w, img/hero-dusk-2200.webp 2200w" sizes="100vw">
-    <img src="img/hero-dusk-1600.jpg" alt="Friends talking in the firelight on a Lowell farm at dusk" fetchpriority="high">
+    <source media="(max-width: 760px)" type="image/webp" srcset="img/hero-roof-m-640.webp 640w, img/hero-roof-m-960.webp 960w" sizes="100vw">
+    <source type="image/webp" srcset="img/hero-roof-1440.webp 1440w, img/hero-roof-2200.webp 2200w" sizes="100vw">
+    <img src="img/hero-roof-1600.jpg" alt="Two friends laughing on a city rooftop in golden light, one holding a pre-roll" fetchpriority="high">
   </picture>
   <div class="container hero-inner">
     <div class="hero-top">
       <span class="eyebrow">Great American Cannabis</span>
       <h1 class="display" id="hero-h">Grown with intention.<br><em>Blended</em> to perfection.</h1>
-      <p class="lede">We don&rsquo;t want to reinvent how you smoke, just make it better. Every detail, from the farm to the pack, is considered.</p>
+      <p class="lede">We don&rsquo;t want to reinvent how you smoke, just make it better. Every detail, from the flower to the pack, is considered.</p>
     </div>
     <div class="hero-ctas">
       <a class="btn" href="shop.html">Shop the Farm Store</a>
@@ -213,11 +213,9 @@ def page_home():
   </div>
 </section>
 
-<section class="purpose-band" aria-labelledby="purpose-h">
+<section class="purpose-band" aria-label="Our purpose">
   <div class="container">
-    <span class="eyebrow" id="purpose-h">Why we exist</span>
     <blockquote>&ldquo;To bring great American cannabis to <em>everyone</em>.&rdquo;</blockquote>
-    <ul class="pillars" aria-label="Brand pillars"><li>Effortless Edge</li><li>Quality Ingenuity</li><li>Crafted Natural</li><li>Explorer Social</li></ul>
   </div>
 </section>
 
@@ -233,7 +231,7 @@ def page_home():
       {lstile("ls-luggage", [640, 1000], "A woman in a green jacket carrying the Wax Canvas Duffel Bag", "Waxed canvas luggage", "shop.html?c=luggage#all", "(max-width: 760px) 92vw, 46vw", "a")}
       {"".join(pcard(BY_SLUG[s], psz) for s in first4)}
       {"".join(pcard(BY_SLUG[s], psz) for s in next4)}
-      {lstile("ls-denim", [640, 1000], "Friends at a Lowell farm party, one wearing the Lowell Denim Jacket with its bull's-head back print", "Apparel", "shop.html?c=apparel#all", "(max-width: 760px) 92vw, 46vw", "b")}
+      {lstile("ls-denim", [640, 1000], "Friends at a Lowell party, one wearing the Lowell Denim Jacket with its bull's-head back print", "Apparel", "shop.html?c=apparel#all", "(max-width: 760px) 92vw, 46vw", "b")}
     </div>
   </div>
 </section>
@@ -246,20 +244,20 @@ def page_home():
     </div>
     <div class="diagram">
       <ol class="points left" aria-label="Details, part one">
-        <li class="point"><span class="num" aria-hidden="true">1</span><h3>Quality first</h3><p>Sun-grown craft flower from hundreds of farms. Only the best gets in.</p></li>
+        <li class="point"><span class="num" aria-hidden="true">1</span><h3>Quality first</h3><p>Craft flower sourced from the best farms. Only the best gets in.</p></li>
         <li class="point"><span class="num" aria-hidden="true">2</span><h3>Always blended</h3><p>A purposeful blend inside: terpene diversity, flavor, balance.</p></li>
       </ol>
-      <figure class="diagram-figure">
-        <picture><source type="image/webp" srcset="img/preroll-560.webp 560w, img/preroll-900.webp 900w" sizes="(max-width: 900px) 300px, 380px">
-          <img src="img/preroll-700.png" alt="A Lowell pre-roll beside its glass travel tube and a Lowell matchbook" loading="lazy" decoding="async" width="700" height="700"></picture>
-        <span class="pin-mark" style="left:52%;top:30%" aria-hidden="true">1</span>
-        <span class="pin-mark" style="left:52%;top:55%" aria-hidden="true">2</span>
-        <span class="pin-mark" style="left:56%;top:79%" aria-hidden="true">3</span>
-        <span class="pin-mark" style="left:23%;top:40%" aria-hidden="true">4</span>
+      <figure class="diagram-figure smoke">
+        <picture><source type="image/webp" srcset="img/smoke-single-480.webp 480w, img/smoke-single-760.webp 760w" sizes="(max-width: 900px) 250px, 320px">
+          <img src="img/smoke-single-600.png" alt="A single Lowell Smoke: a straight pre-roll with a kraft crutch printed with the Lowell bull" loading="lazy" decoding="async" width="600" height="769"></picture>
+        <span class="pin-mark" style="left:62.6%;top:22.8%" aria-hidden="true">1</span>
+        <span class="pin-mark" style="left:49.5%;top:43.8%" aria-hidden="true">2</span>
+        <span class="pin-mark" style="left:25.5%;top:82.2%" aria-hidden="true">3</span>
+        <span class="pin-mark" style="left:73.0%;top:6.3%" aria-hidden="true">4</span>
       </figure>
       <ol class="points" start="3" aria-label="Details, part two">
-        <li class="point"><span class="num" aria-hidden="true">3</span><h3>A better smoke</h3><p>Engineered draw, even burn. You will never lose a cherry.</p></li>
-        <li class="point"><span class="num" aria-hidden="true">4</span><h3>Ready and able</h3><p>Travel-ready tube, matches included. Prepared beats lucky.</p></li>
+        <li class="point"><span class="num" aria-hidden="true">3</span><h3>Engineered draw</h3><p>A long paper crutch keeps every pull smooth, down to the last one.</p></li>
+        <li class="point"><span class="num" aria-hidden="true">4</span><h3>Even burn</h3><p>Rolled to burn slow and steady. You will never lose a cherry.</p></li>
       </ol>
     </div>
   </div>
@@ -300,12 +298,6 @@ def page_home():
           <li class="feat"><span class="pin-mark" aria-hidden="true">4</span><h3>The wax liner</h3><p>Holds the moisture, so the last smoke in the pack is as fresh as the first.</p></li>
         </ol>
       </div>
-      <div class="film">
-        <video controls muted playsinline preload="none" poster="img/farm-to-pack-poster.webp" aria-describedby="film-d">
-          <source src="img/farm-to-pack-v2.mp4" type="video/mp4">
-        </video>
-        <p class="small" id="film-d"><span class="eyebrow red">From the farm</span><br>Greenhouse to sealed tray: plants grown and dried, flower trimmed and weighed, every pre-roll set into its tray by hand. Silent, 41 seconds.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -329,13 +321,13 @@ def page_home():
   <div class="container">
     <div class="sect-head row">
       <span class="eyebrow red">The Journal</span>
-      <h2 class="h2" id="journal-h">Letters from the farm.</h2>
-      <p class="lede">Field notes, craft and design, from the people who make Lowell.</p>
+      <h2 class="h2" id="journal-h">Notes from Lowell.</h2>
+      <p class="lede">Sourcing, craft and design, from the people who make Lowell.</p>
       <span></span>
     </div>
     <div class="jcards">
-      <article class="jcard"><div class="im">{pic("journal-hudson", [480, 960], "Rows of sun-grown cannabis under an open hoop house at harvest", "(max-width: 900px) 92vw, 30vw")}</div>
-        <span class="eyebrow red">Field notes</span><h3 class="h3">Farming cannabis</h3><p>George Allen on sun-grown flower, local farmers, and doing it the slow way.</p></article>
+      <article class="jcard"><div class="im">{pic("journal-flower", [480, 960], "Close-up of cured cannabis flower", "(max-width: 900px) 92vw, 30vw")}</div>
+        <span class="eyebrow red">Sourcing</span><h3 class="h3">Where our flower comes from</h3><p>We don&rsquo;t grow our own. We buy from the best farms we can find, and only the best gets in.</p></article>
       <article class="jcard"><div class="im">{pic("journal-blend", [480, 960], "Freshly rolled Lowell pre-rolls spread across a sorting tray", "(max-width: 900px) 92vw, 30vw")}</div>
         <span class="eyebrow red">Craft</span><h3 class="h3">Why we blend</h3><p>Single strains are a gamble. Blends are a recipe. The case for terpene diversity.</p></article>
       <article class="jcard"><div class="im">{pic("journal-box", [480, 960], "A Lowell Smokes pack, its open tray of pre-rolls and the Signature Metal Ashtray on a wooden valet tray", "(max-width: 900px) 92vw, 30vw")}</div>
@@ -351,13 +343,13 @@ def page_home():
   </div>
 </section>
 
-<section class="band" aria-label="Photographs from the farm and the community">
+<section class="band" aria-label="Photographs of Lowell people and product">
   <ul>
-    <li>{pic("band-tractor", [480, 720], "A tractor hauling harvested plants on a Lowell farm road", "(max-width: 760px) 50vw, 20vw")}</li>
+    <li>{pic("band-dusk", [480, 720], "Friends in lawn chairs talking in the last light at a Lowell party", "(max-width: 760px) 50vw, 20vw")}</li>
     <li>{pic("band-light", [480, 720], "A man lighting a pre-roll over an amber ashtray", "(max-width: 760px) 50vw, 20vw")}</li>
     <li>{pic("hero-pack", [720, 1200], "A Lowell Smokes pack, three matches and a pre-roll resting in a stone ashtray on a walnut table", "(max-width: 760px) 50vw, 20vw")}</li>
     <li>{pic("band-greens", [480, 720], "A man in a mustard tee smoking a pre-roll among tropical leaves", "(max-width: 760px) 50vw, 20vw")}</li>
-    <li class="band-5"><img src="img/film-canopy.webp" alt="Cannabis canopy under warm greenhouse lights" loading="lazy" decoding="async" width="540" height="720"></li>
+    <li class="band-5">{pic("band-jacket", [480, 720], "A woman in the green quilted Lowell Herb Co. jacket, seen from behind", "(max-width: 760px) 50vw, 20vw")}</li>
   </ul>
 </section>
 </main>
@@ -370,7 +362,7 @@ def page_home():
 
 # ---------------------------------------------------------------- shop
 def page_shop():
-    cats = [("apparel", "Apparel", "ls-denim", "Friends at a Lowell farm party, one in the Lowell Denim Jacket"),
+    cats = [("apparel", "Apparel", "ls-denim", "Friends at a Lowell party, one in the Lowell Denim Jacket"),
             ("luggage", "Luggage", "ls-backpack", "A man wearing the Waxed Canvas Backpack"),
             ("accessories", "Accessories", "ls-ashtray", "The Signature Metal Ashtray with a pre-roll, on a cinder block beside work gloves")]
     counts = {c: sum(1 for p in PRODUCTS if p["cat"].lower() == c) for c, _, _, _ in cats}
