@@ -76,7 +76,13 @@ The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
 
 Brief rule: swap out the Erica Danger 2021 shoot and the 2021 Summer Lifestyle Shoot (UNKOMMON: beach, roof, greenhouse and the Brigitte set) wherever a replacement holds up.
 
-**Remaining images from those two shoots: none.** Every one was replaced. Provenance was checked by perceptual hash against 4,818 Drive images, plus a filename search of the flagged folders.
+**Remaining images from those two shoots: none.** Every one was replaced.
+
+How this was checked:
+- Each July image was traced to its Drive original by perceptual hash across 4,818 Drive images.
+- Each v2 source file was searched by filename across all five flagged-shoot folders: 0 hits.
+- The two Hero Pack Shots were hash-compared against the flagged shoot's own product frames (`Lowell Farms Photoshoot/Selects/GREENHOUSE/Product Additions`): no match. Distances were 111–134 of 256 bits; a copy scores under about 30.
+- **Not done:** a full perceptual sweep of v2's sources against all 1,589 flagged-shoot images. Drive streaming made it take hours, so I stopped it. A renamed copy of a flagged frame would get past the filename search.
 
 One near-miss: the "Merchandise Lifestyle Shots" folder holds `20210128-3U9A1693.jpg`, a couple in the green tee. It looks like merch photography, but it's a copy of a frame from the UNKOMMON beach shoot (`Lowell 2021 Summer Lifestyle Shoot/UNKOMMON/BEACH/Copy of 20210128-3U9A1693.jpg`). I used it in a draft, caught it, and replaced it. Anyone reusing images from that folder should check the same way.
 
