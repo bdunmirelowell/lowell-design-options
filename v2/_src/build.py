@@ -10,7 +10,7 @@ and ignores ?v= query strings.
 """
 import html, json, pathlib, re, shutil
 
-VER = "v8"
+VER = "v9"
 SRC = pathlib.Path(__file__).resolve().parent
 OUT = SRC.parent
 BASE = "https://bdunmirelowell.github.io/lowell-design-options/v2/"
@@ -523,8 +523,7 @@ def page_find():
   <div class="fl-panel">
     <h2 class="sr-only" id="fl-results-h">Stores</h2>
     <div class="fl-resulthead"><p class="fl-count" id="fl-count" aria-live="polite"></p>
-      <label class="fl-toggle"><input type="checkbox" id="fl-stock" checked> In stock only</label></div>
-    <div class="fl-reveal" id="fl-reveal" hidden></div>
+      <label class="fl-toggle"><input type="checkbox" id="fl-stock" checked> Hide out of stock</label></div>
     <div class="fl-list" id="fl-list"><div class="fl-loading">Loading stores&hellip;</div></div>
   </div>
   <div class="fl-mapwrap"><div id="fl-map" role="region" aria-label="Map of stores"></div></div>
@@ -533,10 +532,9 @@ def page_find():
   <div class="container">
     <h2 class="h3" id="key-h">How to read the list</h2>
     <ul class="fl-keylist">
-      <li><span class="kdot k-stock" aria-hidden="true"></span><div><b>In stock</b><p class="small">Listed on the shop&rsquo;s own online menu today, at the shelf price that menu quotes.</p></div></li>
-      <li><span class="kdot k-out" aria-hidden="true"></span><div><b>Listed, out today</b><p class="small">The shop carries Lowell but its menu shows none in stock right now.</p></div></li>
-      <li><span class="kdot k-ship" aria-hidden="true"></span><div><b>Carries Lowell &middot; shipped &lt;date&gt;</b><p class="small">We delivered to this shop on that date. No live menu feed, so no stock or price: call ahead.</p></div></li>
-      <li><span class="kdot k-partner" aria-hidden="true"></span><div><b>Partner-reported</b><p class="small">From our retail partner&rsquo;s monthly report. Placed by city, not street address. No price shown.</p></div></li>
+      <li><span class="kdot k-stock" aria-hidden="true"></span><div><b>In stock now</b><p class="small">On the shop&rsquo;s own online menu today, at the shelf price that menu quotes.</p></div></li>
+      <li><span class="kdot k-out" aria-hidden="true"></span><div><b>Currently out of stock</b><p class="small">The shop&rsquo;s live menu shows no Lowell right now.</p></div></li>
+      <li><span class="kdot k-carries" aria-hidden="true"></span><div><b>Lowell store</b><p class="small">A shop that carries Lowell. We can&rsquo;t read its menu, so we don&rsquo;t show stock or prices.</p></div></li>
     </ul>
   </div>
 </section>

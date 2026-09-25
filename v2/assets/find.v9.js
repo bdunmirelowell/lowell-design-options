@@ -1,7 +1,9 @@
 /* Lowell Herb Co · Golden Hour v2 · Find Lowell
-   Functional spec: brya8385.github.io/find-lowell (app.v4.js). Data is fetched live from that app's doors.json
+   Functional spec: brya8385.github.io/find-lowell (app.v5.js). Data is fetched live from that app's doors.json
    on every visit; there is deliberately no embedded or cached fallback. Product rows are shown as line x lean only,
-   never by blend name. Tier B (shipped, no feed) and tier C (partner-reported) never show a price. */
+   never by blend name. Labels come from each store's `st` field (Bryan, 25 Sep 2026): in_stock = "In stock",
+   out_of_stock = "Currently out of stock", carries = no live menu we can read, so no badge, no stock claim and no
+   price. The old B/C flags are never used for labels. */
 (function () {
   'use strict';
   var main = document.querySelector('.fl');
@@ -20,7 +22,7 @@
   var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   var doors = [], rows = [], map = null, layer = null, ring = null, youMark = null, markers = new Map();
-  var S = { started: false, st: null, line: null, lean: null, radius: 50, stockOnly: true, showMore: false, origin: null, originLabel: '', sel: null };
+  var S = { started: false, st: null, line: null, lean: null, radius: 50, hideOut: true, origin: null, originLabel: '', sel: null };
 
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   function fmtDate(iso, withYear) {
@@ -32,8 +34,10 @@
     var x = Math.sin(dLa / 2) * Math.sin(dLa / 2) + Math.cos(a * p) * Math.cos(c * p) * Math.sin(dLo / 2) * Math.sin(dLo / 2);
     return 2 * R * Math.asin(Math.sqrt(x));
   }
-  function tier(d) { return d.C ? 'partner' : d.B ? 'ship' : (d.k > 0 ? 'stock' : 'out'); }
-  function confirmedTier(d) { return !d.B && !d.C; }
+  /* st: in_stock | out_of_stock | carries. Files built before 25 Sep 2026 have no st; derive it as find-lowell's app.v5.js does. */
+  function status(d) { return d.st || ((d.B || d.C) ? 'carries' : (d.k > 0 ? 'in_stock' : 'out_of_stock')); }
+  var TIER = { in_stock: 'stock', out_of_stock: 'out', carries: 'carries' }, ST_ORDER = { in_stock: 0, carries: 1, out_of_stock: 2 };
+  function tier(d) { return TIER[status(d)] || 'carries'; }
 
   /* ---------------- load ---------------- */
   function load() {
@@ -58,7 +62,6 @@
         document.querySelector('.fl-resulthead').hidden = true;
         $('fl-asof').textContent = 'Store list unavailable';
         $('fl-count').textContent = '';
-        $('fl-reveal').hidden = true;
         $('fl-list').innerHTML = '<div class="fl-error" role="alert"><p class="h3">We couldn’t load the store list.</p>' +
           '<p class="small">The live list didn’t respond (' + esc(err.message) + '). We show nothing rather than an out-of-date copy. ' +
           'Try again in a moment.</p><button class="btn sm" type="button" id="fl-retry">Try again</button></div>';
@@ -83,8 +86,8 @@
     var legend = L.control({ position: 'bottomright' });
     legend.onAdd = function () {
       var el = L.DomUtil.create('div', 'fl-legend');
-      el.innerHTML = '<div><span class="kdot k-stock"></span>In stock</div><div><span class="kdot k-out"></span>Listed, out today</div>' +
-        '<div><span class="kdot k-ship"></span>Shipped, no menu feed</div><div><span class="kdot k-partner"></span>Partner-reported</div>';
+      el.innerHTML = '<div><span class="kdot k-stock"></span>In stock now</div><div><span class="kdot k-out"></span>Currently out of stock</div>' +
+        '<div><span class="kdot k-carries"></span>Lowell store</div>';
       return el;
     };
     legend.addTo(map);
@@ -152,7 +155,7 @@
     STATE_ORDER.filter(function (s) { return doors.some(function (d) { return d.s === s; }); }).forEach(function (s) {
       chip(st, s, false, function () { pickState(S.st === s ? null : s); }, { st: s });
     });
-    $('fl-stock').addEventListener('change', function (e) { S.stockOnly = e.target.checked; render(); drawAndFrame(false); });
+    $('fl-stock').addEventListener('change', function (e) { S.hideOut = e.target.checked; render(); drawAndFrame(false); });
   }
   var det = $('fl-filters'), mq = window.matchMedia('(max-width: 860px)');
   function syncDet() { if (!mq.matches) det.open = true; }
@@ -205,7 +208,7 @@
     setOrigin(c.at, c.label);
   }
   function setOrigin(at, label) {
-    S.origin = at; S.originLabel = label; S.st = null; S.started = true; S.sel = null; S.showMore = false;
+    S.origin = at; S.originLabel = label; S.st = null; S.started = true; S.sel = null;
     $('fl-note').textContent = '';
     press('fl-st', 'st', null); render(); drawAndFrame(true); syncUrl();
   }
@@ -248,7 +251,6 @@
       rows = doors.slice();
       var counts = {}; doors.forEach(function (d) { counts[d.s] = (counts[d.s] || 0) + 1; });
       $('fl-count').textContent = doors.length + ' stores in ' + Object.keys(counts).length + ' states';
-      $('fl-reveal').hidden = true;
       list.innerHTML = '<div class="fl-where"><p class="h3">Where are you?</p><p class="small">Search a ZIP code or city above, or pick a state.</p><div class="fl-states">' +
         STATE_ORDER.filter(function (s) { return counts[s]; }).map(function (s) {
           return '<button type="button" class="fl-state" data-gstate="' + s + '"><b>' + STATE_NAME[s] + '</b><span>' + counts[s] + ' stores</span></button>';
@@ -257,33 +259,13 @@
       return;
     }
 
-    var scope = doors.filter(inScope);
-    var confirmed = scope.filter(confirmedTier), unconfirmed = scope.filter(function (d) { return !confirmedTier(d); });
-    var auto = !confirmed.length && unconfirmed.length > 0;   /* CO, NM, CA: partner data only */
-    var includeMore = S.showMore || auto;
-    rows = scope.filter(function (d) {
-      if (!confirmedTier(d)) return includeMore;
-      return !(S.stockOnly && d.k <= 0);
-    });
+    /* every store in scope is listed; "Hide out of stock" hides only out_of_stock (carries makes no stock claim) */
+    rows = doors.filter(function (d) { return inScope(d) && !(S.hideOut && status(d) === 'out_of_stock'); });
     rows.sort(S.origin ? function (a, b) { return a._m - b._m; }
-      : function (a, b) { return (b.k || 0) - (a.k || 0) || (confirmedTier(b) - confirmedTier(a)) || a.n.localeCompare(b.n); });
+      : function (a, b) { return ST_ORDER[status(a)] - ST_ORDER[status(b)] || (b.k || 0) - (a.k || 0) || a.n.localeCompare(b.n); });
 
     var where = S.origin ? (S.radius ? 'within ' + S.radius + ' miles of ' + S.originLabel : 'nearest to ' + S.originLabel) : (S.st ? 'in ' + STATE_NAME[S.st] : '');
     $('fl-count').innerHTML = '<b>' + rows.length + (rows.length === 1 ? ' store' : ' stores') + '</b> ' + esc(where) + (S.origin ? ', nearest first' : '');
-
-    var rev = $('fl-reveal');
-    if (auto) {
-      rev.hidden = false;
-      rev.innerHTML = '<span>No shop here has a live menu feed yet, so these are stores we ship or that our partner reports. Call ahead for stock.</span>';
-    } else if (unconfirmed.length && !S.showMore) {
-      rev.hidden = false;
-      rev.innerHTML = '<span><b>' + unconfirmed.length + '</b> more ' + (unconfirmed.length === 1 ? 'store carries' : 'stores carry') + ' Lowell without a live menu feed.</span> <button type="button" class="fl-linkbtn" id="fl-more">Show them</button>';
-      $('fl-more').addEventListener('click', function () { S.showMore = true; render(); drawAndFrame(false); });
-    } else if (S.showMore && unconfirmed.length) {
-      rev.hidden = false;
-      rev.innerHTML = '<span>Including <b>' + unconfirmed.length + '</b> without a live menu feed.</span> <button type="button" class="fl-linkbtn" id="fl-less">Hide them</button>';
-      $('fl-less').addEventListener('click', function () { S.showMore = false; render(); drawAndFrame(false); });
-    } else rev.hidden = true;
 
     list.innerHTML = '';
     if (!rows.length) { list.appendChild(emptyState()); return; }
@@ -304,9 +286,9 @@
       el.querySelector('#fl-widen').addEventListener('click', function () { S.radius = 0; press('fl-rad', 'r', 0); render(); drawAndFrame(true); syncUrl(); });
       return el;
     }
-    if (S.stockOnly) {
-      el.innerHTML = '<p>' + msg + '</p><button type="button" class="btn sm line" id="fl-nostock">Include stores out of stock today</button>';
-      el.querySelector('#fl-nostock').addEventListener('click', function () { $('fl-stock').checked = false; S.stockOnly = false; render(); drawAndFrame(false); });
+    if (S.hideOut) {
+      el.innerHTML = '<p>' + msg + '</p><button type="button" class="btn sm line" id="fl-nostock">Show stores that are out of stock</button>';
+      el.querySelector('#fl-nostock').addEventListener('click', function () { $('fl-stock').checked = false; S.hideOut = false; render(); drawAndFrame(false); });
       return el;
     }
     el.innerHTML = '<p>' + msg + '</p>'; return el;
@@ -329,12 +311,10 @@
   }
   function money(v) { return '$' + (Math.round(v) === v ? v : v.toFixed(2)); }
   function badge(d) {
-    var t = tier(d);
-    if (t === 'stock') return '<span class="fl-badge b-stock">In stock &middot; ' + d.k + ' product' + (d.k > 1 ? 's' : '') + '</span>';
-    if (t === 'out') return '<span class="fl-badge b-out">Listed &middot; out of stock today</span>';
-    if (t === 'ship') return '<span class="fl-badge b-ship">Carries Lowell &middot; shipped ' + esc(fmtDate(d.last)) + '</span>';
-    var when = String(d.src || '').split('·').pop().trim();
-    return '<span class="fl-badge b-partner">Partner-reported' + (when ? ' &middot; ' + esc(when) : '') + '</span>';
+    var st = status(d);
+    if (st === 'in_stock') return '<span class="fl-badge b-stock">In stock &middot; ' + d.k + ' product' + (d.k > 1 ? 's' : '') + '</span>';
+    if (st === 'out_of_stock') return '<span class="fl-badge b-out">Currently out of stock</span>';
+    return '';   /* carries: no live menu we can read, so no stock claim */
   }
   function tel(d) { return d.tel ? '<a class="fl-tel" href="tel:' + String(d.tel).replace(/[^0-9+]/g, '') + '">' + esc(d.tel) + '</a>' : ''; }
   function link(d) {
@@ -347,20 +327,19 @@
     var t = tier(d), el = document.createElement('article');
     el.className = 'fl-card t-' + t + (S.sel === d ? ' sel' : '');
     el.dataset.key = doors.indexOf(d);
-    var priced = t === 'stock';   /* tier A with stock only; B and C never show a price */
+    var priced = status(d) === 'in_stock';   /* only a live menu with Lowell in stock quotes a price */
     var price = priced && d.p ? '<span class="fl-price mono">' + (d.p === d.ph || !d.ph ? money(+d.p) : money(+d.p) + '–' + money(+d.ph)) + '</span>' : '';
     var dist = d._m != null && S.origin ? '<span class="fl-dist mono">' + (d._m < 10 ? d._m.toFixed(1) : Math.round(d._m)) + ' mi</span>' : '';
     var gs = groups(d), shown = S.sel === d ? gs : gs.slice(0, 4), hidden = gs.length - shown.length;
-    var prods = gs.length ? '<ul class="fl-prods" aria-label="' + (t === 'ship' ? 'What we shipped' : 'Lowell on the menu') + '">' + shown.map(function (g) {
+    var prods = gs.length ? '<ul class="fl-prods" aria-label="' + (t === 'carries' ? 'Lowell products' : 'Lowell on the menu') + '">' + shown.map(function (g) {
       return '<li><span class="fl-line">' + esc(g.line) + '</span>' + (g.lean ? '<span class="fl-lean l-' + g.lean + '">' + LEAN[g.lean] + '</span>' : '') +
         (g.spec ? '<span class="fl-spec">' + esc(g.spec) + '</span>' : '') + (priced && g.price != null ? '<span class="fl-pp mono">' + money(g.price) + '</span>' : '') + '</li>';
     }).join('') + '</ul>' + ((hidden > 0 || d.more > 0) ? '<p class="fl-more small">' + (hidden > 0 ? '+' + hidden + ' more' : '') + (d.more > 0 ? (hidden > 0 ? ', and more on their menu' : 'More on their menu') : '') + '</p>' : '') : '';
-    var note = t === 'ship' && !d.u ? '<p class="fl-hint small">No live menu feed: call ahead.</p>'
-      : t === 'partner' ? '<p class="fl-hint small">' + (d.approx ? 'Placed by city, not street address. ' : '') + 'Call ahead for stock.</p>' : '';
+    var note = d.approx ? '<p class="fl-hint small">Pin placed by town; check the address.</p>' : '';
     var nomap = !d.valid ? '<p class="fl-hint small">Map location unavailable.</p>' : '';
     el.innerHTML = '<div class="fl-top"><h3 class="fl-name"><button type="button" aria-describedby="addr-' + el.dataset.key + '">' + esc(d.n) + '</button></h3>' + dist + '</div>' +
       '<p class="fl-addr small" id="addr-' + el.dataset.key + '">' + esc(d.a) + '</p>' +
-      '<div class="fl-meta">' + badge(d) + price + '</div>' + prods + note + nomap +
+      (badge(d) || price ? '<div class="fl-meta">' + badge(d) + price + '</div>' : '') + prods + note + nomap +
       '<div class="fl-actions">' + link(d) + tel(d) + '</div>';
     el.querySelector('.fl-name button').addEventListener('click', function () { select(d, true); });
     return el;
