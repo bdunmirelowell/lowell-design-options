@@ -17,6 +17,8 @@ BASE = "https://bdunmirelowell.github.io/lowell-design-options/v2/"
 DOORS_URL = "https://brya8385.github.io/find-lowell/data/doors.json"
 PRODUCTS = json.loads((SRC / "products.json").read_text())
 BY_SLUG = {p["slug"]: p for p in PRODUCTS}
+# Notes from the Farm: real Lowell posts (lowellsupply.com/blogs/news, read 25 Sep 2026); every edit is listed in each entry's "edits"
+ARTICLES = json.loads((SRC / "articles.json").read_text())
 esc = html.escape
 
 
@@ -32,7 +34,7 @@ ICON_X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-widt
 ICON_PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>'
 
 NAV = [("index.html", "Home", "home"), ("shop.html", "Farm Store", "shop"), ("find.html", "Find Lowell", "find"),
-       ("index.html#pack", "The Pack", "pack"), ("index.html#journal", "Journal", "journal")]
+       ("index.html#pack", "The Pack", "pack"), ("index.html#notes", "Notes from the Farm", "notes")]
 
 STATES = [("CA", "California"), ("CO", "Colorado"), ("NM", "New Mexico"), ("MO", "Missouri"),
           ("IL", "Illinois"), ("OH", "Ohio"), ("NY", "New York"), ("NJ", "New Jersey")]
@@ -122,7 +124,7 @@ def footer():
   <div class="container">
     <div class="foot-top">
       <div>
-        <h2 class="h2">Letters from Lowell</h2>
+        <h2 class="h2">Notes from the Farm</h2>
         <p>New goods, restock news and first word on drops. One email a month, at most.</p>
         <form class="field js-signup" action="#" aria-label="Email sign-up">
           <label class="sr-only" for="signup-email">Email address</label>
@@ -177,6 +179,30 @@ def pcard(p, sizes="(max-width: 760px) 46vw, 30vw"):
 def lstile(name, widths, alt, label, href, sizes, cls=""):
     return (f'<a class="ls-tile {cls}" href="{href}">{pic(name, widths, alt, sizes)}'
             f'<span class="ls-cap"><span>{label}</span><span aria-hidden="true">&rarr;</span></span></a>')
+
+
+MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+
+def long_date(iso):
+    y, m, d = (int(x) for x in iso.split("-"))
+    return f"{MONTHS[m - 1]} {d}, {y}"
+
+
+def article_href(a):
+    return f"notes-{a['slug']}.html"
+
+
+def jcard(a, sizes="(max-width: 900px) 92vw, 30vw"):
+    return (f'<a class="jcard" href="{article_href(a)}"><div class="im">{pic(a["img"], [480, 960], a["alt"], sizes)}</div>'
+            f'<span class="eyebrow red">{esc(a["cat"])}</span><h3 class="h3">{esc(a["title"])}</h3><p>{esc(a["teaser"])}</p>'
+            f'<span class="link-arrow" aria-hidden="true">Read</span></a>')
+
+
+def band_tile(name, widths, alt, cls=""):
+    c = f' class="{cls}"' if cls else ""
+    return (f'<li{c}><a href="{IG_URL}" target="_blank" rel="noopener" aria-label="{esc(alt)}. Lowell on Instagram (opens in a new tab)">'
+            f'{pic(name, widths, "", "(max-width: 760px) 50vw, 20vw")}{ig_icon(False)}</a></li>')
 
 
 def page_home():
@@ -294,22 +320,15 @@ def page_home():
   </div>
 </section>
 
-<section class="section" id="journal" aria-labelledby="journal-h">
+<section class="section" id="notes" aria-labelledby="notes-h">
   <div class="container">
     <div class="sect-head row">
-      <span class="eyebrow red">The Journal</span>
-      <h2 class="h2" id="journal-h">Notes from Lowell.</h2>
+      <span class="eyebrow red">The blog</span>
+      <h2 class="h2" id="notes-h">Notes from the Farm.</h2>
       <p class="lede">Sourcing, craft and design, from the people who make Lowell.</p>
       <span></span>
     </div>
-    <div class="jcards">
-      <article class="jcard"><div class="im">{pic("journal-flower", [480, 960], "Close-up of cured cannabis flower", "(max-width: 900px) 92vw, 30vw")}</div>
-        <span class="eyebrow red">Sourcing</span><h3 class="h3">Where our flower comes from</h3><p>We don&rsquo;t grow our own. We buy from the best farms we can find, and only the best gets in.</p></article>
-      <article class="jcard"><div class="im">{pic("journal-blend", [480, 960], "Freshly rolled Lowell pre-rolls spread across a sorting tray", "(max-width: 900px) 92vw, 30vw")}</div>
-        <span class="eyebrow red">Craft</span><h3 class="h3">Why we blend</h3><p>Single strains are a gamble. Blends are a recipe. The case for terpene diversity.</p></article>
-      <article class="jcard"><div class="im">{pic("journal-box", [480, 960], "A Lowell Smokes pack, its open tray of pre-rolls and the Signature Metal Ashtray on a wooden valet tray", "(max-width: 900px) 92vw, 30vw")}</div>
-        <span class="eyebrow red">Design</span><h3 class="h3">The craft of the box</h3><p>Magnetic flap, wax liner, emergency matches: why the pack is engineered like the smoke.</p></article>
-    </div>
+    <div class="jcards">{"".join(jcard(x) for x in ARTICLES)}</div>
   </div>
 </section>
 
@@ -335,6 +354,38 @@ def page_home():
                "Golden Hour v2: the new lowellherbco.com homepage, with the Farm Store and a store locator for all eight Lowell states.",
                "") + gate() + header("home") + body + footer() + tail()
     (OUT / "index.html").write_text(out)
+
+
+# ---------------------------------------------------------------- Notes from the Farm articles
+def page_article(a):
+    blocks = "".join(f'<h2 class="h3">{esc(b["h"])}</h2>' if "h" in b else f'<p>{esc(b["p"])}</p>' for b in a["body"])
+    more = "".join(jcard(x, "(max-width: 900px) 92vw, 44vw") for x in ARTICLES if x["slug"] != a["slug"])
+    body = f"""<main id="main">
+<article class="post" aria-labelledby="post-h">
+  <header class="container post-head">
+    <p class="crumbs"><a href="index.html">Home</a> / <a href="index.html#notes">Notes from the Farm</a></p>
+    <span class="eyebrow red">{esc(a["cat"])}</span>
+    <h1 class="h2" id="post-h">{esc(a["title"])}</h1>
+    <p class="post-meta">By {esc(a["by"])} &middot; <time datetime="{a["date"]}">{long_date(a["date"])}</time></p>
+  </header>
+  <figure class="container post-hero">{pic(a["img"], [480, 960], a["alt"], "(max-width: 1000px) 92vw, 960px", eager=True)}</figure>
+  <div class="container post-body">{blocks}</div>
+</article>
+<section class="section sand" aria-labelledby="more-h">
+  <div class="container">
+    <div class="sect-head row">
+      <span class="eyebrow red">Notes from the Farm</span>
+      <h2 class="h2" id="more-h">Keep reading.</h2>
+      <span></span>
+      <a class="link-arrow" href="index.html#notes">All notes</a>
+    </div>
+    <div class="jcards two">{more}</div>
+  </div>
+</section>
+</main>
+"""
+    out = head(f"{a['title']} · Notes from the Farm · Lowell Herb Co. (v2 preview)", a["teaser"], article_href(a)) + gate() + header("notes") + body + footer() + tail()
+    (OUT / article_href(a)).write_text(out)
 
 
 # ---------------------------------------------------------------- shop
@@ -485,4 +536,6 @@ def assets():
 if __name__ == "__main__":
     assets()
     page_home(); page_shop(); page_product(); page_find()
+    for a in ARTICLES:
+        page_article(a)
     print("built", VER, sorted(p.name for p in OUT.glob("*.html")))
