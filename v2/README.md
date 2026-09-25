@@ -7,11 +7,38 @@ This is a static design preview for team feedback, not the Shopify build. Every 
 | Page | File | What it is |
 |---|---|---|
 | Home | `index.html` | Golden Hour, sharpened |
+| Notes from the Farm | `notes-<slug>.html` (3) | One article page per blog card |
 | Find Lowell | `find.html` | Store locator on live data |
 | Farm Store | `shop.html` | Shop landing: three categories and all 21 goods |
 | Product | `product.html?p=<slug>` | Placeholder that confirms Farm Store links resolve |
 
 The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
+
+## Round 4 (25 Sep, Bryan's third review): home page first
+
+Phase 1 is the home page only. Phase 2 (Farm Store sort, contact page, policy drafts, site-wide link test, locator labels) waits for Bryan's OK on the home page.
+
+- **Hero:** back to round 2's full-bleed dusk bonfire photo (`hero-dusk-*`, from `Lowell x Revelry-15.jpg`), replacing round 3's rooftop shot. Git history holds only one bonfire hero (round 1's hero was the Eunbi pack photo, not a bonfire).
+  - Desktop: the headline, paragraph and buttons sit on the right, over the sky and clear of the guests.
+  - Phone: the tall crop, with the text on the sky and the buttons over the grass. The text runs full width there, so it isn't "right" or "left".
+  - The rooftop files are deleted, so no image from the two unconfirmed 2021 shoots is left on v2.
+- **The Pack:** the single-Smoke section ("What sets us apart") is gone. The Pack now has six features, all pinned on the open-pack photo:
+  - two from the Smoke section, tightened: Quality first and Always blended
+  - the pack's four: magnetic flap, slide-out tray, emergency matches, wax liner
+
+  The header is Bryan's pick of three options: "Pre-rolls made with intention. A box built to match."
+- **Blog name:** "Notes from the Farm" everywhere: nav, home section, footer sign-up. It was Journal / Notes from Lowell / Letters from Lowell. This is Bryan's exception to the no-from-the-farm-copy rule, for the name only.
+- **Articles:** each blog card links to its own page, built from a real Lowell post on lowellsupply.com/blogs/news (George Allen). The text is verbatim except for the edits listed in `_src/articles.json`.
+  - Farming Cannabis (13 Oct 2025)
+  - Salad Science (4 Aug 2025)
+  - Freshness You Can Trust (22 Jul 2025)
+
+  Card titles are the posts' real titles, and each teaser is a sentence from the post. The pages reuse the cards' photos; the posts' own featured images weren't used (farm-imagery rule).
+- **Press:** Forbes, Robb Report, Page Six and Newsweek each link, in a new tab, to their article about Lowell. The quote is verbatim from the Forbes piece, with the cut marked by an ellipsis. Sources and dates are listed under Known gaps → Press.
+- **Instagram:** the five bottom photos and an "@lowellfarms" pill link to instagram.com/lowellfarms in a new tab. The word "Instagram" is replaced by the Instagram logo (inline SVG, `aria-label="Instagram"`).
+  - The band's dusk tile was the same frame as the hero, so it's replaced by `Bonfire + Lowell.jpg` from the same party.
+- **Footer:** the four dead `#top` help links are removed until Phase 2 builds real pages: Contact, Shipping & returns, Privacy, Terms.
+- CSS and JS are now `site.v4.css`, `site.v4.js` and `find.v4.js`. axe-core (WCAG 2.1 AA + best practice) reports 0 violations on Home and on an article page.
 
 ## Round 3 (23 Sep, Bryan's second review)
 
@@ -107,7 +134,7 @@ The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
 
 Brief rule: swap out the Erica Danger 2021 shoot and the 2021 Summer Lifestyle Shoot (UNKOMMON: beach, roof, greenhouse and the Brigitte set) wherever a replacement holds up.
 
-**One image from those two shoots remains: the home hero** (`hero-roof-*`, `Lowell Farms Photoshoot/Selects/ROOF/20210709-1Q0A3170.jpg`, the UNKOMMON rooftop set). Bryan chose it on 23 Sep. **Its usage rights are unconfirmed and need clearing before launch.** Every other image from those shoots was replaced.
+**No image from those two shoots remains on v2** (round 4). The round-3 rooftop hero (`Lowell Farms Photoshoot/Selects/ROOF/20210709-1Q0A3170.jpg`, UNKOMMON) was the last one; it was replaced by the dusk bonfire photo and its files are deleted.
 
 How this was checked:
 - Each July image was traced to its Drive original by perceptual hash across 4,818 Drive images.
@@ -121,11 +148,10 @@ Every image v2 uses (sources under `Shared drives/Graphic Design/Photography` un
 
 | v2 file | Where it's used | Source | Rights status |
 |---|---|---|---|
-| `hero-roof-*` | Home hero | `Lowell Farms Photoshoot/Selects/ROOF/20210709-1Q0A3170.jpg` (UNKOMMON 2021 rooftop set, also the July hero) | **Unconfirmed.** Kept at Bryan's request, 23 Sep. |
-| `og-v2.jpg`, `band-dusk-*` | Share card, photo band | `2025/2025 Events/New York/6-5-25 Lowell Bonfire Party/Thank You Carousel Assets/Lowell x Revelry-15.jpg` | Lowell's own event photography (the 132A camera series). Guests are identifiable: **confirm likeness releases**. |
+| `hero-dusk-*`, `og-v2.jpg` | Home hero, share card | `2025/2025 Events/New York/6-5-25 Lowell Bonfire Party/Thank You Carousel Assets/Lowell x Revelry-15.jpg` | Lowell's own event photography. **Verified 25 Sep:** its EXIF matches the `132A` frames (Canon EOS R6, body serial 122024000392), shot 5 Jun 2025 20:54. Guests are identifiable: **confirm likeness releases**. The right edge of the frame shows a John Deere loader. |
+| `band-bonfire-*` | Photo band (links to Instagram) | Same folder, `Bonfire + Lowell.jpg` (two guests from behind watching the bonfire, the Lowell bull on a jacket) | Lowell's own event collateral: a Photoshop export made 9 Jun 2025 with the other carousel files. It has no EXIF, and a perceptual-hash search of the party's 114 `132A` raws and Daniel's iPhone photos found no match (best 97 of 256 bits). At 1080×1920 it's likely a still from one of Daniel's iPhone videos: **source frame not traced**. No faces shown. |
 | `mo-sunset-*` | People mosaic | Same folder, `Lowell x Revelry-14.jpg` (a hand holding a pre-roll against the sun) | Same as above; no face shown. |
 | `ls-denim-*` | Farm Store tile, Shop "Apparel" | Same party, `Photos/Kwesi's Raw Photos/132A0091.JPG` | Same as above: **confirm likeness releases**. |
-| `smoke-single-*` | "What sets us apart" diagram | `Packaging/Product Rendering + Animations/Infused packs/Copy of 202511-OB-017_Infused Original_Joint_2.png` (one Smoke cut from the tray render, tilted, shadow added) | In-house product render, Nov 2025. It's the only full-length Originals Smoke in Drive, and it comes from the **Infused** Originals render. The standard 2025 Originals render prints the crutch bull in grey rather than black. |
 | `mo-pass-*`, `mo-smoke-*`, `band-greens-*` | People mosaic, photo band | `35s/House Shoot/Finals/…` (files named `Lowell Farms3421_F.jpg`, `Lowell Farms3934_F.jpg`, `Lowell Farms2803 _F.jpg`) | 2022 commissioned 35's lifestyle shoot with professional models. The filenames say it was shot under Lowell Farms Inc.: **confirm the licence carried over to the brand**. In `mo-pass` the blend name on the pack spine is blurred. |
 | `mo-pool-*`, `band-light-*` | People mosaic, photo band | `35s/2023 Lifestyle Sanitized/LHC_35s_…_Sanitized_010623.jpg` | Same shoot, "sanitized" versions: no blend name is legible. Same licence question. |
 | `ls-luggage-*`, `shop-head-*` | Farm Store tile, Shop header | `2025/Merch/Luggae Photoshoot - Lifestyle and Product Photography/BackPackShootB10.jpg` | In-house 2025 merch shoot. Model release not in Drive: **confirm**. |
@@ -154,21 +180,31 @@ Images that "confirm" doesn't cover: none. The v1 pages (option1–4) still use 
 **Locator setup**
 - The map uses the public OpenStreetMap tile server. That's fine for a preview, but OSM's usage policy rules it out for production traffic, so the live site needs a tile provider.
 
-**Copy to confirm (round 3)**
-- The two new diagram points are my wording, built on the brand's "Engineered draw, even burn. You will never lose a cherry." line:
-  - "Engineered draw: a long paper crutch keeps every pull smooth, down to the last one."
-  - "Even burn: rolled to burn slow and steady."
-  Check them against the Smoke's actual spec.
+**Copy to confirm (round 4)**
+- Tightened pack features:
+  - Quality first: "Flower from the best farms. Only the best gets in." (was "Craft flower sourced from the best farms. Only the best gets in.")
+  - Always blended: "A purposeful blend in every smoke: terpene diversity, flavor, balance." (was "A purposeful blend inside: …")
+- Two new labels: the blog section's eyebrow "The blog" and the article pages' "Keep reading." / "All notes".
+- Article edits, all listed in `_src/articles.json`:
+  - **Freshness You Can Trust:** four cuts remove the growing claims ("grow and", "harvest, trim, and") and the online-store / ship-to-your-door wording. The last paragraph (a link to the retired THC vs THCa post) is dropped. **Confirm every retail Lowell pack carries a packaging date**, because the title and body claim it. The source post was written about packs shipped from the online store.
+  - **Salad Science:** two capitalisation typos fixed. The post makes effect claims ("therapeutic", "mood-enhancing", receptor "blockage"): check them against each state's marketing rules.
+  - **Farming Cannabis:** verbatim. It names Hudson Cannabis as a grower: confirm it's still a supplier.
 - The hero headline still reads "Grown with intention." It's the existing brand line, but it may read as growing.
+
+**Press (verified 25 Sep; each article opened and read)**
+- Forbes: Javier Hasse, "America's $3.1 Billion Cannabis Pre-Roll Habit…", 26 Jun 2025. Lowell is No. 9, with its own section; the quote is from it. Opened in the built-in browser.
+- Robb Report: Nick Williams, "How Lowell Herb Co. Became America's First Great Weed Brand", 11 Feb 2019. The built-in browser refused robbreport.com, so I read the Wayback copy (23 Jul 2025 capture). The live URL returns 200.
+- Page Six: Ian Mohr, "Bella Thorne marijuana ad rejected ahead of Oscars", 24 Feb 2019, about Lowell's Oscars ad. The built-in browser blocks pagesix.com, so I read the Wayback copy (23 Oct 2019 capture). The live URL returns 200.
+- Newsweek: Mary Kaye Schilling, "Pot Offenders Wanted: California's Lowell Herb Co. Seeks to Hire Parolees", 15 Jun 2018. Opened in the built-in browser.
+- The Robb Report piece retells the Bull Lowell story and names Coachella-era strains. It's an outside article, not site copy, but it is one click away.
 
 **Imagery and state rules**
 - Several photos show people smoking: the mosaic, the photo band, and the July page's hero did too. Check each launch state's cannabis marketing rules on depicting consumption before the real site goes live.
 
 **Placeholders and unverified copy**
 - Farm Store product pages, cart, checkout and email sign-up are placeholders.
-- Journal cards don't link anywhere; no articles exist.
+- Contact, Shipping & returns, Privacy and Terms pages don't exist yet (Phase 2). Their footer links are removed until then.
 - Copy carried over from v1 and not re-verified:
-  - the press quote and the four outlet names under it
   - "700+ licensed shops": the live data maps 658 stores plus 47 unplaced CA stores, which is 705
 - The state licence and marketing disclosure line in the footer is still a placeholder.
 - The age gate stores a yes in the browser (`localStorage`). That's a courtesy gate, not a compliance-grade age check.
@@ -178,7 +214,7 @@ Images that "confirm" doesn't cover: none. The v1 pages (option1–4) still use 
 
 ## How to edit
 
-The pages are generated, so don't hand-edit the four `.html` files. Edit `_src/` and rebuild:
+The pages are generated, so don't hand-edit the `.html` files. Edit `_src/` and rebuild:
 
 ```
 python3 v2/_src/build.py
@@ -189,5 +225,6 @@ python3 v2/_src/build.py
 - `_src/site.js` holds the gate, menu and shop filter.
 - `_src/find.js` holds the locator.
 - `_src/products.json` is the catalog snapshot.
+- `_src/articles.json` holds the Notes from the Farm articles: source URL, byline, date, body, and every edit made to the source text.
 
 **Bump `VER` in `build.py` on every deploy** that changes CSS or JS. It renames the asset files, which is the only cache-bust GitHub Pages honours.

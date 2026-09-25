@@ -16,7 +16,7 @@
 <meta name="theme-color" content="#F6EFDF">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23F6EFDF' stroke='%2335291A' stroke-width='3'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='36' fill='%23A5301F'%3EL%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="../assets/fonts/El-Hidrant-Regular.otf" as="font" type="font/otf" crossorigin>
-<link rel="stylesheet" href="assets/site.v3.css">
+<link rel="stylesheet" href="assets/site.v4.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -36,7 +36,7 @@
 <header class="site-head" id="top">
   <div class="container">
     <a class="wordmark" href="index.html" aria-label="Lowell Herb Co. home">Lowell</a>
-    <nav class="nav" aria-label="Main"><a href="shop.html">Farm Store</a><a href="index.html#pack">The Pack</a><a href="index.html#journal">Journal</a></nav>
+    <nav class="nav" aria-label="Main"><a href="shop.html">Farm Store</a><a href="index.html#pack">The Pack</a><a href="index.html#notes">Notes from the Farm</a></nav>
     <div class="head-actions">
       <a class="btn sm" href="find.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Find Lowell</a>
       <a class="icon-btn" href="shop.html" aria-label="Cart, 0 items (checkout arrives with the Shopify build)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 7h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9L5 7Z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg><span class="cart-count" aria-hidden="true">0</span></a>
@@ -47,7 +47,7 @@
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Menu" hidden>
   <div class="sheet-top"><a class="wordmark" href="index.html">Lowell</a>
     <button class="icon-btn" type="button" id="menu-close" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-  <nav aria-label="Main"><a href="index.html" aria-current="page">Home</a><a href="shop.html">Farm Store</a><a href="find.html">Find Lowell</a><a href="index.html#pack">The Pack</a><a href="index.html#journal">Journal</a></nav>
+  <nav aria-label="Main"><a href="index.html" aria-current="page">Home</a><a href="shop.html">Farm Store</a><a href="find.html">Find Lowell</a><a href="index.html#pack">The Pack</a><a href="index.html#notes">Notes from the Farm</a></nav>
   <div class="sheet-zip">
     <span class="eyebrow">Find Lowell near you</span>
     <form class="field js-zip" action="find.html" method="get" role="search" aria-label="Find Lowell by ZIP code">
@@ -59,11 +59,11 @@
   </div>
 </div>
 <main id="main">
-<section class="hero-full hero-right on-photo" aria-labelledby="hero-h">
+<section class="hero-full hero-dusk on-photo" aria-labelledby="hero-h">
   <picture>
-    <source media="(max-width: 760px)" type="image/webp" srcset="img/hero-roof-m-640.webp 640w, img/hero-roof-m-960.webp 960w" sizes="100vw">
-    <source type="image/webp" srcset="img/hero-roof-1440.webp 1440w, img/hero-roof-2200.webp 2200w" sizes="100vw">
-    <img src="img/hero-roof-1600.jpg" alt="Two friends laughing on a city rooftop in golden light, one holding a pre-roll" fetchpriority="high">
+    <source media="(max-width: 760px)" type="image/webp" srcset="img/hero-dusk-tall-640.webp 640w, img/hero-dusk-tall-960.webp 960w" sizes="100vw">
+    <source type="image/webp" srcset="img/hero-dusk-1440.webp 1440w, img/hero-dusk-2200.webp 2200w" sizes="100vw">
+    <img src="img/hero-dusk-1600.jpg" alt="Friends talking in the firelight at a Lowell party at dusk" fetchpriority="high">
   </picture>
   <div class="container hero-inner">
     <div class="hero-top">
@@ -101,33 +101,6 @@
   </div>
 </section>
 
-<section class="section sand" id="apart" aria-labelledby="apart-h">
-  <div class="container">
-    <div class="sect-head">
-      <span class="eyebrow red">What sets us apart</span>
-      <h2 class="h2" id="apart-h">Every product, crafted with respect for the plant, our planet, and you.</h2>
-    </div>
-    <div class="diagram">
-      <ol class="points left" aria-label="Details, part one">
-        <li class="point"><span class="num" aria-hidden="true">1</span><h3>Quality first</h3><p>Craft flower sourced from the best farms. Only the best gets in.</p></li>
-        <li class="point"><span class="num" aria-hidden="true">2</span><h3>Always blended</h3><p>A purposeful blend inside: terpene diversity, flavor, balance.</p></li>
-      </ol>
-      <figure class="diagram-figure smoke">
-        <picture><source type="image/webp" srcset="img/smoke-single-480.webp 480w, img/smoke-single-760.webp 760w" sizes="(max-width: 900px) 250px, 320px">
-          <img src="img/smoke-single-600.png" alt="A single Lowell Smoke: a straight pre-roll with a kraft crutch printed with the Lowell bull" loading="lazy" decoding="async" width="600" height="769"></picture>
-        <span class="pin-mark" style="left:62.6%;top:22.8%" aria-hidden="true">1</span>
-        <span class="pin-mark" style="left:49.5%;top:43.8%" aria-hidden="true">2</span>
-        <span class="pin-mark" style="left:25.5%;top:82.2%" aria-hidden="true">3</span>
-        <span class="pin-mark" style="left:73.0%;top:6.3%" aria-hidden="true">4</span>
-      </figure>
-      <ol class="points" start="3" aria-label="Details, part two">
-        <li class="point"><span class="num" aria-hidden="true">3</span><h3>Engineered draw</h3><p>A long paper crutch keeps every pull smooth, down to the last one.</p></li>
-        <li class="point"><span class="num" aria-hidden="true">4</span><h3>Even burn</h3><p>Rolled to burn slow and steady. You will never lose a cherry.</p></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
 <section class="mosaic-sec on-ink" aria-labelledby="people-h">
   <div class="mosaic">
     <figure class="mo mo-a"><picture><source type="image/webp" srcset="img/mo-pass-800.webp 800w, img/mo-pass-1400.webp 1400w" sizes="(max-width: 760px) 100vw, 50vw"><img src="img/mo-pass-1400.webp" alt="Friends on a leather couch passing a pack of Lowell 35&#x27;s across a table of snacks" loading="lazy" decoding="async"></picture></figure>
@@ -148,19 +121,23 @@
     <div class="pack">
       <figure class="pack-figure">
         <div class="arch"><picture><source type="image/webp" srcset="img/pack-tray-640.webp 640w, img/pack-tray-1000.webp 1000w" sizes="(max-width: 900px) 90vw, 440px"><img src="img/pack-tray-1000.jpg" alt="An open Lowell Smokes pack: the tray of six pre-rolls slid out, emergency matches in the top slot, the magnetic flap behind" loading="lazy" decoding="async"></picture></div>
-        <span class="pin-mark" style="left:24%;top:9%" aria-hidden="true">1</span>
-        <span class="pin-mark" style="left:40%;top:60%" aria-hidden="true">2</span>
-        <span class="pin-mark" style="left:74%;top:21%" aria-hidden="true">3</span>
-        <span class="pin-mark" style="left:9%;top:31%" aria-hidden="true">4</span>
+        <span class="pin-mark" style="left:33%;top:37%" aria-hidden="true">1</span>
+        <span class="pin-mark" style="left:58%;top:57%" aria-hidden="true">2</span>
+        <span class="pin-mark" style="left:24%;top:9%" aria-hidden="true">3</span>
+        <span class="pin-mark" style="left:44%;top:86%" aria-hidden="true">4</span>
+        <span class="pin-mark" style="left:74%;top:21%" aria-hidden="true">5</span>
+        <span class="pin-mark" style="left:9%;top:31%" aria-hidden="true">6</span>
       </figure>
       <div class="pack-copy">
         <span class="eyebrow red">The Pack</span>
-        <h2 class="h2" id="pack-h">Lighting up is a ritual. We built the box for it.</h2>
+        <h2 class="h2" id="pack-h">Pre-rolls made with intention. A box built to match.</h2>
         <ol class="feats">
-          <li class="feat"><span class="pin-mark" aria-hidden="true">1</span><h3>The magnetic flap</h3><p>The signature closure: sturdy, organic packaging that&rsquo;s ready for any outdoor adventure.</p></li>
-          <li class="feat"><span class="pin-mark" aria-hidden="true">2</span><h3>The slide-out tray</h3><p>Pull the tray and your pre-rolls sit in a row, like the good silverware.</p></li>
-          <li class="feat"><span class="pin-mark" aria-hidden="true">3</span><h3>Emergency matches</h3><p>Every pack ships with them. Prepared beats lucky.</p></li>
-          <li class="feat"><span class="pin-mark" aria-hidden="true">4</span><h3>The wax liner</h3><p>Holds the moisture, so the last smoke in the pack is as fresh as the first.</p></li>
+          <li class="feat"><span class="pin-mark" aria-hidden="true">1</span><h3>Quality first</h3><p>Flower from the best farms. Only the best gets in.</p></li>
+          <li class="feat"><span class="pin-mark" aria-hidden="true">2</span><h3>Always blended</h3><p>A purposeful blend in every smoke: terpene diversity, flavor, balance.</p></li>
+          <li class="feat"><span class="pin-mark" aria-hidden="true">3</span><h3>The magnetic flap</h3><p>The signature closure: sturdy, organic packaging that&rsquo;s ready for any outdoor adventure.</p></li>
+          <li class="feat"><span class="pin-mark" aria-hidden="true">4</span><h3>The slide-out tray</h3><p>Pull the tray and your pre-rolls sit in a row, like the good silverware.</p></li>
+          <li class="feat"><span class="pin-mark" aria-hidden="true">5</span><h3>Emergency matches</h3><p>Every pack ships with them. Prepared beats lucky.</p></li>
+          <li class="feat"><span class="pin-mark" aria-hidden="true">6</span><h3>The wax liner</h3><p>Holds the moisture, so the last smoke in the pack is as fresh as the first.</p></li>
         </ol>
       </div>
     </div>
@@ -394,47 +371,46 @@
   </div>
 </section>
 
-<section class="section" id="journal" aria-labelledby="journal-h">
+<section class="section" id="notes" aria-labelledby="notes-h">
   <div class="container">
     <div class="sect-head row">
-      <span class="eyebrow red">The Journal</span>
-      <h2 class="h2" id="journal-h">Notes from Lowell.</h2>
+      <span class="eyebrow red">The blog</span>
+      <h2 class="h2" id="notes-h">Notes from the Farm.</h2>
       <p class="lede">Sourcing, craft and design, from the people who make Lowell.</p>
       <span></span>
     </div>
-    <div class="jcards">
-      <article class="jcard"><div class="im"><picture><source type="image/webp" srcset="img/journal-flower-480.webp 480w, img/journal-flower-960.webp 960w" sizes="(max-width: 900px) 92vw, 30vw"><img src="img/journal-flower-960.webp" alt="Close-up of cured cannabis flower" loading="lazy" decoding="async"></picture></div>
-        <span class="eyebrow red">Sourcing</span><h3 class="h3">Where our flower comes from</h3><p>We don&rsquo;t grow our own. We buy from the best farms we can find, and only the best gets in.</p></article>
-      <article class="jcard"><div class="im"><picture><source type="image/webp" srcset="img/journal-blend-480.webp 480w, img/journal-blend-960.webp 960w" sizes="(max-width: 900px) 92vw, 30vw"><img src="img/journal-blend-960.webp" alt="Freshly rolled Lowell pre-rolls spread across a sorting tray" loading="lazy" decoding="async"></picture></div>
-        <span class="eyebrow red">Craft</span><h3 class="h3">Why we blend</h3><p>Single strains are a gamble. Blends are a recipe. The case for terpene diversity.</p></article>
-      <article class="jcard"><div class="im"><picture><source type="image/webp" srcset="img/journal-box-480.webp 480w, img/journal-box-960.webp 960w" sizes="(max-width: 900px) 92vw, 30vw"><img src="img/journal-box-960.webp" alt="A Lowell Smokes pack, its open tray of pre-rolls and the Signature Metal Ashtray on a wooden valet tray" loading="lazy" decoding="async"></picture></div>
-        <span class="eyebrow red">Design</span><h3 class="h3">The craft of the box</h3><p>Magnetic flap, wax liner, emergency matches: why the pack is engineered like the smoke.</p></article>
-    </div>
+    <div class="jcards"><a class="jcard" href="notes-farming-cannabis.html"><div class="im"><picture><source type="image/webp" srcset="img/journal-flower-480.webp 480w, img/journal-flower-960.webp 960w" sizes="(max-width: 900px) 92vw, 30vw"><img src="img/journal-flower-960.webp" alt="Close-up of cured cannabis flower" loading="lazy" decoding="async"></picture></div><span class="eyebrow red">Sourcing</span><h3 class="h3">Farming Cannabis</h3><p>As cannabis normalizes, its cultivation increasingly resembles traditional farming.</p><span class="link-arrow" aria-hidden="true">Read</span></a><a class="jcard" href="notes-salad-science.html"><div class="im"><picture><source type="image/webp" srcset="img/journal-blend-480.webp 480w, img/journal-blend-960.webp 960w" sizes="(max-width: 900px) 92vw, 30vw"><img src="img/journal-blend-960.webp" alt="Freshly rolled Lowell pre-rolls spread across a sorting tray" loading="lazy" decoding="async"></picture></div><span class="eyebrow red">Craft</span><h3 class="h3">Salad Science: Why Combining Cannabis Strains Elevates Your Experience</h3><p>This isn’t a trend — it’s chemistry and it works to deliver a better high.</p><span class="link-arrow" aria-hidden="true">Read</span></a><a class="jcard" href="notes-freshness-you-can-trust.html"><div class="im"><picture><source type="image/webp" srcset="img/journal-box-480.webp 480w, img/journal-box-960.webp 960w" sizes="(max-width: 900px) 92vw, 30vw"><img src="img/journal-box-960.webp" alt="A Lowell Smokes pack, its open tray of pre-rolls and the Signature Metal Ashtray on a wooden valet tray" loading="lazy" decoding="async"></picture></div><span class="eyebrow red">The Pack</span><h3 class="h3">Freshness You Can Trust: Why Every Lowell Pack Comes Dated</h3><p>At Lowell, we believe great cannabis should never be a mystery — especially when it comes to freshness.</p><span class="link-arrow" aria-hidden="true">Read</span></a></div>
   </div>
 </section>
 
-<section class="press-band on-ink" aria-label="Press">
+<section class="press-band on-ink" aria-labelledby="press-h">
   <div class="container">
-    <blockquote>&ldquo;Lowell is one of the most widely recognized names in American cannabis, with a trailblazing legacy.&rdquo;</blockquote>
-    <ul class="press-names" aria-label="As featured in"><li>Forbes</li><li>Robb Report</li><li>Page Six</li><li>Newsweek</li></ul>
+    <h2 class="sr-only" id="press-h">Press</h2>
+    <figure class="press-quote">
+      <blockquote cite="https://www.forbes.com/sites/javierhasse/2025/06/26/americas-31-billion-cannabis-pre-roll-habit-316-million-joints-smoked-last-year-heres-who-cashed-in/">&ldquo;Lowell is one of the most widely recognized names in American cannabis, with a trailblazing legacy&hellip;&rdquo;</blockquote>
+      <figcaption>Forbes &middot; June 2025</figcaption>
+    </figure>
+    <ul class="press-names" aria-label="As featured in"><li><a href="https://www.forbes.com/sites/javierhasse/2025/06/26/americas-31-billion-cannabis-pre-roll-habit-316-million-joints-smoked-last-year-heres-who-cashed-in/" target="_blank" rel="noopener" aria-label="Forbes: America’s $3.1 Billion Cannabis Pre-Roll Habit, June 2025 (opens in a new tab)">Forbes</a></li><li><a href="https://robbreport.com/lifestyle/news/lowell-herb-cannabis-brand-2840799/" target="_blank" rel="noopener" aria-label="Robb Report: How Lowell Herb Co. Became America’s First Great Weed Brand, February 2019 (opens in a new tab)">Robb Report</a></li><li><a href="https://pagesix.com/2019/02/24/bella-thorne-marijuana-ad-rejected-ahead-of-oscars/" target="_blank" rel="noopener" aria-label="Page Six: Bella Thorne marijuana ad rejected ahead of Oscars, February 2019 (opens in a new tab)">Page Six</a></li><li><a href="https://www.newsweek.com/pot-marijuana-weed-lowell-herb-co-980030" target="_blank" rel="noopener" aria-label="Newsweek: Pot Offenders Wanted: California’s Lowell Herb Co. Seeks to Hire Parolees, June 2018 (opens in a new tab)">Newsweek</a></li></ul>
   </div>
 </section>
 
-<section class="band" aria-label="Photographs of Lowell people and product">
+<section class="band" aria-labelledby="band-h">
+  <h2 class="sr-only" id="band-h">Lowell on Instagram</h2>
   <ul>
-    <li><picture><source type="image/webp" srcset="img/band-dusk-480.webp 480w, img/band-dusk-720.webp 720w" sizes="(max-width: 760px) 50vw, 20vw"><img src="img/band-dusk-720.webp" alt="Friends in lawn chairs talking in the last light at a Lowell party" loading="lazy" decoding="async"></picture></li>
-    <li><picture><source type="image/webp" srcset="img/band-light-480.webp 480w, img/band-light-720.webp 720w" sizes="(max-width: 760px) 50vw, 20vw"><img src="img/band-light-720.webp" alt="A man lighting a pre-roll over an amber ashtray" loading="lazy" decoding="async"></picture></li>
-    <li><picture><source type="image/webp" srcset="img/hero-pack-720.webp 720w, img/hero-pack-1200.webp 1200w" sizes="(max-width: 760px) 50vw, 20vw"><img src="img/hero-pack-1200.webp" alt="A Lowell Smokes pack, three matches and a pre-roll resting in a stone ashtray on a walnut table" loading="lazy" decoding="async"></picture></li>
-    <li><picture><source type="image/webp" srcset="img/band-greens-480.webp 480w, img/band-greens-720.webp 720w" sizes="(max-width: 760px) 50vw, 20vw"><img src="img/band-greens-720.webp" alt="A man in a mustard tee smoking a pre-roll among tropical leaves" loading="lazy" decoding="async"></picture></li>
-    <li class="band-5"><picture><source type="image/webp" srcset="img/band-jacket-480.webp 480w, img/band-jacket-720.webp 720w" sizes="(max-width: 760px) 50vw, 20vw"><img src="img/band-jacket-720.webp" alt="A woman in the green quilted Lowell Herb Co. jacket, seen from behind" loading="lazy" decoding="async"></picture></li>
+    <li><a href="https://www.instagram.com/lowellfarms/" target="_blank" rel="noopener" aria-label="Two guests watching a bonfire at a Lowell party, one in a jacket with the Lowell bull on the back. Lowell on Instagram (opens in a new tab)"><picture><source type="image/webp" srcset="img/band-bonfire-480.webp 480w, img/band-bonfire-720.webp 720w" sizes="(max-width: 760px) 50vw, 20vw"><img src="img/band-bonfire-720.webp" alt="" loading="lazy" decoding="async"></picture><svg class="ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.35" cy="6.65" r="1.15" fill="currentColor" stroke="none"/></svg></a></li>
+    <li><a href="https://www.instagram.com/lowellfarms/" target="_blank" rel="noopener" aria-label="A man lighting a pre-roll over an amber ashtray. Lowell on Instagram (opens in a new tab)"><picture><source type="image/webp" srcset="img/band-light-480.webp 480w, img/band-light-720.webp 720w" sizes="(max-width: 760px) 50vw, 20vw"><img src="img/band-light-720.webp" alt="" loading="lazy" decoding="async"></picture><svg class="ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.35" cy="6.65" r="1.15" fill="currentColor" stroke="none"/></svg></a></li>
+    <li><a href="https://www.instagram.com/lowellfarms/" target="_blank" rel="noopener" aria-label="A Lowell Smokes pack, three matches and a pre-roll resting in a stone ashtray on a walnut table. Lowell on Instagram (opens in a new tab)"><picture><source type="image/webp" srcset="img/hero-pack-720.webp 720w, img/hero-pack-1200.webp 1200w" sizes="(max-width: 760px) 50vw, 20vw"><img src="img/hero-pack-1200.webp" alt="" loading="lazy" decoding="async"></picture><svg class="ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.35" cy="6.65" r="1.15" fill="currentColor" stroke="none"/></svg></a></li>
+    <li><a href="https://www.instagram.com/lowellfarms/" target="_blank" rel="noopener" aria-label="A man in a mustard tee smoking a pre-roll among tropical leaves. Lowell on Instagram (opens in a new tab)"><picture><source type="image/webp" srcset="img/band-greens-480.webp 480w, img/band-greens-720.webp 720w" sizes="(max-width: 760px) 50vw, 20vw"><img src="img/band-greens-720.webp" alt="" loading="lazy" decoding="async"></picture><svg class="ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.35" cy="6.65" r="1.15" fill="currentColor" stroke="none"/></svg></a></li>
+    <li class="band-5"><a href="https://www.instagram.com/lowellfarms/" target="_blank" rel="noopener" aria-label="A woman in the green quilted Lowell Herb Co. jacket, seen from behind. Lowell on Instagram (opens in a new tab)"><picture><source type="image/webp" srcset="img/band-jacket-480.webp 480w, img/band-jacket-720.webp 720w" sizes="(max-width: 760px) 50vw, 20vw"><img src="img/band-jacket-720.webp" alt="" loading="lazy" decoding="async"></picture><svg class="ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.35" cy="6.65" r="1.15" fill="currentColor" stroke="none"/></svg></a></li>
   </ul>
+  <a class="band-handle" href="https://www.instagram.com/lowellfarms/" target="_blank" rel="noopener"><svg class="ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" role="img" aria-label="Instagram"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.35" cy="6.65" r="1.15" fill="currentColor" stroke="none"/></svg><span>@lowellfarms</span></a>
 </section>
 </main>
 <footer class="site-foot on-ink">
   <div class="container">
     <div class="foot-top">
       <div>
-        <h2 class="h2">Letters from Lowell</h2>
+        <h2 class="h2">Notes from the Farm</h2>
         <p>New goods, restock news and first word on drops. One email a month, at most.</p>
         <form class="field js-signup" action="#" aria-label="Email sign-up">
           <label class="sr-only" for="signup-email">Email address</label>
@@ -445,8 +421,8 @@
       </div>
       <div class="foot-cols">
         <div><h3>Shop</h3><a href="shop.html">Farm Store</a><a href="shop.html?c=apparel">Apparel</a><a href="shop.html?c=luggage">Luggage</a><a href="shop.html?c=accessories">Accessories</a></div>
-        <div><h3>Lowell</h3><a href="find.html">Find Lowell</a><a href="index.html#apart">What sets us apart</a><a href="index.html#pack">The Pack</a><a href="index.html#journal">Journal</a></div>
-        <div><h3>Help</h3><a href="#top">Contact</a><a href="#top">Shipping &amp; returns</a><a href="#top">Privacy</a><a href="#top">Terms</a><a href="https://www.instagram.com/lowellfarms/" rel="noopener">Instagram @lowellfarms</a></div>
+        <div><h3>Lowell</h3><a href="find.html">Find Lowell</a><a href="index.html#pack">The Pack</a><a href="index.html#notes">Notes from the Farm</a></div>
+        <div><h3>Follow</h3><a class="ig-link" href="https://www.instagram.com/lowellfarms/" target="_blank" rel="noopener"><svg class="ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" role="img" aria-label="Instagram"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.35" cy="6.65" r="1.15" fill="currentColor" stroke="none"/></svg><span>@lowellfarms</span></a></div>
       </div>
     </div>
     <ul class="values" aria-label="What we value"><li>Freedom</li><li>Confidence</li><li>No Bullshit</li><li>Generosity</li><li>Originality</li><li>Family</li><li>Good Vibes</li></ul>
@@ -456,6 +432,6 @@
     </div>
   </div>
 </footer>
-<script src="assets/site.v3.js"></script>
+<script src="assets/site.v4.js"></script>
 </body>
 </html>
