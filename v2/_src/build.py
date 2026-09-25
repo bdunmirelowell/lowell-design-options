@@ -236,33 +236,6 @@ def page_home():
   </div>
 </section>
 
-<section class="section sand" id="apart" aria-labelledby="apart-h">
-  <div class="container">
-    <div class="sect-head">
-      <span class="eyebrow red">What sets us apart</span>
-      <h2 class="h2" id="apart-h">Every product, crafted with respect for the plant, our planet, and you.</h2>
-    </div>
-    <div class="diagram">
-      <ol class="points left" aria-label="Details, part one">
-        <li class="point"><span class="num" aria-hidden="true">1</span><h3>Quality first</h3><p>Craft flower sourced from the best farms. Only the best gets in.</p></li>
-        <li class="point"><span class="num" aria-hidden="true">2</span><h3>Always blended</h3><p>A purposeful blend inside: terpene diversity, flavor, balance.</p></li>
-      </ol>
-      <figure class="diagram-figure smoke">
-        <picture><source type="image/webp" srcset="img/smoke-single-480.webp 480w, img/smoke-single-760.webp 760w" sizes="(max-width: 900px) 250px, 320px">
-          <img src="img/smoke-single-600.png" alt="A single Lowell Smoke: a straight pre-roll with a kraft crutch printed with the Lowell bull" loading="lazy" decoding="async" width="600" height="769"></picture>
-        <span class="pin-mark" style="left:62.6%;top:22.8%" aria-hidden="true">1</span>
-        <span class="pin-mark" style="left:49.5%;top:43.8%" aria-hidden="true">2</span>
-        <span class="pin-mark" style="left:25.5%;top:82.2%" aria-hidden="true">3</span>
-        <span class="pin-mark" style="left:73.0%;top:6.3%" aria-hidden="true">4</span>
-      </figure>
-      <ol class="points" start="3" aria-label="Details, part two">
-        <li class="point"><span class="num" aria-hidden="true">3</span><h3>Engineered draw</h3><p>A long paper crutch keeps every pull smooth, down to the last one.</p></li>
-        <li class="point"><span class="num" aria-hidden="true">4</span><h3>Even burn</h3><p>Rolled to burn slow and steady. You will never lose a cherry.</p></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
 <section class="mosaic-sec on-ink" aria-labelledby="people-h">
   <div class="mosaic">
     <figure class="mo mo-a">{pic("mo-pass", [800, 1400], "Friends on a leather couch passing a pack of Lowell 35's across a table of snacks", "(max-width: 760px) 100vw, 50vw")}</figure>
@@ -283,19 +256,23 @@ def page_home():
     <div class="pack">
       <figure class="pack-figure">
         <div class="arch">{pic("pack-tray", [640, 1000], "An open Lowell Smokes pack: the tray of six pre-rolls slid out, emergency matches in the top slot, the magnetic flap behind", "(max-width: 900px) 90vw, 440px", jpg=1000)}</div>
-        <span class="pin-mark" style="left:24%;top:9%" aria-hidden="true">1</span>
-        <span class="pin-mark" style="left:40%;top:60%" aria-hidden="true">2</span>
-        <span class="pin-mark" style="left:74%;top:21%" aria-hidden="true">3</span>
-        <span class="pin-mark" style="left:9%;top:31%" aria-hidden="true">4</span>
+        <span class="pin-mark" style="left:33%;top:37%" aria-hidden="true">1</span>
+        <span class="pin-mark" style="left:58%;top:57%" aria-hidden="true">2</span>
+        <span class="pin-mark" style="left:24%;top:9%" aria-hidden="true">3</span>
+        <span class="pin-mark" style="left:44%;top:86%" aria-hidden="true">4</span>
+        <span class="pin-mark" style="left:74%;top:21%" aria-hidden="true">5</span>
+        <span class="pin-mark" style="left:9%;top:31%" aria-hidden="true">6</span>
       </figure>
       <div class="pack-copy">
         <span class="eyebrow red">The Pack</span>
-        <h2 class="h2" id="pack-h">Lighting up is a ritual. We built the box for it.</h2>
+        <h2 class="h2" id="pack-h">Pre-rolls made with intention. A box built to match.</h2>
         <ol class="feats">
-          <li class="feat"><span class="pin-mark" aria-hidden="true">1</span><h3>The magnetic flap</h3><p>The signature closure: sturdy, organic packaging that&rsquo;s ready for any outdoor adventure.</p></li>
-          <li class="feat"><span class="pin-mark" aria-hidden="true">2</span><h3>The slide-out tray</h3><p>Pull the tray and your pre-rolls sit in a row, like the good silverware.</p></li>
-          <li class="feat"><span class="pin-mark" aria-hidden="true">3</span><h3>Emergency matches</h3><p>Every pack ships with them. Prepared beats lucky.</p></li>
-          <li class="feat"><span class="pin-mark" aria-hidden="true">4</span><h3>The wax liner</h3><p>Holds the moisture, so the last smoke in the pack is as fresh as the first.</p></li>
+          <li class="feat"><span class="pin-mark" aria-hidden="true">1</span><h3>Quality first</h3><p>Flower from the best farms. Only the best gets in.</p></li>
+          <li class="feat"><span class="pin-mark" aria-hidden="true">2</span><h3>Always blended</h3><p>A purposeful blend in every smoke: terpene diversity, flavor, balance.</p></li>
+          <li class="feat"><span class="pin-mark" aria-hidden="true">3</span><h3>The magnetic flap</h3><p>The signature closure: sturdy, organic packaging that&rsquo;s ready for any outdoor adventure.</p></li>
+          <li class="feat"><span class="pin-mark" aria-hidden="true">4</span><h3>The slide-out tray</h3><p>Pull the tray and your pre-rolls sit in a row, like the good silverware.</p></li>
+          <li class="feat"><span class="pin-mark" aria-hidden="true">5</span><h3>Emergency matches</h3><p>Every pack ships with them. Prepared beats lucky.</p></li>
+          <li class="feat"><span class="pin-mark" aria-hidden="true">6</span><h3>The wax liner</h3><p>Holds the moisture, so the last smoke in the pack is as fresh as the first.</p></li>
         </ol>
       </div>
     </div>

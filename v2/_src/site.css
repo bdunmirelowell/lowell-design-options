@@ -235,29 +235,6 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: flex; align-items: center; gap: var(--s5); }
 .pillars li + li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
 
-/* ---------- pre-roll diagram ---------- */
-.diagram { display: grid; grid-template-columns: 1fr minmax(220px, 320px) 1fr; gap: clamp(20px, 3vw, 48px); align-items: center; }
-.diagram-figure { position: relative; margin: 0; }
-.diagram-figure::before { content: ""; position: absolute; inset: 10% -10%; border-radius: 50%; background: radial-gradient(closest-side, rgba(200, 155, 75, .28), rgba(200, 155, 75, 0)); }
-.diagram-figure img { position: relative; width: 100%; filter: drop-shadow(0 26px 34px rgba(70, 52, 22, .2)); }
-.pin-mark { position: absolute; width: 30px; height: 30px; transform: translate(-50%, -50%); border-radius: 50%; background: var(--red); color: var(--on-ink);
-  border: 2px solid var(--on-ink); display: grid; place-items: center; font-family: var(--caps); font-weight: 700; font-size: 14px; line-height: 1;
-  box-shadow: 0 4px 14px rgba(40, 28, 12, .3); }
-.points { display: grid; gap: var(--s6); }
-.points.left { text-align: right; justify-items: end; }
-.point { max-width: 300px; display: grid; gap: var(--s2); }
-.points.left .point { justify-items: end; }
-.point .num { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--red); color: var(--red); display: grid; place-items: center;
-  font-family: var(--caps); font-weight: 700; font-size: 14px; }
-.point h3 { font-family: var(--caps); font-weight: 700; font-size: 16px; letter-spacing: .12em; text-transform: uppercase; }
-.point p { font-size: var(--t-sm); color: var(--ink-2); }
-@media (max-width: 900px) {
-  .diagram { grid-template-columns: 1fr 1fr; }
-  .diagram-figure { grid-column: 1 / -1; grid-row: 1; max-width: 250px; justify-self: center; width: 100%; }
-  .points.left { text-align: left; justify-items: start; }
-  .points.left .point { justify-items: start; }
-}
-@media (max-width: 560px) { .diagram { grid-template-columns: 1fr; } .points { gap: var(--s5); } }
 
 /* ---------- product cards ---------- */
 .products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 24px); }
@@ -320,6 +297,9 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 /* ---------- the pack ---------- */
+.pin-mark { position: absolute; width: 30px; height: 30px; transform: translate(-50%, -50%); border-radius: 50%; background: var(--red); color: var(--on-ink);
+  border: 2px solid var(--on-ink); display: grid; place-items: center; font-family: var(--caps); font-weight: 700; font-size: 14px; line-height: 1;
+  box-shadow: 0 4px 14px rgba(40, 28, 12, .3); }
 .pack { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 80px); align-items: center; }
 .pack-figure { position: relative; margin: 0; width: 100%; max-width: 460px; justify-self: center; }
 .pack-figure .arch { aspect-ratio: 4 / 5; border-radius: var(--arch); overflow: hidden; box-shadow: var(--shadow); }
