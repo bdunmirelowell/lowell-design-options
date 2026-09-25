@@ -39,7 +39,11 @@ Phase 1 is the home page only. Phase 2 (Farm Store sort, contact page, policy dr
   - The band's dusk tile was the same frame as the hero, so it's replaced by `Bonfire + Lowell.jpg` from the same party.
 - **Footer:** the four dead `#top` help links are removed until Phase 2 builds real pages: Contact, Shipping & returns, Privacy, Terms.
 - On phones the band is 2×2, so the per-photo Instagram glyphs are hidden and the pill carries the cue.
-- CSS and JS are now `site.v6.css`, `site.v6.js` and `find.v6.js`. axe-core (WCAG 2.1 AA + best practice) reports 0 violations on Home and on an article page.
+- Bryan's edits after the first look (25 Sep):
+  - The Pack moves above the Farm Store.
+  - Larger hero type: headline about 74px at 1440 wide (was 61), paragraph 22px (was 19).
+  - The hero line "Every detail, from the flower to the pack, is considered." becomes "From the flower to the pack, nothing is an afterthought." It was Bryan's pick of three.
+- CSS and JS are now `site.v7.css`, `site.v7.js` and `find.v7.js`. axe-core (WCAG 2.1 AA + best practice) reports 0 violations on Home and on an article page.
 
 ## Round 3 (23 Sep, Bryan's second review)
 

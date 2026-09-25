@@ -251,7 +251,7 @@ def page_home():
     <div class="hero-top">
       <span class="eyebrow">Great American Cannabis</span>
       <h1 class="display" id="hero-h">Grown with intention.<br><em>Blended</em> to perfection.</h1>
-      <p class="lede">We don&rsquo;t want to reinvent how you smoke, just make it better. Every detail, from the flower to the pack, is considered.</p>
+      <p class="lede">We don&rsquo;t want to reinvent how you smoke, just make it better. From the flower to the pack, nothing is an afterthought.</p>
     </div>
     <div class="hero-ctas">
       <a class="btn" href="shop.html">Shop the Farm Store</a>
