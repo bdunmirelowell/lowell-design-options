@@ -206,9 +206,10 @@ ul { margin: 0; padding: 0; list-style: none; }
   linear-gradient(90deg, rgba(8, 24, 32, .42) 0%, rgba(8, 24, 32, .12) 45%, rgba(8, 24, 32, 0) 62%); }
 .hero-dusk img { object-position: 50% 18%; }
 .hero-dusk .hero-inner { align-items: flex-start; }
-.hero-dusk .hero-top, .hero-dusk .hero-ctas { width: min(680px, 50vw); }
-.hero-dusk .display { font-size: clamp(44px, 2.3vw + 28px, 74px); }
-.hero-dusk .lede { font-size: 19px; max-width: 44ch; }
+.hero-dusk .hero-top, .hero-dusk .hero-ctas { width: min(820px, 58vw); }
+.hero-dusk .display { font-size: clamp(52px, 3.2vw + 28px, 100px); }
+.hero-dusk .eyebrow { font-size: 15px; }
+.hero-dusk .lede { font-size: clamp(20px, 0.5vw + 15px, 24px); max-width: 42ch; }
 @media (max-width: 760px) {
   .hero-full { min-height: calc(100svh - var(--nav-h) - 34px); }
   .hero-full img { object-position: 50% 42%; }
@@ -219,8 +220,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   /* keep the text on the sky: the guests' heads sit at about half the photo's height */
   .hero-dusk .hero-inner { padding-top: var(--s5); }
   .hero-dusk .hero-top { gap: var(--s3); }
-  .hero-dusk .display { font-size: 40px; }
-  .hero-dusk .lede { font-size: 17px; }
+  .hero-dusk .display { font-size: 44px; }
+  .hero-dusk .lede { font-size: 18px; }
+  .hero-dusk .eyebrow { font-size: 14px; }
   .hero-full .lede { font-size: 18px; }
   .hero-ctas .btn { flex: 1 1 auto; }
 }
