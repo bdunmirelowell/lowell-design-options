@@ -393,6 +393,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   font-family: var(--caps); font-weight: 500; font-size: var(--t-cap); letter-spacing: .14em; text-transform: uppercase; transition: background .15s, color .15s; }
 .band-handle:hover { background: var(--ink); color: var(--on-ink); }
 .band-handle .ig { width: 20px; height: 20px; }
+@media (max-width: 760px) { .band li .ig { display: none; } .band-handle { bottom: var(--s4); } }  /* 2x2 on phones: the pill carries the Instagram cue */
 @media (max-width: 760px) { .band ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } .band .band-5 { display: none; } }
 
 /* ---------- footer ---------- */

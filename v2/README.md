@@ -38,7 +38,8 @@ Phase 1 is the home page only. Phase 2 (Farm Store sort, contact page, policy dr
 - **Instagram:** the five bottom photos and an "@lowellfarms" pill link to instagram.com/lowellfarms in a new tab. The word "Instagram" is replaced by the Instagram logo (inline SVG, `aria-label="Instagram"`).
   - The band's dusk tile was the same frame as the hero, so it's replaced by `Bonfire + Lowell.jpg` from the same party.
 - **Footer:** the four dead `#top` help links are removed until Phase 2 builds real pages: Contact, Shipping & returns, Privacy, Terms.
-- CSS and JS are now `site.v4.css`, `site.v4.js` and `find.v4.js`. axe-core (WCAG 2.1 AA + best practice) reports 0 violations on Home and on an article page.
+- On phones the band is 2×2, so the per-photo Instagram glyphs are hidden and the pill carries the cue.
+- CSS and JS are now `site.v5.css`, `site.v5.js` and `find.v5.js`. axe-core (WCAG 2.1 AA + best practice) reports 0 violations on Home and on an article page.
 
 ## Round 3 (23 Sep, Bryan's second review)
 
