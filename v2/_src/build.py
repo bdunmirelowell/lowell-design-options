@@ -10,7 +10,7 @@ and ignores ?v= query strings.
 """
 import html, json, pathlib, re, shutil
 
-VER = "v9"
+VER = "v10"
 SRC = pathlib.Path(__file__).resolve().parent
 OUT = SRC.parent
 BASE = "https://bdunmirelowell.github.io/lowell-design-options/v2/"
@@ -157,7 +157,7 @@ def footer():
       <div class="foot-cols">
         <div><h3>Shop</h3><a href="shop.html">Farm Store</a><a href="shop.html?c=apparel">Apparel</a><a href="shop.html?c=luggage">Luggage</a><a href="shop.html?c=accessories">Accessories</a></div>
         <div><h3>Lowell</h3><a href="find.html">Find Lowell</a><a href="index.html#pack">The Pack</a><a href="index.html#notes">Notes from the Farm</a></div>
-        <div><h3>Follow</h3><a class="ig-link" href="{IG_URL}" target="_blank" rel="noopener">{ig_icon()}<span>@lowellfarms</span></a></div>
+        <div><h3>Help</h3><a href="contact.html">Contact</a><a href="shipping-returns.html">Shipping &amp; returns</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a class="ig-link" href="{IG_URL}" target="_blank" rel="noopener">{ig_icon()}<span>@lowellfarms</span></a></div>
       </div>
     </div>
     <ul class="values" aria-label="What we value"><li>Freedom</li><li>Confidence</li><li>No Bullshit</li><li>Generosity</li><li>Originality</li><li>Family</li><li>Good Vibes</li></ul>
@@ -415,6 +415,97 @@ def page_article(a):
     (OUT / article_href(a)).write_text(out)
 
 
+# ---------------------------------------------------------------- contact + policy drafts
+CONTACT_EMAIL = "admin@lowellherbco.com"   # Bryan, 25 Sep 2026: email only, no form, no address or phone
+POLICIES = [("privacy", "Privacy Policy"), ("shipping-returns", "Shipping & Returns"), ("terms", "Terms of Service")]
+
+
+def inline(t):
+    t = esc(t, quote=False)
+    t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
+    t = re.sub(r"\{\{(.+?)\}\}", r'<mark class="todo">[\1]</mark>', t)   # open items for Bryan / counsel
+    return re.sub(r"\[([^\]]+)\]\(([^)]+)\)", lambda m: f'<a class="link" href="{m.group(2)}">{m.group(1)}</a>', t)
+
+
+def md(text):
+    """The small Markdown subset the policy drafts use: ## / ### headings, paragraphs, '- ' lists, **bold**, [links](url)."""
+    out, para, items = [], [], []
+    def flush():
+        if para: out.append(f"<p>{inline(' '.join(para))}</p>"); para.clear()
+        if items: out.append("<ul>" + "".join(f"<li>{inline(i)}</li>" for i in items) + "</ul>"); items.clear()
+    for line in text.splitlines():
+        l = line.strip()
+        if not l: flush(); continue
+        if l.startswith("### "): flush(); out.append(f'<h3>{inline(l[4:])}</h3>'); continue
+        if l.startswith("## "):
+            flush(); h = l[3:]; out.append(f'<h2 id="{re.sub(r"[^a-z0-9]+", "-", h.lower()).strip("-")}">{inline(h)}</h2>'); continue
+        if l.startswith("- "):
+            if para: flush()
+            items.append(l[2:]); continue
+        if items: flush()
+        para.append(l)
+    flush()
+    return "".join(out)
+
+
+def page_contact():
+    body = f"""<main id="main">
+<section class="page-head" aria-labelledby="contact-h">
+  <div class="container">
+    <p class="crumbs"><a href="index.html">Home</a> / Contact</p>
+    <span class="eyebrow red">Contact</span>
+    <h1 class="display" id="contact-h">Get in touch.</h1>
+  </div>
+</section>
+<section class="section">
+  <div class="container contact-grid">
+    <div class="contact-card">
+      <h2 class="h3">Email us</h2>
+      <p class="small">Farm Store orders, returns, press, or anything else.</p>
+      <a class="contact-mail" href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>
+    </div>
+    <div class="contact-card">
+      <h2 class="h3">Looking for Lowell pre-rolls?</h2>
+      <p class="small">Our pre-rolls are sold only through licensed dispensaries.</p>
+      <a class="link-arrow" href="find.html">Find Lowell near you</a>
+    </div>
+    <div class="contact-card">
+      <h2 class="h3">Follow along</h2>
+      <p class="small">New goods, events and the people behind Lowell.</p>
+      <a class="ig-link contact-ig" href="{IG_URL}" target="_blank" rel="noopener">{ig_icon()}<span>@lowellfarms</span></a>
+    </div>
+  </div>
+</section>
+</main>
+"""
+    out = head("Contact · Lowell Herb Co. (v2 preview)", "How to reach Lowell Herb Co.", "contact.html") + gate() + header("contact") + body + footer() + tail()
+    (OUT / "contact.html").write_text(out)
+
+
+def page_policy(slug, title):
+    text = (SRC / "policies" / f"{slug}.md").read_text()
+    others = " &middot; ".join(f'<a class="link" href="{s}.html">{esc(t)}</a>' for s, t in POLICIES if s != slug)
+    body = f"""<main id="main">
+<section class="page-head" aria-labelledby="doc-h">
+  <div class="container">
+    <p class="crumbs"><a href="index.html">Home</a> / {esc(title)}</p>
+    <h1 class="display" id="doc-h">{esc(title)}</h1>
+    <div class="notice draft" role="note"><span aria-hidden="true">&#9888;</span><p><strong>Draft: needs legal review before launch.</strong> This is a working draft for the design preview. It is not in effect.</p></div>
+  </div>
+</section>
+<section class="section">
+  <div class="container doc">
+    <p class="doc-meta">Last updated: draft of 25 September 2026</p>
+    {md(text)}
+    <p class="doc-more small">Also see: {others}</p>
+  </div>
+</section>
+</main>
+"""
+    out = head(f"{title} (draft) · Lowell Herb Co. (v2 preview)", f"Lowell Herb Co. {title}: draft for legal review.", f"{slug}.html") + gate() + header("help") + body + footer() + tail()
+    (OUT / f"{slug}.html").write_text(out)
+
+
 # ---------------------------------------------------------------- shop
 def page_shop():
     cats = [("apparel", "Apparel", "ls-denim", "Friends at a Lowell party, one in the Lowell Denim Jacket"),
@@ -563,4 +654,7 @@ if __name__ == "__main__":
     page_home(); page_shop(); page_product(); page_find()
     for a in ARTICLES:
         page_article(a)
+    page_contact()
+    for slug, title in POLICIES:
+        page_policy(slug, title)
     print("built", VER, sorted(p.name for p in OUT.glob("*.html")))
