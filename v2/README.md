@@ -11,8 +11,29 @@ This is a static design preview for team feedback, not the Shopify build. Every 
 | Find Lowell | `find.html` | Store locator on live data |
 | Farm Store | `shop.html` | Shop landing: three categories and all 21 goods |
 | Product | `product.html?p=<slug>` | Placeholder that confirms Farm Store links resolve |
+| Contact | `contact.html` | Email link only (no form), per Bryan |
+| Policies | `privacy.html`, `shipping-returns.html`, `terms.html` | Drafts, each labelled "Draft: needs legal review before launch" |
 
 The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
+
+## Round 4, phase 2 (25 Sep, after Bryan said the home page is done)
+
+- **Farm Store filters fixed.** The All / Apparel / Luggage / Accessories chips (and the category tiles) marked cards hidden, but the cards' `display: grid` overrode the browser's `[hidden]` rule. All 21 stayed on screen while the count said 9 or 6. A base `[hidden] { display: none !important }` rule fixes it everywhere. Each chip now shows exactly its count. There's no price sort: Bryan chose to fix the filters only.
+- **Locator labels follow `doors.json`'s `st` field** (08r review, F1; Bryan's rule of 25 Sep):
+  - `in_stock`: "In stock · N products" plus the shelf price
+  - `out_of_stock`: "Currently out of stock"
+  - `carries` (no live menu we can read): no badge, no price and no stock claim, with a plain grey "Lowell store" pin
+
+  "Carries Lowell · shipped" and "Partner-reported" are gone, and so is the "without a live menu feed… Show them" bar. "In stock only" becomes "Hide out of stock", which hides only out-of-stock stores. Files without `st` are labelled the same way find-lowell's `app.v5.js` does it. `accept_09_v2_labels.py`: 4/4 PASS on the live site.
+- **Contact page:** admin@lowellherbco.com as an email link, plus Find Lowell and @lowellfarms. There's no form, address or phone (Bryan's choice).
+- **Policy drafts:** Privacy, Shipping & Returns, and Terms for a merch-only store.
+  - Built from the old Shopify store's policies (lowell-farms.myshopify.com/policies/…), with all hemp and THCa content removed. The old store had no shipping policy.
+  - Written in our own words, after a read of Old Pal's (oldpalprovisions.com) and Miss Grass's policies for what a brand like ours covers. No text was copied.
+  - Open facts and decisions are highlighted on the page, from `{{To confirm: …}}` / `{{To decide: …}}` markers in `_src/policies/*.md`.
+  - Merch shipping and returns stay in, because Bryan confirmed that merch ships direct.
+- **Footer:** the Help column is back, with real pages: Contact, Shipping & returns, Privacy, Terms, @lowellfarms.
+- **Site-wide link test:** 11 pages, 408 static links, 58 unique targets, all working. The locator's 472 store-menu links were swept separately; see Known gaps.
+- CSS and JS are now `.v10`.
 
 ## Round 4 (25 Sep, Bryan's third review): home page first
 
@@ -123,12 +144,11 @@ Phase 1 is the home page only. Phase 2 (Farm Store sort, contact page, policy dr
   - one pin per store on OSM tiles, with Leaflet 1.9.4 from cdnjs
   - "Store list updated <asof>"
 - `doors.json` is fetched live from `brya8385.github.io/find-lowell` on every visit, with no embedded or cached copy. If the fetch fails, the page shows an error and a retry button, not stale data. Test it with `find.html?doors-test=fail`.
-- The four tiers look different in both the pins and the cards:
-  - **In stock** (solid green)
-  - **Listed, out today** (ring)
-  - **Carries Lowell · shipped <date>** (dashed)
-  - **Partner-reported** (grey diamond)
-- Tier B and C never show a price. The page enforces this itself and doesn't rely on the data.
+- Since round 4, phase 2, labels come from each store's `st` field. The three states look different in both the pins and the cards:
+  - **In stock now** (solid green)
+  - **Currently out of stock** (amber ring)
+  - **Lowell store** (plain grey: no live menu we can read, so no stock claim)
+- Only in-stock stores show a price. The page enforces this itself and doesn't rely on the data.
 - **No blend names:** product rows are grouped by line × lean (e.g. "Quicks · Indica · 10 pre-rolls, 0.35g each"), and the blend-name field in the data is never read.
   - Leak test: I rendered all 8 states with every tier shown and searched the page text for the 287 distinct product names in the data.
   - 0 blend names appear. The only matches were store and place names, e.g. "State of Mind Dispensary" and "Chicago (Midway)".
@@ -174,12 +194,15 @@ Images that "confirm" doesn't cover: none. The v1 pages (option1–4) still use 
 ## Known gaps
 
 **Store data (session 08 owns the data feed)**
-- `doors.json` is dated **11 Sep 2026**, 12 days old when this was built. The page shows that date. Once session 08's daily rebuild lands, the page picks it up with no change here.
-- Two Colorado partner stores have coordinates outside Colorado:
-  - "Everyday Wellness — 6th Ave, Aurora" is pinned in Aurora, **Illinois**.
-  - "Emerald Fields — South Boulder" is pinned in Montana.
-  - v2 lists both but doesn't pin them ("Map location unavailable"). The fix belongs in the data feed.
-- California shows 14 of the 61 stores we ship. The other 47 have no address in our records yet.
+- `doors.json` is rebuilt daily by session 08. On 25 Sep it was dated 2026-09-25: 598 stores, all with `st` (428 in stock, 77 out of stock, 93 carries). Stores whose coordinates fall outside their state are listed but not pinned ("Map location unavailable").
+- **Store-menu links** (from the data feed, 25 Sep sweep of the 472 unique URLs):
+  - 190 answer 200.
+  - 278 answer 403 to scripts. All are Dutchie, iHeartJane or Verilife; spot checks of one of each load normally in a browser.
+  - Four fail. They belong in session 08's feed:
+    - `organicblooms.dispensary.shop/…afternoon-delight-10pk-lowell…`: 404
+    - `www.carngiehillcannabis.com`: no response; the domain is misspelled
+    - `emeraldfields.com/shop/`: no response
+    - `shop.root22dispensary.com/menu?brand=Lowell%20Herb%20Co`: 307
 - City search only knows cities that have a Lowell store. ZIP search covers every US ZIP except PO-box-only ZIPs, which have no Census centroid.
 
 **Locator setup**
@@ -231,5 +254,6 @@ python3 v2/_src/build.py
 - `_src/find.js` holds the locator.
 - `_src/products.json` is the catalog snapshot.
 - `_src/articles.json` holds the Notes from the Farm articles: source URL, byline, date, body, and every edit made to the source text.
+- `_src/policies/*.md` holds the policy drafts. They use a small Markdown subset (`##`/`###`, paragraphs, `- ` lists, `**bold**`, `[links](url)`). `{{To confirm: …}}` renders as a highlighted open item.
 
 **Bump `VER` in `build.py` on every deploy** that changes CSS or JS. It renames the asset files, which is the only cache-bust GitHub Pages honours.
