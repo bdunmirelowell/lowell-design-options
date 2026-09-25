@@ -201,12 +201,12 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero-full .eyebrow { color: #F0C57A; }
 .hero-full .lede { color: rgba(251, 246, 233, .92); max-width: 46ch; text-shadow: 0 1px 18px rgba(6, 16, 22, .45); }
 .hero-ctas { display: flex; gap: var(--s3); flex-wrap: wrap; }
-/* dusk bonfire photo: headline sits right, over the sky; the people stay clear along the bottom */
+/* dusk bonfire photo: headline sits left, over the empty sky; the guests stay clear along the bottom */
 .hero-dusk::before { background: linear-gradient(180deg, rgba(8, 24, 32, .44) 0%, rgba(8, 24, 32, .14) 42%, rgba(8, 24, 32, 0) 60%, rgba(20, 12, 4, .34) 100%),
-  linear-gradient(270deg, rgba(8, 24, 32, .42) 0%, rgba(8, 24, 32, .12) 45%, rgba(8, 24, 32, 0) 62%); }
+  linear-gradient(90deg, rgba(8, 24, 32, .42) 0%, rgba(8, 24, 32, .12) 45%, rgba(8, 24, 32, 0) 62%); }
 .hero-dusk img { object-position: 50% 18%; }
-.hero-dusk .hero-inner { align-items: flex-end; }
-.hero-dusk .hero-top, .hero-dusk .hero-ctas { width: min(570px, 46vw); }
+.hero-dusk .hero-inner { align-items: flex-start; }
+.hero-dusk .hero-top, .hero-dusk .hero-ctas { width: min(680px, 50vw); }
 .hero-dusk .display { font-size: clamp(44px, 2.3vw + 28px, 74px); }
 .hero-dusk .lede { font-size: 19px; max-width: 44ch; }
 @media (max-width: 760px) {

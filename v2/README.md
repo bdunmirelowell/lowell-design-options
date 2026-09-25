@@ -19,7 +19,7 @@ The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
 Phase 1 is the home page only. Phase 2 (Farm Store sort, contact page, policy drafts, site-wide link test, locator labels) waits for Bryan's OK on the home page.
 
 - **Hero:** back to round 2's full-bleed dusk bonfire photo (`hero-dusk-*`, from `Lowell x Revelry-15.jpg`), replacing round 3's rooftop shot. Git history holds only one bonfire hero (round 1's hero was the Eunbi pack photo, not a bonfire).
-  - Desktop: the headline, paragraph and buttons sit on the right, over the sky and clear of the guests.
+  - Desktop: the headline, paragraph and buttons sit on the **left**, over the empty sky and clear of every face; the fire is out of frame. (First built on the right per the round-4 prompt; Bryan corrected it to the left on 25 Sep and approved it in the build session.) Checked at 1280×720, 1440×900 and 1920×1080: the buttons end 95–215px above the nearest head.
   - Phone: the tall crop, with the text on the sky and the buttons over the grass. The text runs full width there, so it isn't "right" or "left".
   - The rooftop files are deleted, so no image from the two unconfirmed 2021 shoots is left on v2.
 - **The Pack:** the single-Smoke section ("What sets us apart") is gone. The Pack now has six features, all pinned on the open-pack photo:
@@ -39,7 +39,7 @@ Phase 1 is the home page only. Phase 2 (Farm Store sort, contact page, policy dr
   - The band's dusk tile was the same frame as the hero, so it's replaced by `Bonfire + Lowell.jpg` from the same party.
 - **Footer:** the four dead `#top` help links are removed until Phase 2 builds real pages: Contact, Shipping & returns, Privacy, Terms.
 - On phones the band is 2×2, so the per-photo Instagram glyphs are hidden and the pill carries the cue.
-- CSS and JS are now `site.v5.css`, `site.v5.js` and `find.v5.js`. axe-core (WCAG 2.1 AA + best practice) reports 0 violations on Home and on an article page.
+- CSS and JS are now `site.v6.css`, `site.v6.js` and `find.v6.js`. axe-core (WCAG 2.1 AA + best practice) reports 0 violations on Home and on an article page.
 
 ## Round 3 (23 Sep, Bryan's second review)
 
