@@ -194,11 +194,11 @@ def page_home():
     psz = "(max-width: 760px) 46vw, 22vw"
     chips = "".join(f'<a class="chip" href="find.html?st={st}" data-st="{st}">{name}</a>' for st, name in STATES)
     body = f"""<main id="main">
-<section class="hero-full hero-right on-photo" aria-labelledby="hero-h">
+<section class="hero-full hero-dusk on-photo" aria-labelledby="hero-h">
   <picture>
-    <source media="(max-width: 760px)" type="image/webp" srcset="img/hero-roof-m-640.webp 640w, img/hero-roof-m-960.webp 960w" sizes="100vw">
-    <source type="image/webp" srcset="img/hero-roof-1440.webp 1440w, img/hero-roof-2200.webp 2200w" sizes="100vw">
-    <img src="img/hero-roof-1600.jpg" alt="Two friends laughing on a city rooftop in golden light, one holding a pre-roll" fetchpriority="high">
+    <source media="(max-width: 760px)" type="image/webp" srcset="img/hero-dusk-tall-640.webp 640w, img/hero-dusk-tall-960.webp 960w" sizes="100vw">
+    <source type="image/webp" srcset="img/hero-dusk-1440.webp 1440w, img/hero-dusk-2200.webp 2200w" sizes="100vw">
+    <img src="img/hero-dusk-1600.jpg" alt="Friends talking in the firelight at a Lowell party at dusk" fetchpriority="high">
   </picture>
   <div class="container hero-inner">
     <div class="hero-top">

@@ -201,26 +201,26 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero-full .eyebrow { color: #F0C57A; }
 .hero-full .lede { color: rgba(251, 246, 233, .92); max-width: 46ch; text-shadow: 0 1px 18px rgba(6, 16, 22, .45); }
 .hero-ctas { display: flex; gap: var(--s3); flex-wrap: wrap; }
-.hero-right::before { background: linear-gradient(270deg, rgba(34, 22, 8, .86) 0%, rgba(34, 22, 8, .8) 28%, rgba(34, 22, 8, .62) 36%, rgba(34, 22, 8, .38) 44%, rgba(34, 22, 8, .16) 52%, rgba(34, 22, 8, .04) 60%, rgba(34, 22, 8, 0) 66%),
-  linear-gradient(0deg, rgba(34, 22, 8, .35) 0%, rgba(34, 22, 8, 0) 30%); }
-.hero-right img { object-position: 50% 46%; }
-.hero-right .hero-inner { align-items: flex-end; justify-content: center; }
-.hero-right .hero-top, .hero-right .hero-ctas { width: min(470px, 34vw); }
-.hero-right .display { font-size: clamp(44px, 2.8vw + 26px, 80px); }
-.hero-right .lede { font-size: 19px; }
-@media (max-width: 760px) {
-  .hero-full.hero-right { display: block; min-height: 0; background: var(--ink); }
-  .hero-right::before { display: none; }
-  .hero-full.hero-right picture, .hero-full.hero-right > picture img { position: static; width: 100%; height: auto; }
-  .hero-full.hero-right img { aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 45%; }
-  .hero-right .hero-inner { align-items: stretch; justify-content: flex-start; padding-block: var(--s6) var(--s7); gap: var(--s5); }
-  .hero-right .hero-top, .hero-right .hero-ctas { width: auto; }
-  .hero-right .display, .hero-right .lede { text-shadow: none; }
-}
+/* dusk bonfire photo: headline sits right, over the sky; the people stay clear along the bottom */
+.hero-dusk::before { background: linear-gradient(180deg, rgba(8, 24, 32, .44) 0%, rgba(8, 24, 32, .14) 42%, rgba(8, 24, 32, 0) 60%, rgba(20, 12, 4, .34) 100%),
+  linear-gradient(270deg, rgba(8, 24, 32, .42) 0%, rgba(8, 24, 32, .12) 45%, rgba(8, 24, 32, 0) 62%); }
+.hero-dusk img { object-position: 50% 18%; }
+.hero-dusk .hero-inner { align-items: flex-end; }
+.hero-dusk .hero-top, .hero-dusk .hero-ctas { width: min(570px, 46vw); }
+.hero-dusk .display { font-size: clamp(44px, 2.3vw + 28px, 74px); }
+.hero-dusk .lede { font-size: 19px; max-width: 44ch; }
 @media (max-width: 760px) {
   .hero-full { min-height: calc(100svh - var(--nav-h) - 34px); }
   .hero-full img { object-position: 50% 42%; }
   .hero-inner { justify-content: space-between; }
+  .hero-dusk .hero-inner { align-items: stretch; }
+  .hero-dusk .hero-top, .hero-dusk .hero-ctas { width: auto; }
+  .hero-dusk img { object-position: 50% 30%; }
+  /* keep the text on the sky: the guests' heads sit at about half the photo's height */
+  .hero-dusk .hero-inner { padding-top: var(--s5); }
+  .hero-dusk .hero-top { gap: var(--s3); }
+  .hero-dusk .display { font-size: 40px; }
+  .hero-dusk .lede { font-size: 17px; }
   .hero-full .lede { font-size: 18px; }
   .hero-ctas .btn { flex: 1 1 auto; }
 }
