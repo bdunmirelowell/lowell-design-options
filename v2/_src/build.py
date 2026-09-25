@@ -33,6 +33,27 @@ ICON_MENU = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 ICON_X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'
 ICON_PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>'
 
+IG_URL = "https://www.instagram.com/lowellfarms/"
+IG_PATH = '<rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.35" cy="6.65" r="1.15" fill="currentColor" stroke="none"/>'
+
+
+def ig_icon(labelled=True):
+    a11y = 'role="img" aria-label="Instagram"' if labelled else 'aria-hidden="true" focusable="false"'
+    return f'<svg class="ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" {a11y}>{IG_PATH}</svg>'
+
+
+# Press: each outlet's article about Lowell, opened and read 25 Sep 2026 (Robb Report and Page Six via their Wayback copies)
+PRESS = [
+    ("Forbes", "https://www.forbes.com/sites/javierhasse/2025/06/26/americas-31-billion-cannabis-pre-roll-habit-316-million-joints-smoked-last-year-heres-who-cashed-in/",
+     "America’s $3.1 Billion Cannabis Pre-Roll Habit, June 2025"),
+    ("Robb Report", "https://robbreport.com/lifestyle/news/lowell-herb-cannabis-brand-2840799/",
+     "How Lowell Herb Co. Became America’s First Great Weed Brand, February 2019"),
+    ("Page Six", "https://pagesix.com/2019/02/24/bella-thorne-marijuana-ad-rejected-ahead-of-oscars/",
+     "Bella Thorne marijuana ad rejected ahead of Oscars, February 2019"),
+    ("Newsweek", "https://www.newsweek.com/pot-marijuana-weed-lowell-herb-co-980030",
+     "Pot Offenders Wanted: California’s Lowell Herb Co. Seeks to Hire Parolees, June 2018"),
+]
+
 NAV = [("index.html", "Home", "home"), ("shop.html", "Farm Store", "shop"), ("find.html", "Find Lowell", "find"),
        ("index.html#pack", "The Pack", "pack"), ("index.html#notes", "Notes from the Farm", "notes")]
 
@@ -135,8 +156,8 @@ def footer():
       </div>
       <div class="foot-cols">
         <div><h3>Shop</h3><a href="shop.html">Farm Store</a><a href="shop.html?c=apparel">Apparel</a><a href="shop.html?c=luggage">Luggage</a><a href="shop.html?c=accessories">Accessories</a></div>
-        <div><h3>Lowell</h3><a href="find.html">Find Lowell</a><a href="index.html#apart">What sets us apart</a><a href="index.html#pack">The Pack</a><a href="index.html#journal">Journal</a></div>
-        <div><h3>Help</h3><a href="#top">Contact</a><a href="#top">Shipping &amp; returns</a><a href="#top">Privacy</a><a href="#top">Terms</a><a href="https://www.instagram.com/lowellfarms/" rel="noopener">Instagram @lowellfarms</a></div>
+        <div><h3>Lowell</h3><a href="find.html">Find Lowell</a><a href="index.html#pack">The Pack</a><a href="index.html#notes">Notes from the Farm</a></div>
+        <div><h3>Follow</h3><a class="ig-link" href="{IG_URL}" target="_blank" rel="noopener">{ig_icon()}<span>@lowellfarms</span></a></div>
       </div>
     </div>
     <ul class="values" aria-label="What we value"><li>Freedom</li><li>Confidence</li><li>No Bullshit</li><li>Generosity</li><li>Originality</li><li>Family</li><li>Good Vibes</li></ul>
@@ -332,21 +353,27 @@ def page_home():
   </div>
 </section>
 
-<section class="press-band on-ink" aria-label="Press">
+<section class="press-band on-ink" aria-labelledby="press-h">
   <div class="container">
-    <blockquote>&ldquo;Lowell is one of the most widely recognized names in American cannabis, with a trailblazing legacy.&rdquo;</blockquote>
-    <ul class="press-names" aria-label="As featured in"><li>Forbes</li><li>Robb Report</li><li>Page Six</li><li>Newsweek</li></ul>
+    <h2 class="sr-only" id="press-h">Press</h2>
+    <figure class="press-quote">
+      <blockquote cite="{PRESS[0][1]}">&ldquo;Lowell is one of the most widely recognized names in American cannabis, with a trailblazing legacy&hellip;&rdquo;</blockquote>
+      <figcaption>Forbes &middot; June 2025</figcaption>
+    </figure>
+    <ul class="press-names" aria-label="As featured in">{"".join(f'<li><a href="{u}" target="_blank" rel="noopener" aria-label="{n}: {esc(t)} (opens in a new tab)">{n}</a></li>' for n, u, t in PRESS)}</ul>
   </div>
 </section>
 
-<section class="band" aria-label="Photographs of Lowell people and product">
+<section class="band" aria-labelledby="band-h">
+  <h2 class="sr-only" id="band-h">Lowell on Instagram</h2>
   <ul>
-    <li>{pic("band-dusk", [480, 720], "Friends in lawn chairs talking in the last light at a Lowell party", "(max-width: 760px) 50vw, 20vw")}</li>
-    <li>{pic("band-light", [480, 720], "A man lighting a pre-roll over an amber ashtray", "(max-width: 760px) 50vw, 20vw")}</li>
-    <li>{pic("hero-pack", [720, 1200], "A Lowell Smokes pack, three matches and a pre-roll resting in a stone ashtray on a walnut table", "(max-width: 760px) 50vw, 20vw")}</li>
-    <li>{pic("band-greens", [480, 720], "A man in a mustard tee smoking a pre-roll among tropical leaves", "(max-width: 760px) 50vw, 20vw")}</li>
-    <li class="band-5">{pic("band-jacket", [480, 720], "A woman in the green quilted Lowell Herb Co. jacket, seen from behind", "(max-width: 760px) 50vw, 20vw")}</li>
+    {band_tile("band-bonfire", [480, 720], "Two guests watching a bonfire at a Lowell party, one in a jacket with the Lowell bull on the back")}
+    {band_tile("band-light", [480, 720], "A man lighting a pre-roll over an amber ashtray")}
+    {band_tile("hero-pack", [720, 1200], "A Lowell Smokes pack, three matches and a pre-roll resting in a stone ashtray on a walnut table")}
+    {band_tile("band-greens", [480, 720], "A man in a mustard tee smoking a pre-roll among tropical leaves")}
+    {band_tile("band-jacket", [480, 720], "A woman in the green quilted Lowell Herb Co. jacket, seen from behind", "band-5")}
   </ul>
+  <a class="band-handle" href="{IG_URL}" target="_blank" rel="noopener">{ig_icon()}<span>@lowellfarms</span></a>
 </section>
 </main>
 """
