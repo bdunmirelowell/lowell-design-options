@@ -286,7 +286,8 @@
       el.querySelector('#fl-widen').addEventListener('click', function () { S.radius = 0; press('fl-rad', 'r', 0); render(); drawAndFrame(true); syncUrl(); });
       return el;
     }
-    if (S.hideOut) {
+    /* offer the out-of-stock stores only when some match this scope; otherwise the click is a dead end */
+    if (S.hideOut && doors.some(function (d) { return inScope(d) && status(d) === 'out_of_stock'; })) {
       el.innerHTML = '<p>' + msg + '</p><button type="button" class="btn sm line" id="fl-nostock">Show stores that are out of stock</button>';
       el.querySelector('#fl-nostock').addEventListener('click', function () { $('fl-stock').checked = false; S.hideOut = false; render(); drawAndFrame(false); });
       return el;

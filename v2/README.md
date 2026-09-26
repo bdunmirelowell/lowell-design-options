@@ -16,6 +16,17 @@ This is a static design preview for team feedback, not the Shopify build. Every 
 
 The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
 
+## Round 4, phase 2 fix (26 Sep, 09r review B-1 and B-2)
+
+- **Empty-state button:**
+  - With "Hide out of stock" on and no store left, "Show stores that are out of stock" now appears only when an out-of-stock store matches the state, line and type filters. Otherwise the page shows "No stores match those filters." alone.
+  - Before, the button appeared in every empty scope. On the 25 Sep data it revealed nothing in all 231 of them (e.g. Missouri + Littles).
+  - The radius branch ("Show any distance") is unchanged.
+- **Privacy draft:**
+  - "The store list is loaded from our own servers." wasn't true. The preview loads the list from brya8385.github.io (GitHub Pages), and Leaflet from cdnjs.cloudflare.com.
+  - The sentence is now a `{{To confirm: …}}` open item that names both hosts. The three drafts now carry 16 open items (privacy 6, shipping 6, terms 4).
+- CSS and JS are now `.v11`.
+
 ## Round 4, phase 2 (25 Sep, after Bryan said the home page is done)
 
 - **Farm Store filters fixed.** The All / Apparel / Luggage / Accessories chips (and the category tiles) marked cards hidden, but the cards' `display: grid` overrode the browser's `[hidden]` rule. All 21 stayed on screen while the count said 9 or 6. A base `[hidden] { display: none !important }` rule fixes it everywhere. Each chip now shows exactly its count. There's no price sort: Bryan chose to fix the filters only.
