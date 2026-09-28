@@ -385,13 +385,14 @@
       '<span class="sr-only"> (opens in a new tab)</span> &rarr;</a>';
   }
   /* Directions: Apple Maps on iPhone, iPad (which reports itself as a Mac) and Mac; Google Maps elsewhere. The
-     destination is the store's name and street address; an approx store (pin placed by town) or one with no street
-     gets name + city + state, never the approximate pin. Maps routes from wherever the visitor is, so the visitor's
-     own position is never put in the link. */
+     destination is the store's name and street address whenever the address has a street, even when our pin was
+     placed by town (approx): Maps finds the street itself. A store with no street gets name + city + state. An
+     approx pin's coordinates are never used. Maps routes from wherever the visitor is, so the visitor's own position
+     is never put in the link. */
   var APPLE = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
   function destination(d) {
     var first = (d.a || '').split(',')[0].trim();
-    if (!d.approx && first && first.toLowerCase() !== (d.c || '').toLowerCase()) return d.n + ', ' + d.a;
+    if (first && first.toLowerCase() !== (d.c || '').toLowerCase()) return d.n + ', ' + d.a;
     if (d.n && d.c && d.s) return d.n + ', ' + d.c + ', ' + d.s;
     return !d.approx && d.valid ? d.la + ',' + d.lo : '';
   }

@@ -32,14 +32,14 @@ The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
   - The position never goes into the URL or share link, is never stored, and isn't sent anywhere by this page.
 - **"Get directions" on every store card** (and in the map pin's popup), a quiet link beside the phone number.
   - Where it opens: Apple Maps (`maps.apple.com/?daddr=`) on iPhone, iPad and Mac, including Chrome on a Mac. Google Maps (`google.com/maps/dir/?api=1&destination=`) everywhere else.
-  - The destination is the store's name and street address. A store whose pin was placed by town (`approx`), or that has no street, gets name + city + state instead, never the approximate pin.
+  - The destination is the store's name and street address whenever the address has a street, including stores whose pin was placed by town (`approx`). A store with no street gets name + city + state. An approximate pin's coordinates are never used.
   - The visitor's position is never in the link: Maps works out the route itself.
   - It's a plain link, so long-press and copy work.
 - **One label for store links:** "See Lowell at this store" in the solid style for both link kinds.
   - A brand page (`uk` "verified") and a Lowell product page listed in stock (`uk` "menu") are both checked in a browser to open to Lowell products.
   - "View their menu" and its faded style are gone.
 - **Privacy draft:** under "Finding a store near you": "The store finder can use your device's location, in your browser only, to show nearby stores. We don't receive or save it. The map images come from OpenStreetMap, which sees the area the map is showing."
-- CSS and JS are now `.v13`.
+- CSS and JS are now `.v14`.
 
 ## Round 4, phase 2 fix (26 Sep, 09r review B-1 and B-2)
 
