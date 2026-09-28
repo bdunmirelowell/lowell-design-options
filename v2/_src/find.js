@@ -22,7 +22,7 @@
   var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   var doors = [], rows = [], map = null, layer = null, ring = null, youMark = null, markers = new Map();
-  var S = { started: false, st: null, line: null, lean: null, radius: 50, hideOut: true, origin: null, originLabel: '', sel: null };
+  var S = { started: false, st: null, line: null, lean: null, radius: 50, hideOut: true, origin: null, originLabel: '', geo: false, sel: null };
 
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   function fmtDate(iso, withYear) {
@@ -56,6 +56,8 @@
         $('fl-asof').textContent = 'Store list updated ' + fmtDate(data.asof);
         $('fl-asof').dataset.asof = data.asof;
         initMap(); buildFilters(); applyParams();
+        if (geoWait && (geoWait.force || !S.started)) useLocation(geoWait.at);
+        geoWait = null;
       })
       .catch(function (err) {
         doors = [];
@@ -82,6 +84,7 @@
     }).addTo(map);
     map.on('focus click', function () { map.scrollWheelZoom.enable(); });
     map.on('blur mouseout', function () { map.scrollWheelZoom.disable(); });
+    touchGestures();
     layer = L.layerGroup().addTo(map);
     var legend = L.control({ position: 'bottomright' });
     legend.onAdd = function () {
@@ -91,6 +94,31 @@
       return el;
     };
     legend.addTo(map);
+  }
+  /* Touch: one finger scrolls the page, two fingers move and zoom the map. With dragging off, Leaflet's CSS gives the
+     map touch-action: pan-x pan-y, so the browser scrolls; the pinch handler (touchZoom) follows the two fingers'
+     midpoint, so a two-finger drag pans. A mouse or pen turns dragging back on, so desktop is unchanged. */
+  function touchGestures() {
+    var el = map.getContainer(), hint = L.DomUtil.create('div', 'fl-maphint', el), timer = null, x0 = 0, y0 = 0;
+    hint.setAttribute('aria-hidden', 'true');
+    hint.innerHTML = '<span>Use two fingers to move the map.</span>';
+    function showHint(on) {
+      clearTimeout(timer); hint.classList.toggle('on', on);
+      if (on) timer = setTimeout(function () { hint.classList.remove('on'); }, 1500);
+    }
+    if (navigator.maxTouchPoints > 0 || 'ontouchstart' in window) map.dragging.disable();
+    el.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') { if (map.dragging.enabled()) map.dragging.disable(); }
+      else if (!map.dragging.enabled()) map.dragging.enable();
+    }, true);
+    el.addEventListener('touchstart', function (e) {
+      if (e.touches.length > 1) { e.preventDefault(); showHint(false); return; }
+      x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+    }, { passive: false });
+    el.addEventListener('touchmove', function (e) {
+      if (e.touches.length > 1) { e.preventDefault(); showHint(false); return; }
+      if (Math.abs(e.touches[0].clientX - x0) + Math.abs(e.touches[0].clientY - y0) > 10) showHint(true);
+    }, { passive: false });
   }
   function icon(d) {
     var big = S.sel === d, sz = big ? 22 : 14;
@@ -113,7 +141,7 @@
     if (youMark) { map.removeLayer(youMark); youMark = null; }
     var pts;
     if (S.origin) {
-      youMark = L.circleMarker(S.origin, { radius: 7, color: '#35291A', weight: 2, fillColor: '#A5301F', fillOpacity: 1 }).addTo(map).bindTooltip('Your search');
+      youMark = L.circleMarker(S.origin, { radius: 7, color: '#35291A', weight: 2, fillColor: '#A5301F', fillOpacity: 1 }).addTo(map).bindTooltip(S.geo ? 'Your location' : 'Your search');
       if (S.radius) {
         ring = L.circle(S.origin, { radius: S.radius * 1609.34, color: '#A5301F', weight: 1.5, dashArray: '5 5', fillColor: '#C89B4B', fillOpacity: .07, interactive: false }).addTo(map);
         map.fitBounds(ring.getBounds(), { padding: [20, 20] }); return;
@@ -166,7 +194,7 @@
   }
   function drawAndFrame(reframe) { drawMarkers(rows); if (reframe) frame(); }
   function pickState(s) {
-    S.st = s; S.origin = null; S.originLabel = ''; S.started = true; S.sel = null; $('fl-q').value = ''; $('fl-note').textContent = '';
+    S.st = s; S.origin = null; S.originLabel = ''; S.geo = false; S.started = true; S.sel = null; $('fl-q').value = ''; $('fl-note').textContent = '';
     press('fl-st', 'st', s); render(); drawAndFrame(true); syncUrl();
   }
 
@@ -207,19 +235,50 @@
     if (!c) { note.textContent = 'We don’t have a shop in “' + q + '”. Try a five-digit ZIP code and we’ll find the nearest.'; return; }
     setOrigin(c.at, c.label);
   }
-  function setOrigin(at, label) {
-    S.origin = at; S.originLabel = label; S.st = null; S.started = true; S.sel = null;
+  function setOrigin(at, label, geo) {
+    S.origin = at; S.originLabel = label; S.geo = !!geo; S.st = null; S.started = true; S.sel = null;
     $('fl-note').textContent = '';
     press('fl-st', 'st', null); render(); drawAndFrame(true); syncUrl();
   }
   $('fl-form').addEventListener('submit', function (e) { e.preventDefault(); search($('fl-q').value); });
 
+  /* ---------------- your location ----------------
+     Asked for on phones as the page opens (unless the link names a ZIP, city or state; after the 21+ gate on a first
+     visit), and from "Use my location" everywhere. The position stays in this page: it is never written to the URL,
+     stored, or sent anywhere. A refusal, no fix or a 10 s timeout leaves the page as it is; only a tap says so. */
+  var geoWait = null;
+  var PHONE = window.matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) < 600;
+  function useLocation(at) { $('fl-q').value = ''; setOrigin(at, 'your location', true); }
+  function locate(tapped) {
+    if (!navigator.geolocation) return;
+    if (tapped) $('fl-note').textContent = 'Finding your location…';
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      var at = [pos.coords.latitude, pos.coords.longitude];
+      if (tapped) $('fl-note').textContent = '';
+      if (!tapped && S.started) return;                           /* the visitor already picked a state or searched */
+      if (!doors.length) { geoWait = { at: at, force: tapped }; return; }   /* list still loading: applied when it lands */
+      useLocation(at);
+    }, function () {
+      if (tapped) $('fl-note').textContent = 'We couldn’t get your location. Search a ZIP code or city instead.';
+    }, { timeout: 10000, maximumAge: 60000 });
+  }
+  if (navigator.geolocation) {
+    $('fl-locate').hidden = false;
+    $('fl-locate').addEventListener('click', function () { locate(true); });
+  }
+  if (PHONE && !params.has('zip') && !params.has('q') && !params.has('st')) {
+    var passed = false; try { passed = localStorage.getItem('lhc-21') === 'yes'; } catch (e) { /* private mode: the gate shows */ }
+    if (passed || !$('gate-yes')) locate(false);
+    else $('gate-yes').addEventListener('click', function () { locate(false); }, { once: true });
+  }
+
   function syncUrl() {
     var u = new URLSearchParams();
-    if (S.origin && /^ZIP \d{5}$/.test(S.originLabel)) u.set('zip', S.originLabel.slice(4));
+    if (S.origin && S.geo) { /* your location: never in the link */ }
+    else if (S.origin && /^ZIP \d{5}$/.test(S.originLabel)) u.set('zip', S.originLabel.slice(4));
     else if (S.origin) u.set('q', $('fl-q').value.trim());
     if (S.st) u.set('st', S.st);
-    if (S.origin && S.radius !== 50) u.set('r', String(S.radius));
+    if (S.origin && !S.geo && S.radius !== 50) u.set('r', String(S.radius));
     if (params.get('doors-test')) u.set('doors-test', params.get('doors-test'));
     var qs = u.toString();
     history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));

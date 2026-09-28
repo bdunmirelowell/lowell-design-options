@@ -10,7 +10,7 @@ and ignores ?v= query strings.
 """
 import html, json, pathlib, re, shutil
 
-VER = "v11"
+VER = "v12"
 SRC = pathlib.Path(__file__).resolve().parent
 OUT = SRC.parent
 BASE = "https://bdunmirelowell.github.io/lowell-design-options/v2/"
@@ -595,6 +595,7 @@ def page_find():
         <input id="fl-q" name="q" autocomplete="postal-code" placeholder="ZIP code or city" enterkeyhint="search">
         <button type="submit">Search</button>
       </div>
+      <button type="button" class="fl-locate" id="fl-locate" hidden><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.6" fill="currentColor"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Use my location</button>
       <p class="field-note" id="fl-note" aria-live="polite"></p>
     </form>
   </div>

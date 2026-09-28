@@ -25,7 +25,7 @@ We receive information from the companies that help us run the Site: our store p
 - To comply with the law and respond to lawful requests.
 
 ## Finding a store near you
-The Find Lowell locator runs in your browser. We don't store the ZIP code or city you type. {{To confirm: where the live site loads the store list and the map code from. This preview loads the store list from brya8385.github.io (GitHub Pages) and the Leaflet map code from cdnjs.cloudflare.com.}} The map is drawn with tiles from a third-party map provider, which receives your IP address the way any website you load does. {{To confirm: the map provider for the live site.}}
+The Find Lowell locator runs in your browser. We don't store the ZIP code or city you type. The store finder can use your device's location, in your browser only, to show nearby stores; it is not sent to us or saved. {{To confirm: where the live site loads the store list and the map code from. This preview loads the store list from brya8385.github.io (GitHub Pages) and the Leaflet map code from cdnjs.cloudflare.com.}} The map is drawn with tiles from a third-party map provider, which receives your IP address the way any website you load does. {{To confirm: the map provider for the live site.}}
 
 ## Cookies and similar tools
 We use cookies to keep the Site working (for example, your cart), to remember your preferences, and to measure how the Site is used. {{To confirm: whether the live store uses advertising cookies or pixels, and which.}}

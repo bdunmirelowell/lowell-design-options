@@ -478,6 +478,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 .fl-search .field { max-width: none; }
 .fl-search .field-note { margin-top: 0; min-height: 0; }
 .fl-search .field-note:empty { display: none; }
+.fl-locate { justify-self: start; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 2px; border: 0; background: none; cursor: pointer; color: var(--ink);
+  font-family: var(--caps); font-weight: 500; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+.fl-locate:hover { color: var(--red); }
+.fl-locate[hidden] { display: none; }
 @media (max-width: 860px) { .fl-headgrid { grid-template-columns: 1fr; } }
 .fl-filters { margin-top: var(--s4); padding-top: var(--s4); border-top: 1px solid var(--line); }
 .fl-filters > summary { display: none; list-style: none; }
@@ -555,6 +559,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 .fl-mapwrap { position: relative; min-height: 0; isolation: isolate; z-index: 0; }
 #fl-map { position: absolute; inset: 0; background: var(--sand); }
 .fl-maperr { padding: var(--s6); }
+/* touch hint: one finger scrolls the page, so a one-finger drag over the map says how to move it */
+.fl-maphint { position: absolute; inset: 0; z-index: 1001; display: flex; align-items: center; justify-content: center; padding: var(--s5); pointer-events: none;
+  background: rgba(40, 28, 12, .5); color: #fff; font-family: var(--serif); font-size: 19px; line-height: 1.35; text-align: center; opacity: 0; transition: opacity .25s; }
+.fl-maphint.on { opacity: 1; }
 .fl .leaflet-container { font-family: var(--serif); font-size: 13px; }
 .leaflet-container a { color: var(--red); }
 .fl-pin-wrap { background: none; border: 0; }
@@ -583,7 +591,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 @media (max-width: 1000px) { .fl-keylist { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 900px) {
   .fl-body { grid-template-columns: 1fr; height: auto; min-height: 0; }
-  .fl-mapwrap { order: -1; height: 52vh; min-height: 320px; border-bottom: 1px solid var(--line); }
+  .fl-mapwrap { order: -1; height: 52vh; min-height: min(320px, 62vh); border-bottom: 1px solid var(--line); }   /* landscape phones keep page above and below */
   .fl-panel { border-right: 0; }
   .fl-list { overflow: visible; padding-inline: var(--gutter); }
   .fl-resulthead { padding-inline: var(--gutter); }

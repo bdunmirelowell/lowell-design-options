@@ -16,6 +16,23 @@ This is a static design preview for team feedback, not the Shopify build. Every 
 
 The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
 
+## Store finder on phones (28 Sep)
+
+- **The page scrolls past the map.**
+  - On touch screens, one finger now scrolls the page and two fingers move or zoom the map.
+  - A one-finger drag over the map shows "Use two fingers to move the map." for about 1.5 s.
+  - With a mouse or pen, the map works as before: drag to pan, and the wheel zooms after a click.
+  - About 30 lines in `_src/find.js` (`touchGestures()`), not a library. leaflet-gesture-handling 1.2.2 (its latest) is on jsdelivr only, not cdnjs. It would also change desktop, where zooming would need ctrl + scroll.
+  - Phone map height: 52% of the screen, and never more than 62% (it was at least 320px, which filled a phone held sideways). At 375×812 the map is 422px and leaves 390px of page; at 812×375 it's 232px and leaves 142px.
+- **Your location:**
+  - A "Use my location" button sits under the ZIP/city search on every screen size.
+  - Phones also ask as the page opens, unless the link names a ZIP, city or state (`?zip=`, `?q=`, `?st=`). On a first visit they ask right after "Yes, I'm 21+", so the prompt doesn't cover the age gate.
+  - When location is granted, the list shows the stores within 50 miles of your location, nearest first, with the ring and dot a ZIP search shows.
+  - If location is refused, unavailable or takes over 10 s, the page stays as it is and says nothing. Only a tapped button shows a line: "We couldn't get your location. Search a ZIP code or city instead."
+  - The position never goes into the URL or share link, is never stored, and isn't sent anywhere by this page.
+- **Privacy draft:** one sentence added under "Finding a store near you": "The store finder can use your device's location, in your browser only, to show nearby stores; it is not sent to us or saved."
+- CSS and JS are now `.v12`.
+
 ## Round 4, phase 2 fix (26 Sep, 09r review B-1 and B-2)
 
 - **Empty-state button:**
