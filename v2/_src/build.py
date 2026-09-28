@@ -10,7 +10,7 @@ and ignores ?v= query strings.
 """
 import html, json, pathlib, re, shutil
 
-VER = "v12"
+VER = "v13"
 SRC = pathlib.Path(__file__).resolve().parent
 OUT = SRC.parent
 BASE = "https://bdunmirelowell.github.io/lowell-design-options/v2/"

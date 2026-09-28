@@ -377,11 +377,30 @@
     return '';   /* carries: no live menu we can read, so no stock claim */
   }
   function tel(d) { return d.tel ? '<a class="fl-tel" href="tel:' + String(d.tel).replace(/[^0-9+]/g, '') + '">' + esc(d.tel) + '</a>' : ''; }
+  /* both link kinds are browser-checked to open to Lowell products (uk "verified": the store's Lowell brand page;
+     "menu": a Lowell product page there that the feed lists in stock), so both get the same button */
   function link(d) {
     if (!d.u) return '';
-    var verified = d.uk === 'verified';
-    return '<a class="fl-go' + (verified ? '' : ' ghost') + '" href="' + esc(d.u) + '" target="_blank" rel="noopener">' + (verified ? 'See Lowell at this store' : 'View their menu') +
+    return '<a class="fl-go" href="' + esc(d.u) + '" target="_blank" rel="noopener">See Lowell at this store' +
       '<span class="sr-only"> (opens in a new tab)</span> &rarr;</a>';
+  }
+  /* Directions: Apple Maps on iPhone, iPad (which reports itself as a Mac) and Mac; Google Maps elsewhere. The
+     destination is the store's name and street address; an approx store (pin placed by town) or one with no street
+     gets name + city + state, never the approximate pin. Maps routes from wherever the visitor is, so the visitor's
+     own position is never put in the link. */
+  var APPLE = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+  function destination(d) {
+    var first = (d.a || '').split(',')[0].trim();
+    if (!d.approx && first && first.toLowerCase() !== (d.c || '').toLowerCase()) return d.n + ', ' + d.a;
+    if (d.n && d.c && d.s) return d.n + ', ' + d.c + ', ' + d.s;
+    return !d.approx && d.valid ? d.la + ',' + d.lo : '';
+  }
+  function directions(d) {
+    var to = destination(d);
+    if (!to) return '';
+    var href = APPLE ? 'https://maps.apple.com/?daddr=' + encodeURIComponent(to) : 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(to);
+    return '<a class="fl-dir" href="' + esc(href) + '" target="_blank" rel="noopener">Get directions' +
+      '<span class="sr-only"> to ' + esc(d.n) + ' (opens in a new tab)</span></a>';
   }
   function card(d) {
     var t = tier(d), el = document.createElement('article');
@@ -400,12 +419,12 @@
     el.innerHTML = '<div class="fl-top"><h3 class="fl-name"><button type="button" aria-describedby="addr-' + el.dataset.key + '">' + esc(d.n) + '</button></h3>' + dist + '</div>' +
       '<p class="fl-addr small" id="addr-' + el.dataset.key + '">' + esc(d.a) + '</p>' +
       (badge(d) || price ? '<div class="fl-meta">' + badge(d) + price + '</div>' : '') + prods + note + nomap +
-      '<div class="fl-actions">' + link(d) + tel(d) + '</div>';
+      '<div class="fl-actions">' + link(d) + tel(d) + directions(d) + '</div>';
     el.querySelector('.fl-name button').addEventListener('click', function () { select(d, true); });
     return el;
   }
   function popup(d) {
-    return '<div class="fl-pop"><b>' + esc(d.n) + '</b><p>' + esc(d.a) + '</p>' + badge(d) + '<div class="fl-actions">' + link(d) + tel(d) + '</div></div>';
+    return '<div class="fl-pop"><b>' + esc(d.n) + '</b><p>' + esc(d.a) + '</p>' + badge(d) + '<div class="fl-actions">' + link(d) + tel(d) + directions(d) + '</div></div>';
   }
   function select(d, fromList) {
     var prev = S.sel; S.sel = (S.sel === d && fromList) ? null : d;

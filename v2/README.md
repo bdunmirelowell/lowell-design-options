@@ -30,8 +30,16 @@ The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
   - When location is granted, the list shows the stores within 50 miles of your location, nearest first, with the ring and dot a ZIP search shows.
   - If location is refused, unavailable or takes over 10 s, the page stays as it is and says nothing. Only a tapped button shows a line: "We couldn't get your location. Search a ZIP code or city instead."
   - The position never goes into the URL or share link, is never stored, and isn't sent anywhere by this page.
-- **Privacy draft:** one sentence added under "Finding a store near you": "The store finder can use your device's location, in your browser only, to show nearby stores; it is not sent to us or saved."
-- CSS and JS are now `.v12`.
+- **"Get directions" on every store card** (and in the map pin's popup), a quiet link beside the phone number.
+  - Where it opens: Apple Maps (`maps.apple.com/?daddr=`) on iPhone, iPad and Mac, including Chrome on a Mac. Google Maps (`google.com/maps/dir/?api=1&destination=`) everywhere else.
+  - The destination is the store's name and street address. A store whose pin was placed by town (`approx`), or that has no street, gets name + city + state instead, never the approximate pin.
+  - The visitor's position is never in the link: Maps works out the route itself.
+  - It's a plain link, so long-press and copy work.
+- **One label for store links:** "See Lowell at this store" in the solid style for both link kinds.
+  - A brand page (`uk` "verified") and a Lowell product page listed in stock (`uk` "menu") are both checked in a browser to open to Lowell products.
+  - "View their menu" and its faded style are gone.
+- **Privacy draft:** under "Finding a store near you": "The store finder can use your device's location, in your browser only, to show nearby stores. We don't receive or save it. The map images come from OpenStreetMap, which sees the area the map is showing."
+- CSS and JS are now `.v13`.
 
 ## Round 4, phase 2 fix (26 Sep, 09r review B-1 and B-2)
 
