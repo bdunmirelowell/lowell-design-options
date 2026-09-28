@@ -591,7 +591,8 @@ ul { margin: 0; padding: 0; list-style: none; }
 @media (max-width: 1000px) { .fl-keylist { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 900px) {
   .fl-body { grid-template-columns: 1fr; height: auto; min-height: 0; }
-  .fl-mapwrap { order: -1; height: 52vh; min-height: min(320px, 62vh); border-bottom: 1px solid var(--line); }   /* landscape phones keep page above and below */
+  .fl-mapwrap { order: -1; height: 52vh; min-height: min(320px, 62vh); min-height: min(320px, 62svh); border-bottom: 1px solid var(--line); }
+  /* sideways phones: the 62% cap is measured against the visible screen (svh counts the browser's toolbars), so page shows beside the sticky header */
   .fl-panel { border-right: 0; }
   .fl-list { overflow: visible; padding-inline: var(--gutter); }
   .fl-resulthead { padding-inline: var(--gutter); }
@@ -603,6 +604,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 @media (max-width: 640px) { .ribbon .long { display: none; } .ribbon .short { display: inline; } }
 
 @media (max-width: 560px) { .fl .fl-legend { font-size: 12px; line-height: 1.6; padding: 6px 10px; } .fl-legend .kdot { width: 10px; height: 10px; margin-right: 6px; } }
+@media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) { .fl .fl-legend { display: none; } }   /* phone on its side: the key under the list explains the pins */
 
 /* ---------- Instagram logo (replaces the word everywhere) ---------- */
 .ig { flex: none; }

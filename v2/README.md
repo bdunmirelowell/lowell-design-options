@@ -23,7 +23,8 @@ The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
   - A one-finger drag over the map shows "Use two fingers to move the map." for about 1.5 s.
   - With a mouse or pen, the map works as before: drag to pan, and the wheel zooms after a click.
   - About 30 lines in `_src/find.js` (`touchGestures()`), not a library. leaflet-gesture-handling 1.2.2 (its latest) is on jsdelivr only, not cdnjs. It would also change desktop, where zooming would need ctrl + scroll.
-  - Phone map height: 52% of the screen, and never more than 62% (it was at least 320px, which filled a phone held sideways). At 375×812 the map is 422px and leaves 390px of page; at 812×375 it's 232px and leaves 142px.
+  - Phone map height: 52% of the screen, and never more than 62% of the visible screen (`62svh`, which counts the browser's toolbars). It was at least 320px, which filled a phone held sideways. At 375×812 the map is 422px; at 812×375 it's 232px.
+  - A phone on its side (landscape, under 500px tall, touch) hides the map legend. The key under the list explains the pins.
 - **Your location:**
   - A "Use my location" button sits under the ZIP/city search on every screen size.
   - Phones also ask as the page opens, unless the link names a ZIP, city or state (`?zip=`, `?q=`, `?st=`). On a first visit they ask right after "Yes, I'm 21+", so the prompt doesn't cover the age gate.
@@ -38,8 +39,8 @@ The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
 - **One label for store links:** "See Lowell at this store" in the solid style for both link kinds.
   - A brand page (`uk` "verified") and a Lowell product page listed in stock (`uk` "menu") are both checked in a browser to open to Lowell products.
   - "View their menu" and its faded style are gone.
-- **Privacy draft:** under "Finding a store near you": "The store finder can use your device's location, in your browser only, to show nearby stores. We don't receive or save it. The map images come from OpenStreetMap, which sees the area the map is showing."
-- CSS and JS are now `.v14`.
+- **Privacy draft:** under "Finding a store near you", the review's wording (28 Sep), still a draft for counsel: "If you allow it, the store finder uses your device's location to show the stores nearest you. We don't receive or save your location, and it never appears in the page's web address. To draw the map around you, your browser loads map images for that area from our map provider, which can tell roughly which area is on screen, as it can after a ZIP code search. You can say no and search by ZIP code or city instead." The open items on the map provider stay.
+- CSS and JS are now `.v15`.
 
 ## Round 4, phase 2 fix (26 Sep, 09r review B-1 and B-2)
 
