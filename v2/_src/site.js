@@ -1,4 +1,4 @@
-/* Lowell Herb Co · Golden Hour v2 · shared behaviour: age gate, menu, ZIP forms, map hover, shop filter, product placeholder */
+/* Lowell Herb Co · Golden Hour v2 · shared behaviour: age gate, menu, ZIP forms, map hover */
 (function () {
   'use strict';
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -57,12 +57,6 @@
     });
     input.addEventListener('input', function () { if (note) note.textContent = ''; });
   });
-  $$('.js-signup').forEach(function (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var note = form.nextElementSibling; if (note) note.textContent = 'Preview only: sign-ups open with the new store.';
-    });
-  });
 
   /* ---------- home map: chips and states light each other ---------- */
   $$('.state-links .chip').forEach(function (chip) {
@@ -74,36 +68,4 @@
     path.addEventListener('mouseleave', function () { chip.classList.remove('on'); });
   });
 
-  /* ---------- shop filter ---------- */
-  var grid = $('#shop-grid');
-  if (grid) {
-    var chips = $$('.shop-bar .chip'), count = $('#shop-count');
-    var apply = function (cat) {
-      var n = 0;
-      $$('.pcard', grid).forEach(function (c) { var show = cat === 'all' || c.dataset.cat === cat; c.hidden = !show; if (show) n++; });
-      chips.forEach(function (ch) { ch.setAttribute('aria-pressed', String(ch.dataset.filter === cat)); });
-      count.textContent = n + (n === 1 ? ' good' : ' goods');
-    };
-    chips.forEach(function (ch) { ch.addEventListener('click', function () {
-      apply(ch.dataset.filter);
-      var u = new URL(location.href); if (ch.dataset.filter === 'all') u.searchParams.delete('c'); else u.searchParams.set('c', ch.dataset.filter);
-      history.replaceState(null, '', u.pathname + u.search + '#all');
-    }); });
-    var c0 = new URLSearchParams(location.search).get('c');
-    if (c0 && $('.shop-bar [data-filter="' + c0 + '"]')) apply(c0);
-  }
-
-  /* ---------- product placeholder ---------- */
-  var cat = $('#catalog');
-  if (cat) {
-    var data = JSON.parse(cat.textContent), slug = new URLSearchParams(location.search).get('p'), p = data[slug];
-    if (p) {
-      $('#pd-title').textContent = p.t; $('#pd-crumb').textContent = p.t; $('#pd-cat').textContent = p.c;
-      $('#pd-price').textContent = p.a ? p.p : p.p + ' · sold out';
-      var img = $('#pd-img'); img.src = 'img/p/' + slug + '-640.webp'; img.alt = p.t;
-      document.title = p.t + ' · Farm Store · Lowell Herb Co. (v2 preview)';
-    } else {
-      $('#pd-title').textContent = 'Product not found';
-    }
-  }
 })();

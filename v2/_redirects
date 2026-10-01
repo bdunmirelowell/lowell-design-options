@@ -1,0 +1,79 @@
+# lowellherbco.com on Netlify: what happens to the old WordPress URLs.
+# Sources: the WordPress REST page list (21 pages) and post list (14 posts), read 1 Oct 2026 01:34 UTC, and the
+# WordPress inventory of record (~/work-prompts/2026-09-23/WP-INVENTORY-2026-09-28.md, wp-inventory/urls.csv).
+# Netlify matches a rule with or without the trailing slash; the first matching rule wins; `*` matches the rest of
+# the path. A 410 rule serves 410.html with the status "410 Gone", which tells Google the page is gone for good.
+# Checked by ~/work-prompts/2026-09-30/reports/03-evidence/check_golive.py (every WordPress page and post covered).
+
+# The site's sources and notes are not pages (they exist in the published folder, so these need the ! force flag)
+/_src/*                    /404.html            404!
+/README.md                 /404.html            404!
+/CRITIQUE.md               /404.html            404!
+
+# ---------------------------------------------------------------- 301: WordPress pages with a home on the new site
+/home                      /                    301
+/storelocator              /find.html           301
+/store-locator-2           /find.html           301
+/privacy-policy            /privacy.html        301
+/terms-of-service          /terms.html          301
+/disclaimer                /disclaimer.html     301
+/blog                      /#notes              301
+/blog-preview-page         /#notes              301
+/catalogue                 /#pack               301
+/catalogues                /#pack               301
+/catalogues/*              /#pack               301
+/catalogue-category/*      /#pack               301
+/follow-us                 /                    301
+/budtenders                /                    301
+/budtender-video           /                    301
+# /coas/ listed three NY Originals COA links, all to one Google Drive folder (owner suvi@hudsonhemp.com). Not built
+# (brief 03). If NY pack QR codes point at lowellherbco.com/coas/, replace the next line with:
+# /coas   https://drive.google.com/drive/folders/1Vthye2p8xS1FDm3X0s-NE1mBVE4_N7Zx   302
+/coas                      /                    301
+
+# ---------------------------------------------------------------- 410: gone for good
+# WordPress account and age-gate plumbing
+/age                       /410.html            410
+/login                     /410.html            410
+/verification              /410.html            410
+/reset-password            /410.html            410
+/test-page-delete-later    /410.html            410
+# expired 2025 raffle pages
+/upstatepinesraffle        /410.html            410
+/jersey-raffle             /410.html            410
+/farmerschoiceraffle       /410.html            410
+/ivy-hall-jacket-raffle    /410.html            410
+# the 13 casino-spam posts (all by the compromised "admin" account), and their category and author archives
+/casea-czy-to-nowy-krol-polskiego-igamingu-moje-szczere-wrazenia                          /410.html   410
+/casea-casino-la-mia-opinione-onesta-dopo-un-mese-di-gioco                                /410.html   410
+/spinboss-a-deep-dive-into-the-platform-shaking-up-international-igaming                  /410.html   410
+/why-players-in-international-are-flocking-to-casea-casino                                /410.html   410
+/casea-la-mia-esperienza-onesta-con-questo-nuovo-casino-online-italiano                   /410.html   410
+/dlaczego-polscy-gracze-wybieraja-casea-szczera-opinia-po-miesiacu-grania                 /410.html   410
+/why-international-players-are-thrilled-with-lolajacks-fresh-approach-to-online-gaming   /410.html   410
+/dlaczego-polscy-gracze-wybieraja-casea-casino-moje-osobiste-doswiadczenia                /410.html   410
+/why-international-players-are-choosing-casea-casino-over-the-competition                 /410.html   410
+/miert-valtanak-a-magyar-jatekosok-a-casea-ra-egy-oszinte-velemeny-30-nap-utan            /410.html   410
+/1xslots-angola-review-detalhada-do-casino-online-e-guia-para-jogadores                   /410.html   410
+/1win-angola-analise-detalhada-e-guia-para-apostadores-angolanos                          /410.html   410
+/vavada-kazino-rabochee-zerkalo-na-segodnia-dostupno                                      /410.html   410
+/category/*                /410.html            410
+/author/*                  /410.html            410
+# the WooCommerce store (shop root, 26 products, 5 categories) and its standard endpoints
+/shop                      /410.html            410
+/shop/*                    /410.html            410
+/product/*                 /410.html            410
+/product-category/*        /410.html            410
+/cart                      /410.html            410
+/checkout                  /410.html            410
+/my-account                /410.html            410
+/my-account/*              /410.html            410
+# WordPress itself
+/wp-admin/*                /410.html            410
+/wp-content/*              /410.html            410
+/wp-includes/*             /410.html            410
+/wp-json/*                 /410.html            410
+/wp-login.php              /410.html            410
+/xmlrpc.php                /410.html            410
+/feed/*                    /410.html            410
+/comments/*                /410.html            410

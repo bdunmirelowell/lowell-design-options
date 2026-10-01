@@ -1,0 +1,27 @@
+# Netlify: lowellherbco.com, the Golden Hour v2 site (no store), added 1 Oct 2026.
+# The site is created in the "Lowell Herb Co" team: Add new site -> Import an existing project -> GitHub ->
+# bdunmirelowell/lowell-design-options -> branch main. This file sets the rest, so the build form can stay as it is.
+#
+# v2/ is published as the site root. The pages are prebuilt and committed (python3 v2/_src/build.py runs locally
+# before each commit), so there is no build command. Redirects, 301s and 410s for the old WordPress URLs are in
+# v2/_redirects; Netlify serves v2/404.html for any other unknown URL.
+# GitHub Pages ignores this file and v2/_redirects, and keeps serving the preview at
+# https://bdunmirelowell.github.io/lowell-design-options/v2/.
+
+[build]
+  publish = "v2"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Find Lowell's "Use my location" needs geolocation on this site only
+    Permissions-Policy = "geolocation=(self), camera=(), microphone=()"
+
+# CSS and JS file names carry the build version (site.v16.css) and the fonts and ZIP files never change in place, so they cache for a year
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

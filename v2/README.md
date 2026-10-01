@@ -1,20 +1,33 @@
-# Golden Hour v2: preview
+# Golden Hour v2: lowellherbco.com (no store)
 
-**Live:** https://bdunmirelowell.github.io/lowell-design-options/v2/
+**Preview:** https://bdunmirelowell.github.io/lowell-design-options/v2/
+**Production (after the DNS cutover):** https://www.lowellherbco.com/, on Netlify (team "Lowell Herb Co"), publishing this `v2/` folder as the site root (`../netlify.toml`).
 
-This is a static design preview for team feedback, not the Shopify build. Every page carries `noindex,nofollow` because photo rights are not cleared. Pages:
+The static site that replaces the compromised WordPress site on lowellherbco.com, without the store. Until the cutover every page carries `noindex,nofollow` and a preview ribbon; one line in `_src/build.py` (`LIVE = False` → `True`) turns both off and adds canonical URLs on www.lowellherbco.com. Pages:
 
 | Page | File | What it is |
 |---|---|---|
-| Home | `index.html` | Golden Hour, sharpened |
+| Home | `index.html` | Golden Hour, sharpened; the Farm Store section is now a merch photo band (no prices, links or cart) |
 | Notes from the Farm | `notes-<slug>.html` (3) | One article page per blog card |
 | Find Lowell | `find.html` | Store locator on live data |
-| Farm Store | `shop.html` | Shop landing: three categories and all 21 goods |
-| Product | `product.html?p=<slug>` | Placeholder that confirms Farm Store links resolve |
 | Contact | `contact.html` | Email link only (no form), per Bryan |
-| Policies | `privacy.html`, `shipping-returns.html`, `terms.html` | Drafts, each labelled "Draft: needs legal review before launch" |
+| Policies | `privacy.html`, `terms.html`, `disclaimer.html` | The live WordPress pages' text, verbatim (WordPress ids 3, 362, 924, last modified 3 Jan 2025) |
+| Not found / Gone | `404.html`, `410.html` | Netlify serves 404.html for unknown URLs; `_redirects` serves 410.html for the old WordPress URLs that are gone for good |
 
-The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
+`robots.txt` and `sitemap.xml` are generated with the pages. `_redirects` maps every old WordPress URL (301 or 410). The critique of the July page is in [`CRITIQUE.md`](CRITIQUE.md).
+
+## Go-live without the store (1 Oct 2026, branch `golive-no-store-2026-09-30`)
+
+Bryan's decisions of 30 Sep: the home page is locked except for removing store references; the merch photos stay as plain imagery; the policies are the current WordPress text, verbatim; hosting is Netlify.
+
+- **Store removed:** `shop.html`, `product.html` and `shipping-returns.html` are gone, and so are the cart icon, the "Farm Store" nav link, the hero's "Shop the Farm Store" button, "Shop all 21", the footer's Shop column and its "Shipping & returns" link, and "Nothing sold in the Farm Store contains cannabis." Restore from git at `7d32447` when e-commerce returns.
+- **Home, Farm Store section → merch photo band:** the same ten photos in the same bento (two lifestyle photos, eight merch cutouts). No links, prices, name plates or hover effects. The eyebrow "The Farm Store" became "Lowell goods"; the heading "Timeless goods. No gimmicks." stays; the lede about shipping direct and the "Shop all 21" link are gone. Each merch photo keeps its product name as alt text.
+- **Footer:** the email sign-up is gone (it never stored anything; its note said sign-ups open with the new store). In its place, the home page's own Notes line and a "Read the notes" link. Columns are Lowell, Help (Contact, @lowellfarms) and Legal (Privacy, Terms, Disclaimer). The bracketed licensee-number placeholder is removed; the WordPress footer carries no licence line either.
+- **Contact:** "Farm Store orders, returns, press, or anything else." became "Questions, press, or anything else."
+- **Policies:** `_src/policies/source-wp-2026-09-30/page-<id>.json` are the raw `/wp-json/wp/v2/pages/<id>` responses (fetched 1 Oct 2026 01:34 UTC). `build.py` renders their `content.rendered` with the site's styles: classes dropped, the top heading level becomes h2 and the next h3, `<hr>` dropped, every word kept. A normalised word diff against WordPress shows 0 words changed. The drafts with 15 `{{To confirm}}` markers and the "Draft: needs legal review" banners are gone.
+- **Self-contained folder:** the brand fonts are copied into `assets/fonts/` at build time (they live at the repo root for the v1 pages), so `v2/` works as a site root. CSS and JS are `.v16`.
+- **Images:** the 31 store-only image files (shop header, two category photos, 13 unused product cutouts) are removed from `img/`; every remaining image is used by a page.
+- Checks and screenshots: `~/work-prompts/2026-09-30/reports/03-website-build-report.md`.
 
 ## Store finder on phones (28 Sep)
 
@@ -213,18 +226,17 @@ Every image v2 uses (sources under `Shared drives/Graphic Design/Photography` un
 | `hero-dusk-*`, `og-v2.jpg` | Home hero, share card | `2025/2025 Events/New York/6-5-25 Lowell Bonfire Party/Thank You Carousel Assets/Lowell x Revelry-15.jpg` | Lowell's own event photography. **Verified 25 Sep:** its EXIF matches the `132A` frames (Canon EOS R6, body serial 122024000392), shot 5 Jun 2025 20:54. Guests are identifiable: **confirm likeness releases**. The right edge of the frame shows a John Deere loader. |
 | `band-bonfire-*` | Photo band (links to Instagram) | Same folder, `Bonfire + Lowell.jpg` (two guests from behind watching the bonfire, the Lowell bull on a jacket) | Lowell's own event collateral: a Photoshop export made 9 Jun 2025 with the other carousel files. It has no EXIF, and a perceptual-hash search of the party's 114 `132A` raws and Daniel's iPhone photos found no match (best 97 of 256 bits). At 1080×1920 it's likely a still from one of Daniel's iPhone videos: **source frame not traced**. No faces shown. |
 | `mo-sunset-*` | People mosaic | Same folder, `Lowell x Revelry-14.jpg` (a hand holding a pre-roll against the sun) | Same as above; no face shown. |
-| `ls-denim-*` | Farm Store tile, Shop "Apparel" | Same party, `Photos/Kwesi's Raw Photos/132A0091.JPG` | Same as above: **confirm likeness releases**. |
+| `ls-denim-*` | Home merch band | Same party, `Photos/Kwesi's Raw Photos/132A0091.JPG` | Same as above: **confirm likeness releases**. |
 | `mo-pass-*`, `mo-smoke-*`, `band-greens-*` | People mosaic, photo band | `35s/House Shoot/Finals/…` (files named `Lowell Farms3421_F.jpg`, `Lowell Farms3934_F.jpg`, `Lowell Farms2803 _F.jpg`) | 2022 commissioned 35's lifestyle shoot with professional models. The filenames say it was shot under Lowell Farms Inc.: **confirm the licence carried over to the brand**. In `mo-pass` the blend name on the pack spine is blurred. |
 | `mo-pool-*`, `band-light-*` | People mosaic, photo band | `35s/2023 Lifestyle Sanitized/LHC_35s_…_Sanitized_010623.jpg` | Same shoot, "sanitized" versions: no blend name is legible. Same licence question. |
-| `ls-luggage-*`, `shop-head-*` | Farm Store tile, Shop header | `2025/Merch/Luggae Photoshoot - Lifestyle and Product Photography/BackPackShootB10.jpg` | In-house 2025 merch shoot. Model release not in Drive: **confirm**. |
-| `ls-backpack-*`, `band-jacket-*` | Shop "Luggage", photo band | Same folder, `BackPackshootA-23.jpg` and the green-jacket frame | Same as above. |
-| `ls-ashtray-*` | Shop "Accessories" | `2026/Packs   Tins/New York/The Outlaw/132A0810.JPG` | In-house product photography of the Signature Metal Ashtray. |
+| `ls-luggage-*` | Home merch band | `2025/Merch/Luggae Photoshoot - Lifestyle and Product Photography/BackPackShootB10.jpg` | In-house 2025 merch shoot. Model release not in Drive: **confirm**. |
+| `band-jacket-*` | Photo band | Same folder, the green-jacket frame | Same as above. |
 | `journal-flower-*` | Journal | `Flower/` (a loose-bud product shot on white) | In-house flower photography. No text in the image. |
 | `hero-pack-*` | Photo band | `Eunbi Ashtray, Hex Pipe Bundles/Ashtray, Pack/Export186576.jpg`. Strain name retouched off the label. | Eunbi accessory shoot, listed in the brief as a replacement source. The ashtray is stone, not a Lowell product, and isn't captioned as one. |
 | `pack-tray-*` | The Pack | `Hero Pack Shots/ne1jQrmg.jpeg` | Not a flagged shoot. Photographer not recorded in Drive: **confirm**. |
 | `journal-box-*` | Journal | `Hero Pack Shots/2S7HO84w.jpeg`, blend name retouched off the label | Same as above: **confirm** |
 | `journal-blend-*` | Journal | `FarmVisit_121421` (iPhone, pre-roll packing) | Dec 2021 visit. Listed in the brief as a replacement source. |
-| `p/*.webp` (21 products) | Farm Store | Product cutouts from the live Shopify catalog CDN | Lowell's own product photography |
+| `p/*.webp` (8 products) | Home merch band | Product cutouts from the live Shopify catalog CDN | Lowell's own product photography |
 
 Images that "confirm" doesn't cover: none. The v1 pages (option1–4) still use the unconfirmed shoots and are unchanged.
 
@@ -267,11 +279,10 @@ Images that "confirm" doesn't cover: none. The v1 pages (option1–4) still use 
 - Several photos show people smoking: the mosaic, the photo band, and the July page's hero did too. Check each launch state's cannabis marketing rules on depicting consumption before the real site goes live.
 
 **Placeholders and unverified copy**
-- Farm Store product pages, cart, checkout and email sign-up are placeholders.
-- Contact, Shipping & returns, Privacy and Terms pages don't exist yet (Phase 2). Their footer links are removed until then.
+- The store (product pages, cart, checkout) and the email sign-up are removed until payment processing is sorted (1 Oct).
 - Copy carried over from v1 and not re-verified:
   - "700+ licensed shops": the live data maps 658 stores plus 47 unplaced CA stores, which is 705
-- The state licence and marketing disclosure line in the footer is still a placeholder.
+- The footer has no state licence or marketing disclosure line (the placeholder was removed on 1 Oct; WordPress had none). Check each state's rules.
 - The age gate stores a yes in the browser (`localStorage`). That's a courtesy gate, not a compliance-grade age check.
 
 **Not built**
@@ -287,10 +298,13 @@ python3 v2/_src/build.py
 
 - `_src/build.py` holds the page markup.
 - `_src/site.css` holds the tokens and styles.
-- `_src/site.js` holds the gate, menu and shop filter.
+- `_src/site.js` holds the gate, menu and ZIP forms.
 - `_src/find.js` holds the locator.
-- `_src/products.json` is the catalog snapshot.
+- `_src/products.json` is the catalog snapshot (the home merch band shows eight of its photos).
 - `_src/articles.json` holds the Notes from the Farm articles: source URL, byline, date, body, and every edit made to the source text.
-- `_src/policies/*.md` holds the policy drafts. They use a small Markdown subset (`##`/`###`, paragraphs, `- ` lists, `**bold**`, `[links](url)`). `{{To confirm: …}}` renders as a highlighted open item.
+- `_src/policies/source-wp-2026-09-30/` holds the WordPress policy pages (raw REST JSON). To change a policy, change the text there (or replace the file with a new export) and rebuild; `DISCLAIMER = False` in `build.py` drops the Disclaimer page and its footer link.
+- `_redirects` (published root) maps the old WordPress URLs; `../netlify.toml` sets the publish folder and headers.
+
+**Go-live switch:** `LIVE = True` in `build.py`, rebuild, commit, push, at the DNS cutover and not before. It removes `noindex` and the preview ribbon, drops "(v2 preview)" from titles, and adds `<link rel="canonical">` on www.lowellherbco.com (which also keeps the GitHub Pages copy out of search results). 404 and 410 stay `noindex`.
 
 **Bump `VER` in `build.py` on every deploy** that changes CSS or JS. It renames the asset files, which is the only cache-bust GitHub Pages honours.

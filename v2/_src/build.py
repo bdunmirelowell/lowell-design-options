@@ -2,33 +2,42 @@
 """Build Golden Hour v2 static pages.
 
 Run from anywhere:  python3 v2/_src/build.py
-Writes v2/index.html, v2/find.html, v2/shop.html, v2/product.html and the
-versioned assets v2/assets/site.<VER>.css|js and find.<VER>.js.
+Writes the pages in v2/ (home, Find Lowell, Notes, contact, privacy, terms,
+disclaimer, 404, 410), robots.txt, sitemap.xml and the versioned assets
+v2/assets/site.<VER>.css|js and find.<VER>.js. v2/ is self-contained: Netlify
+publishes it as the site root (netlify.toml), GitHub Pages serves it at /v2/.
 
 Bump VER on every deploy that changes CSS/JS: GitHub Pages caches by filename
 and ignores ?v= query strings.
+
+The store (shop.html, product.html, shipping-returns.html, cart, Farm Store
+section) was removed for the lowellherbco.com go-live (30 Sep 2026). It is in
+git at 7d32447 (`git show 7d32447:v2/_src/build.py`) for when e-commerce returns.
 """
 import html, json, pathlib, re, shutil
+from html.parser import HTMLParser
 
-VER = "v15"
+VER = "v16"
+# The one go-live switch. False = preview: noindex on every page, the preview ribbon, "(v2 preview)" titles.
+# Set True at the DNS cutover (cutover sheet, step 6), rebuild, commit, push: indexable pages with canonical URLs on www.lowellherbco.com.
+LIVE = False
 SRC = pathlib.Path(__file__).resolve().parent
 OUT = SRC.parent
-BASE = "https://bdunmirelowell.github.io/lowell-design-options/v2/"
+SITE = "https://www.lowellherbco.com/"
+BASE = SITE if LIVE else "https://bdunmirelowell.github.io/lowell-design-options/v2/"
+TAG = "" if LIVE else " (v2 preview)"
 DOORS_URL = "https://brya8385.github.io/find-lowell/data/doors.json"
-PRODUCTS = json.loads((SRC / "products.json").read_text())
+PRODUCTS = json.loads((SRC / "products.json").read_text())   # catalog snapshot; the home merch band shows eight of its photos, no prices
 BY_SLUG = {p["slug"]: p for p in PRODUCTS}
+# Disclaimer page: the live WordPress /disclaimer/ text, verbatim (Bryan, 30 Sep). Its text is about hemp products.
+# False drops the page and its footer link, and _redirects then needs /disclaimer/ pointed elsewhere (see the build report).
+DISCLAIMER = True
 # Notes from the Farm: real Lowell posts (lowellsupply.com/blogs/news, read 25 Sep 2026); every edit is listed in each entry's "edits"
 ARTICLES = json.loads((SRC / "articles.json").read_text())
 esc = html.escape
 
 
-def money(p):
-    v = p["price"]
-    return f"${v:,.0f}" if v == int(v) else f"${v:,.2f}"
-
-
 # ---------------------------------------------------------------- partials
-ICON_CART = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 7h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9L5 7Z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>'
 ICON_MENU = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>'
 ICON_X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'
 ICON_PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>'
@@ -54,7 +63,7 @@ PRESS = [
      "Pot Offenders Wanted: California’s Lowell Herb Co. Seeks to Hire Parolees, June 2018"),
 ]
 
-NAV = [("index.html", "Home", "home"), ("shop.html", "Farm Store", "shop"), ("find.html", "Find Lowell", "find"),
+NAV = [("index.html", "Home", "home"), ("find.html", "Find Lowell", "find"),
        ("index.html#pack", "The Pack", "pack"), ("index.html#notes", "Notes from the Farm", "notes")]
 
 STATES = [("CA", "California"), ("CO", "Colorado"), ("NM", "New Mexico"), ("MO", "Missouri"),
@@ -62,12 +71,16 @@ STATES = [("CA", "California"), ("CO", "Colorado"), ("NM", "New Mexico"), ("MO",
 
 
 def head(title, desc, path, extra=""):
+    # preview: noindex. live: indexable, with a canonical URL on www.lowellherbco.com (also de-duplicates the GitHub Pages copy)
+    robots = (f'<link rel="canonical" href="{SITE}{path}">' if path is not None else '<meta name="robots" content="noindex">') if LIVE \
+        else '<meta name="robots" content="noindex,nofollow">'
+    path = path or ""
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
+{robots}
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <meta property="og:title" content="{esc(title)}">
@@ -79,7 +92,7 @@ def head(title, desc, path, extra=""):
 <meta name="twitter:image" content="{BASE}img/og-v2.jpg">
 <meta name="theme-color" content="#F6EFDF">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23F6EFDF' stroke='%2335291A' stroke-width='3'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='36' fill='%23A5301F'%3EL%3C/text%3E%3C/svg%3E">
-<link rel="preload" href="../assets/fonts/El-Hidrant-Regular.otf" as="font" type="font/otf" crossorigin>
+<link rel="preload" href="assets/fonts/El-Hidrant-Regular.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="assets/site.{VER}.css">
 {extra}</head>
 <body>
@@ -107,14 +120,14 @@ def header(active):
     cur = lambda key: ' aria-current="page"' if key == active else ""
     links = "".join(f'<a href="{h}"{cur(key)}>{label}</a>' for h, label, key in NAV if key not in ("home", "find"))
     sheet_links = "".join(f'<a href="{h}"{cur(key)}>{label}</a>' for h, label, key in NAV)
-    return f"""<aside class="ribbon" aria-label="Preview notice"><span class="long">Design preview for team feedback &middot; not the live site &middot; </span><span class="short">Preview &middot; not the live site &middot; </span><a href="../index.html">All directions</a></aside>
-<header class="site-head" id="top">
+    ribbon = "" if LIVE else """<aside class="ribbon" aria-label="Preview notice"><span class="long">Design preview for team feedback &middot; not the live site &middot; </span><span class="short">Preview &middot; not the live site &middot; </span><a href="../index.html">All directions</a></aside>
+"""
+    return f"""{ribbon}<header class="site-head" id="top">
   <div class="container">
     <a class="wordmark" href="index.html" aria-label="Lowell Herb Co. home">Lowell</a>
     <nav class="nav" aria-label="Main">{links}</nav>
     <div class="head-actions">
       <a class="btn sm" href="find.html"{cur("find")}>{ICON_PIN}Find Lowell</a>
-      <a class="icon-btn" href="shop.html" aria-label="Cart, 0 items (checkout arrives with the Shopify build)">{ICON_CART}<span class="cart-count" aria-hidden="true">0</span></a>
       <button class="icon-btn menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="sheet" aria-label="Open menu">{ICON_MENU}</button>
     </div>
   </div>
@@ -146,23 +159,18 @@ def footer():
     <div class="foot-top">
       <div>
         <h2 class="h2">Notes from the Farm</h2>
-        <p>New goods, restock news and first word on drops. One email a month, at most.</p>
-        <form class="field js-signup" action="#" aria-label="Email sign-up">
-          <label class="sr-only" for="signup-email">Email address</label>
-          <input id="signup-email" type="email" autocomplete="email" placeholder="Your email" required>
-          <button type="submit">Sign up</button>
-        </form>
-        <p class="field-note" aria-live="polite"></p>
+        <p>Sourcing, craft and design, from the people who make Lowell.</p>
+        <a class="link-arrow" href="index.html#notes">Read the notes</a>
       </div>
       <div class="foot-cols">
-        <div><h3>Shop</h3><a href="shop.html">Farm Store</a><a href="shop.html?c=apparel">Apparel</a><a href="shop.html?c=luggage">Luggage</a><a href="shop.html?c=accessories">Accessories</a></div>
         <div><h3>Lowell</h3><a href="find.html">Find Lowell</a><a href="index.html#pack">The Pack</a><a href="index.html#notes">Notes from the Farm</a></div>
-        <div><h3>Help</h3><a href="contact.html">Contact</a><a href="shipping-returns.html">Shipping &amp; returns</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a class="ig-link" href="{IG_URL}" target="_blank" rel="noopener">{ig_icon()}<span>@lowellfarms</span></a></div>
+        <div><h3>Help</h3><a href="contact.html">Contact</a><a class="ig-link" href="{IG_URL}" target="_blank" rel="noopener">{ig_icon()}<span>@lowellfarms</span></a></div>
+        <div><h3>Legal</h3>{"".join(f'<a href="{s}.html">{esc(short)}</a>' for s, _, short in policies())}</div>
       </div>
     </div>
     <ul class="values" aria-label="What we value"><li>Freedom</li><li>Confidence</li><li>No Bullshit</li><li>Generosity</li><li>Originality</li><li>Family</li><li>Good Vibes</li></ul>
     <div class="foot-legal">
-      <p>For adults 21 and over. Nothing sold in the Farm Store contains cannabis. Lowell pre-rolls and flower are sold only through licensed dispensaries, and availability varies by state. [Licensee name and license number shown here per state marketing rules.] &copy; 2026 Lowell Herb Co.</p>
+      <p>For adults 21 and over. Lowell pre-rolls and flower are sold only through licensed dispensaries, and availability varies by state. &copy; 2026 Lowell Herb Co.</p>
       <a class="wordmark" href="#top" aria-label="Back to top">Lowell</a>
     </div>
   </div>
@@ -187,19 +195,16 @@ def pic(name, widths, alt, sizes, cls="", eager=False, jpg=None, style=""):
             f'<img src="{fallback}" alt="{esc(alt)}" {load}{c}{st}></picture>')
 
 
-def pcard(p, sizes="(max-width: 760px) 46vw, 30vw"):
-    sold = not p["avail"]
-    tag = '<span class="tag">Sold out</span>' if sold else f'<span class="price">{money(p)}</span>'
-    return (f'<a class="pcard{" soldout" if sold else ""}" href="product.html?p={p["slug"]}">'
-            f'<div class="im"><img src="img/p/{p["slug"]}-640.webp" srcset="img/p/{p["slug"]}-360.webp 360w, img/p/{p["slug"]}-640.webp 640w" '
-            f'sizes="{sizes}" alt="{esc(p["title"])}" loading="lazy" decoding="async" width="640" height="640"></div>'
-            f'<div class="meta"><h3>{esc(p["title"])}</h3>{tag}</div></a>')
+def mcard(p, sizes="(max-width: 760px) 46vw, 30vw"):
+    """A merch photo, as plain imagery: no link, no name plate, no price (go-live without the store, Bryan 30 Sep)."""
+    return (f'<figure class="mcard">'
+            f'<img src="img/p/{p["slug"]}-640.webp" srcset="img/p/{p["slug"]}-360.webp 360w, img/p/{p["slug"]}-640.webp 640w" '
+            f'sizes="{sizes}" alt="{esc(p["title"])}" loading="lazy" decoding="async" width="640" height="640"></figure>')
 
 
 # ---------------------------------------------------------------- home
-def lstile(name, widths, alt, label, href, sizes, cls=""):
-    return (f'<a class="ls-tile {cls}" href="{href}">{pic(name, widths, alt, sizes)}'
-            f'<span class="ls-cap"><span>{label}</span><span aria-hidden="true">&rarr;</span></span></a>')
+def lsphoto(name, widths, alt, sizes, cls=""):
+    return f'<figure class="ls-tile {cls}">{pic(name, widths, alt, sizes)}</figure>'
 
 
 MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -254,7 +259,6 @@ def page_home():
       <p class="lede">We don&rsquo;t want to reinvent how you smoke, just make it better. From the flower to the pack, nothing is an afterthought.</p>
     </div>
     <div class="hero-ctas">
-      <a class="btn" href="shop.html">Shop the Farm Store</a>
       <a class="btn line" href="find.html">{ICON_PIN}Find Lowell near you</a>
     </div>
   </div>
@@ -294,19 +298,17 @@ def page_home():
   </div>
 </section>
 
-<section class="section" id="shop" aria-labelledby="shop-h">
+<section class="section" id="goods" aria-labelledby="goods-h">
   <div class="container">
-    <div class="sect-head row">
-      <span class="eyebrow red">The Farm Store</span>
-      <h2 class="h2" id="shop-h">Timeless goods. No gimmicks.</h2>
-      <p class="lede">Lowell-designed goods, made to our spec and shipped by us, direct to your door, nationwide. It&rsquo;s the only place we sell direct.</p>
-      <a class="link-arrow" href="shop.html">Shop all {len(PRODUCTS)}</a>
+    <div class="sect-head">
+      <span class="eyebrow red">Lowell goods</span>
+      <h2 class="h2" id="goods-h">Timeless goods. No gimmicks.</h2>
     </div>
     <div class="bento">
-      {lstile("ls-luggage", [640, 1000], "A woman in a green jacket carrying the Wax Canvas Duffel Bag", "Waxed canvas luggage", "shop.html?c=luggage#all", "(max-width: 760px) 92vw, 46vw", "a")}
-      {"".join(pcard(BY_SLUG[s], psz) for s in first4)}
-      {"".join(pcard(BY_SLUG[s], psz) for s in next4)}
-      {lstile("ls-denim", [640, 1000], "Friends at a Lowell party, one wearing the Lowell Denim Jacket with its bull's-head back print", "Apparel", "shop.html?c=apparel#all", "(max-width: 760px) 92vw, 46vw", "b")}
+      {lsphoto("ls-luggage", [640, 1000], "A woman in a green jacket carrying the Wax Canvas Duffel Bag", "(max-width: 760px) 92vw, 46vw", "a")}
+      {"".join(mcard(BY_SLUG[s], psz) for s in first4)}
+      {"".join(mcard(BY_SLUG[s], psz) for s in next4)}
+      {lsphoto("ls-denim", [640, 1000], "Friends at a Lowell party, one wearing the Lowell Denim Jacket with its bull's-head back print", "(max-width: 760px) 92vw, 46vw", "b")}
     </div>
   </div>
 </section>
@@ -377,8 +379,9 @@ def page_home():
 </section>
 </main>
 """
-    out = head("Lowell Herb Co. · Great American Cannabis (v2 preview)",
-               "Golden Hour v2: the new lowellherbco.com homepage, with the Farm Store and a store locator for all eight Lowell states.",
+    out = head(f"Lowell Herb Co. · Great American Cannabis{TAG}",
+               "Golden Hour v2: the new lowellherbco.com homepage, with a store locator for all eight Lowell states." if not LIVE else
+               "We don’t want to reinvent how you smoke, just make it better. From the flower to the pack, nothing is an afterthought.",   # the hero line, verbatim
                "") + gate() + header("home") + body + footer() + tail()
     (OUT / "index.html").write_text(out)
 
@@ -411,41 +414,80 @@ def page_article(a):
 </section>
 </main>
 """
-    out = head(f"{a['title']} · Notes from the Farm · Lowell Herb Co. (v2 preview)", a["teaser"], article_href(a)) + gate() + header("notes") + body + footer() + tail()
+    out = head(f"{a['title']} · Notes from the Farm · Lowell Herb Co.{TAG}", a["teaser"], article_href(a)) + gate() + header("notes") + body + footer() + tail()
     (OUT / article_href(a)).write_text(out)
 
 
-# ---------------------------------------------------------------- contact + policy drafts
+# ---------------------------------------------------------------- contact + policies
 CONTACT_EMAIL = "admin@lowellherbco.com"   # Bryan, 25 Sep 2026: email only, no form, no address or phone
-POLICIES = [("privacy", "Privacy Policy"), ("shipping-returns", "Shipping & Returns"), ("terms", "Terms of Service")]
+# The policies are the live WordPress pages, verbatim (Bryan, 30 Sep 2026): the raw /wp-json/wp/v2/pages/<id> responses,
+# fetched 1 Oct 2026 01:34 UTC, are in policies/source-wp-2026-09-30/. Only the markup is changed (classes dropped,
+# headings re-levelled, <hr> dropped); every word is WordPress's. The old {{To confirm}} drafts are in git at 7d32447.
+WP_SRC = SRC / "policies" / "source-wp-2026-09-30"
+POLICY_PAGES = [("privacy", 3, "Privacy"), ("terms", 362, "Terms"), ("disclaimer", 924, "Disclaimer")]   # slug, WordPress page id, footer label
+WP_LINKS = {"/privacy-policy/": "privacy.html", "/terms-of-service/": "terms.html", "/disclaimer/": "disclaimer.html"}
 
 
-def inline(t):
-    t = esc(t, quote=False)
-    t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
-    t = re.sub(r"\{\{(.+?)\}\}", r'<mark class="todo">[\1]</mark>', t)   # open items for Bryan / counsel
-    return re.sub(r"\[([^\]]+)\]\(([^)]+)\)", lambda m: f'<a class="link" href="{m.group(2)}">{m.group(1)}</a>', t)
+def policies():
+    """[(slug, WordPress JSON, footer label)] for the policy pages this build publishes."""
+    return [(slug, json.loads((WP_SRC / f"page-{pid}.json").read_text()), short)
+            for slug, pid, short in POLICY_PAGES if slug != "disclaimer" or DISCLAIMER]
 
 
-def md(text):
-    """The small Markdown subset the policy drafts use: ## / ### headings, paragraphs, '- ' lists, **bold**, [links](url)."""
-    out, para, items = [], [], []
-    def flush():
-        if para: out.append(f"<p>{inline(' '.join(para))}</p>"); para.clear()
-        if items: out.append("<ul>" + "".join(f"<li>{inline(i)}</li>" for i in items) + "</ul>"); items.clear()
-    for line in text.splitlines():
-        l = line.strip()
-        if not l: flush(); continue
-        if l.startswith("### "): flush(); out.append(f'<h3>{inline(l[4:])}</h3>'); continue
-        if l.startswith("## "):
-            flush(); h = l[3:]; out.append(f'<h2 id="{re.sub(r"[^a-z0-9]+", "-", h.lower()).strip("-")}">{inline(h)}</h2>'); continue
-        if l.startswith("- "):
-            if para: flush()
-            items.append(l[2:]); continue
-        if items: flush()
-        para.append(l)
-    flush()
-    return "".join(out)
+class WPClean(HTMLParser):
+    """WordPress block HTML -> the site's .doc markup. Keeps p, lists, headings, strong/em, br and links; drops classes,
+    styles, <hr> and any other tag (its text is kept). The top heading level in the page becomes h2, the next h3."""
+    KEEP = {"p", "ul", "ol", "li", "strong", "b", "em", "i", "br"}
+
+    def __init__(self, levels):
+        super().__init__(convert_charrefs=True)
+        self.map = {f"h{n}": f"h{i + 2}" for i, n in enumerate(levels)}
+        self.out, self.stack = [], []
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if tag in self.map:
+            self.out.append(f"<{self.map[tag]}>"); self.stack.append(self.map[tag])
+        elif tag == "a":
+            href = a.get("href")
+            if href:
+                for old, new in WP_LINKS.items():
+                    if re.fullmatch(rf"https?://(www\.)?lowellherbco\.com{re.escape(old)}?", href):
+                        href = new
+                self.out.append(f'<a class="link" href="{esc(href)}">'); self.stack.append("a")
+            else:
+                self.stack.append(None)   # an <a> with no href is plain text on the WordPress page; keep it plain
+        elif tag == "br":
+            self.out.append("<br>")
+        elif tag in self.KEEP:
+            self.out.append(f"<{tag}>"); self.stack.append(tag)
+        else:
+            self.stack.append(None)
+
+    def handle_endtag(self, tag):
+        if tag == "br" or not self.stack:
+            return
+        t = self.stack.pop()
+        if t:
+            self.out.append(f"</{t}>")
+
+    def handle_startendtag(self, tag, attrs):
+        if tag == "br":
+            self.out.append("<br>")
+
+    def handle_data(self, data):
+        self.out.append(esc(data, quote=False))
+
+
+def wp_html(rendered):
+    levels = sorted({int(n) for n in re.findall(r"<h([1-6])[\s>]", rendered)})
+    w = WPClean(levels); w.feed(rendered); w.close()
+    h = re.sub(r"\s*\n\s*", "\n", "".join(w.out)).strip()
+    h = re.sub(r"<p>\s*</p>", "", h)
+    def hid(m):   # heading anchors, e.g. #section-4-cookies
+        slug = re.sub(r"[^a-z0-9]+", "-", html.unescape(re.sub(r"<[^>]+>", "", m.group(2))).lower()).strip("-")[:60]
+        return f'<{m.group(1)} id="{slug}">{m.group(2)}</{m.group(1)}>'
+    return re.sub(r"<(h[23])>(.*?)</\1>", hid, h, flags=re.S)
 
 
 def page_contact():
@@ -461,7 +503,7 @@ def page_contact():
   <div class="container contact-grid">
     <div class="contact-card">
       <h2 class="h3">Email us</h2>
-      <p class="small">Farm Store orders, returns, press, or anything else.</p>
+      <p class="small">Questions, press, or anything else.</p>
       <a class="contact-mail" href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>
     </div>
     <div class="contact-card">
@@ -478,102 +520,63 @@ def page_contact():
 </section>
 </main>
 """
-    out = head("Contact · Lowell Herb Co. (v2 preview)", "How to reach Lowell Herb Co.", "contact.html") + gate() + header("contact") + body + footer() + tail()
+    out = head(f"Contact · Lowell Herb Co.{TAG}", "How to reach Lowell Herb Co.", "contact.html") + gate() + header("contact") + body + footer() + tail()
     (OUT / "contact.html").write_text(out)
 
 
-def page_policy(slug, title):
-    text = (SRC / "policies" / f"{slug}.md").read_text()
-    others = " &middot; ".join(f'<a class="link" href="{s}.html">{esc(t)}</a>' for s, t in POLICIES if s != slug)
+def page_policy(slug, wp, all_pages):
+    title = html.unescape(wp["title"]["rendered"])
+    others = " &middot; ".join(f'<a class="link" href="{s}.html">{esc(html.unescape(w["title"]["rendered"]))}</a>' for s, w, _ in all_pages if s != slug)
     body = f"""<main id="main">
 <section class="page-head" aria-labelledby="doc-h">
   <div class="container">
     <p class="crumbs"><a href="index.html">Home</a> / {esc(title)}</p>
     <h1 class="display" id="doc-h">{esc(title)}</h1>
-    <div class="notice draft" role="note"><span aria-hidden="true">&#9888;</span><p><strong>Draft: needs legal review before launch.</strong> This is a working draft for the design preview. It is not in effect.</p></div>
   </div>
 </section>
 <section class="section">
-  <div class="container doc">
-    <p class="doc-meta">Last updated: draft of 25 September 2026</p>
-    {md(text)}
+  <div class="container doc wp" data-wp-id="{wp["id"]}" data-wp-modified="{wp["modified"]}">
+<div class="wp-text">
+{wp_html(wp["content"]["rendered"])}
+</div>
     <p class="doc-more small">Also see: {others}</p>
   </div>
 </section>
 </main>
 """
-    out = head(f"{title} (draft) · Lowell Herb Co. (v2 preview)", f"Lowell Herb Co. {title}: draft for legal review.", f"{slug}.html") + gate() + header("help") + body + footer() + tail()
+    out = head(f"{title} · Lowell Herb Co.{TAG}", f"Lowell Herb Co. {title}.", f"{slug}.html") + gate() + header("legal") + body + footer() + tail()
     (OUT / f"{slug}.html").write_text(out)
 
 
-# ---------------------------------------------------------------- shop
-def page_shop():
-    cats = [("apparel", "Apparel", "ls-denim", "Friends at a Lowell party, one in the Lowell Denim Jacket"),
-            ("luggage", "Luggage", "ls-backpack", "A man wearing the Waxed Canvas Backpack"),
-            ("accessories", "Accessories", "ls-ashtray", "The Signature Metal Ashtray with a pre-roll, on a cinder block beside work gloves")]
-    counts = {c: sum(1 for p in PRODUCTS if p["cat"].lower() == c) for c, _, _, _ in cats}
-    tiles = "".join(
-        f'<a class="cat" href="shop.html?c={c}#all" data-cat="{c}"><img src="img/{img}-640.webp" alt="{esc(alt)}" loading="lazy" width="640" height="800">'
-        f'<span class="cat-label"><span class="h3">{label}</span><span class="mono">{counts[c]} items &rarr;</span></span></a>' for c, label, img, alt in cats)
-    order = {"Apparel": 0, "Luggage": 1, "Accessories": 2}
-    prods = sorted(PRODUCTS, key=lambda p: (not p["avail"], order[p["cat"]], -p["price"]))
-    grid = "".join(pcard(p, "(max-width: 760px) 46vw, (max-width: 1000px) 30vw, 22vw").replace('<a class="pcard', f'<a data-cat="{p["cat"].lower()}" class="pcard', 1) for p in prods)
-    chips = f'<button class="chip" type="button" data-filter="all" aria-pressed="true">All <span class="mono">{len(PRODUCTS)}</span></button>' + "".join(
-        f'<button class="chip" type="button" data-filter="{c}" aria-pressed="false">{label} <span class="mono">{counts[c]}</span></button>' for c, label, _, _ in cats)
+# ---------------------------------------------------------------- 404 and 410 (Netlify serves them at any path, so links are root-absolute)
+def absolutize(page):
+    """Relative href/src/srcset -> root-absolute ("/assets/...", "/find.html"), for pages Netlify serves at any URL."""
+    rel = lambda u: u if re.match(r"(?:[a-z]+:|/|#)", u) else "/" + u
+    page = re.sub(r'\b(href|src)="([^"]*)"', lambda m: f'{m.group(1)}="{rel(m.group(2))}"', page)
+    return re.sub(r'\bsrcset="([^"]*)"', lambda m: 'srcset="' + ", ".join(rel(x.strip()) for x in m.group(1).split(",")) + '"', page)
+
+
+def page_gone(code, h1, text):
     body = f"""<main id="main">
-<section class="shop-hero on-photo" aria-labelledby="shop-h">
-  <picture><source type="image/webp" srcset="img/shop-head-1440.webp 1440w, img/shop-head-2200.webp 2200w" sizes="100vw">
-    <img src="img/shop-head-1600.jpg" alt="A woman in a green jacket with the Wax Canvas Duffel Bag" fetchpriority="high"></picture>
+<section class="page-head err-head" aria-labelledby="err-h">
   <div class="container">
-    <p class="crumbs"><a href="index.html">Home</a> / Farm Store</p>
-    <span class="eyebrow">The Farm Store</span>
-    <h1 class="display" id="shop-h">Timeless goods. No&nbsp;gimmicks.</h1>
-    <p class="lede">Lowell-designed goods, made to our spec and shipped by us, direct to your door, nationwide. Nothing here contains cannabis.</p>
-  </div>
-</section>
-<section class="shop-cats" aria-label="Shop by category">
-  <div class="container"><div class="cats">{tiles}</div></div>
-</section>
-<section class="section sand" id="all" aria-labelledby="all-h">
-  <div class="container">
-    <h2 class="sr-only" id="all-h">All goods</h2>
-    <div class="shop-bar" role="group" aria-label="Filter by category">{chips}<span class="count" id="shop-count" aria-live="polite">{len(PRODUCTS)} goods</span></div>
-    <div class="products four" id="shop-grid">{grid}</div>
-    <div class="notice" style="margin-top:var(--s7)"><span aria-hidden="true">&#9432;</span><p><strong>Preview.</strong> Products and prices are the live Farm Store catalog (lowell-farms.myshopify.com, 23 Sep 2026). Product pages, sizes and checkout come with the Shopify theme build.</p></div>
+    <span class="eyebrow red">{code}</span>
+    <h1 class="display" id="err-h">{h1}</h1>
+    <p class="lede">{text}</p>
+    <div class="err-ctas"><a class="btn" href="index.html">Go to the home page</a><a class="btn line" href="find.html">{ICON_PIN}Find Lowell near you</a></div>
   </div>
 </section>
 </main>
 """
-    out = head("Farm Store · Lowell Herb Co. (v2 preview)", "Lowell-designed apparel, waxed-canvas luggage and smoke accessories, shipped direct.",
-               "shop.html") + gate() + header("shop") + body + footer() + tail()
-    (OUT / "shop.html").write_text(out)
+    out = head(f"{h1} · Lowell Herb Co.{TAG}", text, None) + gate() + header("") + body + footer() + tail()
+    (OUT / f"{code}.html").write_text(absolutize(out))
 
 
-# ---------------------------------------------------------------- product placeholder
-def page_product():
-    data = json.dumps({p["slug"]: {"t": p["title"], "p": money(p), "c": p["cat"], "a": p["avail"]} for p in PRODUCTS}, separators=(",", ":"))
-    body = f"""<main id="main">
-<section class="section">
-  <div class="container">
-    <p class="crumbs" style="margin-bottom:var(--s6)"><a href="index.html">Home</a> / <a href="shop.html">Farm Store</a> / <span id="pd-crumb">Product</span></p>
-    <div class="pdp">
-      <div class="im"><img id="pd-img" src="img/p/lowell-denim-jacket-640.webp" alt="" width="640" height="640"></div>
-      <div class="info">
-        <span class="eyebrow red" id="pd-cat">Farm Store</span>
-        <h1 class="h2" id="pd-title">Product</h1>
-        <p class="price" id="pd-price"></p>
-        <div><button class="btn" type="button" disabled aria-disabled="true" style="opacity:.55;cursor:not-allowed">Add to cart</button></div>
-        <div class="notice"><span aria-hidden="true">&#9432;</span><p><strong>Placeholder page.</strong> Product detail, sizes, photos and checkout come with the Shopify theme build. This page only confirms the Farm Store links resolve.</p></div>
-        <a class="link-arrow" href="shop.html">Back to the Farm Store</a>
-      </div>
-    </div>
-  </div>
-</section>
-</main>
-<script type="application/json" id="catalog">{data}</script>
-"""
-    out = head("Product · Farm Store · Lowell Herb Co. (v2 preview)", "Farm Store product placeholder.", "product.html") + gate() + header("shop") + body + footer() + tail()
-    (OUT / "product.html").write_text(out)
+# ---------------------------------------------------------------- robots.txt + sitemap.xml (served from the Netlify root)
+def seo_files(pages):
+    (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}sitemap.xml\n")
+    urls = "".join(f"  <url><loc>{SITE}{'' if p == 'index.html' else p}</loc></url>\n" for p in pages)
+    (OUT / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
 
 
 # ---------------------------------------------------------------- find lowell
@@ -634,10 +637,13 @@ def page_find():
 """
     scripts = ('<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>\n'
                f'<script src="assets/find.{VER}.js"></script>\n')
-    out = head("Find Lowell · Store locator · Lowell Herb Co. (v2 preview)",
+    out = head(f"Find Lowell · Store locator · Lowell Herb Co.{TAG}",
                "Find licensed dispensaries carrying Lowell pre-rolls near you, in California, Colorado, New Mexico, Missouri, Illinois, Ohio, New York and New Jersey.",
                "find.html", extra) + gate() + header("find") + body + footer() + tail(scripts)
     (OUT / "find.html").write_text(out)
+
+
+FONTS = ["El-Hidrant-Regular.otf", "GothamCondensed-Book.otf", "GothamCondensed-Medium.otf", "GothamCondensed-Bold.otf", "Nitti-Normal.ttf"]
 
 
 def assets():
@@ -648,14 +654,27 @@ def assets():
     shutil.copy(SRC / "site.css", a / f"site.{VER}.css")
     shutil.copy(SRC / "site.js", a / f"site.{VER}.js")
     shutil.copy(SRC / "find.js", a / f"find.{VER}.js")
+    # the brand fonts live at the repo root (assets/fonts, shared with the v1 pages); v2 carries its own copy so it can be
+    # published as a site root on Netlify, where ../ above v2 doesn't exist
+    (a / "fonts").mkdir(exist_ok=True)
+    for f in FONTS:
+        shutil.copy(OUT.parent / "assets" / "fonts" / f, a / "fonts" / f)
 
 
 if __name__ == "__main__":
+    for gone in ("shop.html", "product.html", "shipping-returns.html"):   # the store pages, removed for the go-live
+        (OUT / gone).unlink(missing_ok=True)
+    if not DISCLAIMER:
+        (OUT / "disclaimer.html").unlink(missing_ok=True)
     assets()
-    page_home(); page_shop(); page_product(); page_find()
+    page_home(); page_find()
     for a in ARTICLES:
         page_article(a)
     page_contact()
-    for slug, title in POLICIES:
-        page_policy(slug, title)
-    print("built", VER, sorted(p.name for p in OUT.glob("*.html")))
+    pol = policies()
+    for slug, wp, _ in pol:
+        page_policy(slug, wp, pol)
+    page_gone(404, "This page isn’t here.", "The page you’re looking for has moved or no longer exists.")
+    page_gone(410, "This page is gone.", "It was removed from lowellherbco.com and isn’t coming back.")
+    seo_files(["index.html", "find.html"] + [article_href(a) for a in ARTICLES] + ["contact.html"] + [f"{s}.html" for s, _, _ in pol])
+    print("built", VER, "LIVE" if LIVE else "preview", sorted(p.name for p in OUT.glob("*.html")))
