@@ -16,7 +16,10 @@
 /store-locator-2           /find.html           301
 /privacy-policy            /privacy.html        301
 /terms-of-service          /terms.html          301
-/disclaimer                /disclaimer.html     301
+# Disclaimer page dropped (Bryan, 8 Oct 2026): the old URL and the dropped page's own URL go to the Terms.
+# /disclaimer also matches /disclaimer/ (trailing slash ignored); /terms.html is a page, so neither rule chains.
+/disclaimer                /terms.html          301
+/disclaimer.html           /terms.html          301
 /blog                      /#notes              301
 /blog-preview-page         /#notes              301
 /catalogue                 /#pack               301

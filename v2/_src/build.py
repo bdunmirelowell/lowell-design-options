@@ -3,7 +3,7 @@
 
 Run from anywhere:  python3 v2/_src/build.py
 Writes the pages in v2/ (home, Find Lowell, Notes, contact, privacy, terms,
-disclaimer, 404, 410), robots.txt, sitemap.xml and the versioned assets
+404, 410), robots.txt, sitemap.xml and the versioned assets
 v2/assets/site.<VER>.css|js and find.<VER>.js. v2/ is self-contained: Netlify
 publishes it as the site root (netlify.toml), GitHub Pages serves it at /v2/.
 
@@ -19,7 +19,7 @@ from html.parser import HTMLParser
 
 VER = "v16"
 # The one go-live switch. False = preview: noindex on every page, the preview ribbon, "(v2 preview)" titles.
-# Set True at the DNS cutover (cutover sheet, step 6), rebuild, commit, push: indexable pages with canonical URLs on www.lowellherbco.com.
+# Set True at cutover sheet step 4 (after the netlify.app checks, before the DNS change), rebuild, commit, push: indexable pages with canonical URLs on www.lowellherbco.com.
 LIVE = False
 SRC = pathlib.Path(__file__).resolve().parent
 OUT = SRC.parent
@@ -29,9 +29,10 @@ TAG = "" if LIVE else " (v2 preview)"
 DOORS_URL = "https://brya8385.github.io/find-lowell/data/doors.json"
 PRODUCTS = json.loads((SRC / "products.json").read_text())   # catalog snapshot; the home merch band shows eight of its photos, no prices
 BY_SLUG = {p["slug"]: p for p in PRODUCTS}
-# Disclaimer page: the live WordPress /disclaimer/ text, verbatim (Bryan, 30 Sep). Its text is about hemp products.
-# False drops the page and its footer link, and _redirects then needs /disclaimer/ pointed elsewhere (see the build report).
-DISCLAIMER = True
+# Disclaimer page: the WordPress /disclaimer/ text is about hemp products. Dropped (Bryan, 8 Oct 2026): no
+# disclaimer.html, no footer, "Also see:" or sitemap entry, and _redirects 301s /disclaimer, /disclaimer/ and
+# /disclaimer.html to /terms.html. True would bring the page back verbatim (and _redirects would need changing back).
+DISCLAIMER = False
 # Notes from the Farm: real Lowell posts (lowellsupply.com/blogs/news, read 25 Sep 2026); every edit is listed in each entry's "edits"
 ARTICLES = json.loads((SRC / "articles.json").read_text())
 esc = html.escape
@@ -301,7 +302,7 @@ def page_home():
 <section class="section" id="goods" aria-labelledby="goods-h">
   <div class="container">
     <div class="sect-head">
-      <span class="eyebrow red">Lowell goods</span>
+      <span class="eyebrow red">Farm Store</span>
       <h2 class="h2" id="goods-h">Timeless goods. No gimmicks.</h2>
     </div>
     <div class="bento">
@@ -422,16 +423,45 @@ def page_article(a):
 CONTACT_EMAIL = "admin@lowellherbco.com"   # Bryan, 25 Sep 2026: email only, no form, no address or phone
 # The policies are the live WordPress pages, verbatim (Bryan, 30 Sep 2026): the raw /wp-json/wp/v2/pages/<id> responses,
 # fetched 1 Oct 2026 01:34 UTC, are in policies/source-wp-2026-09-30/. Only the markup is changed (classes dropped,
-# headings re-levelled, <hr> dropped); every word is WordPress's. The old {{To confirm}} drafts are in git at 7d32447.
+# headings re-levelled, <hr> dropped); every word is WordPress's except POLICY_OVERRIDES below. The old {{To confirm}} drafts are in git at 7d32447.
 WP_SRC = SRC / "policies" / "source-wp-2026-09-30"
 POLICY_PAGES = [("privacy", 3, "Privacy"), ("terms", 362, "Terms"), ("disclaimer", 924, "Disclaimer")]   # slug, WordPress page id, footer label
-WP_LINKS = {"/privacy-policy/": "privacy.html", "/terms-of-service/": "terms.html", "/disclaimer/": "disclaimer.html"}
+WP_LINKS = {"/privacy-policy/": "privacy.html", "/terms-of-service/": "terms.html",
+            "/disclaimer/": "disclaimer.html" if DISCLAIMER else "terms.html"}
+# Wording overrides on the verbatim WordPress text: Bryan, 8 Oct 2026. Applied at render time, so the saved JSON in
+# source-wp-2026-09-30/ stays exactly as WordPress served it. Each `old` must occur exactly once in that page's
+# content.rendered or the build stops before writing any page, so an override can never silently do nothing
+# (for example after the JSON is replaced with a new export).
+POLICY_OVERRIDES = {
+    "terms": [   # Section 8, governing law
+        ("the laws of [Insert State], United States.", "the laws of the State of New York, United States."),
+    ],
+    "privacy": [   # Section 8, children's privacy (the site's age gate is 21+); the contact address stays as it is
+        ("not intended for individuals under the age of 18.", "not intended for individuals under the age of 21."),
+    ],
+}
+
+
+def overridden(slug, wp):
+    """The WordPress JSON with POLICY_OVERRIDES[slug] applied to content.rendered; stops the build if an `old` isn't there exactly once."""
+    text = wp["content"]["rendered"]
+    for old, new in POLICY_OVERRIDES.get(slug, []):
+        n = text.count(old)
+        if n != 1:
+            raise SystemExit(f"build.py: POLICY_OVERRIDES[{slug!r}] expects {old!r} exactly once in WordPress page {wp['id']}, "
+                             f"found it {n} times. Nothing past this point was built.")
+        text = text.replace(old, new)
+    return {**wp, "content": {**wp["content"], "rendered": text}}
 
 
 def policies():
-    """[(slug, WordPress JSON, footer label)] for the policy pages this build publishes."""
-    return [(slug, json.loads((WP_SRC / f"page-{pid}.json").read_text()), short)
-            for slug, pid, short in POLICY_PAGES if slug != "disclaimer" or DISCLAIMER]
+    """[(slug, WordPress JSON with Bryan's overrides applied, footer label)] for the policy pages this build publishes."""
+    pages = [(slug, overridden(slug, json.loads((WP_SRC / f"page-{pid}.json").read_text())), short)
+             for slug, pid, short in POLICY_PAGES if slug != "disclaimer" or DISCLAIMER]
+    unused = set(POLICY_OVERRIDES) - {slug for slug, _, _ in pages}
+    if unused:
+        raise SystemExit(f"build.py: POLICY_OVERRIDES names pages this build doesn't publish: {sorted(unused)}")
+    return pages
 
 
 class WPClean(HTMLParser):
@@ -662,6 +692,7 @@ def assets():
 
 
 if __name__ == "__main__":
+    pol = policies()   # first, so a policy override that no longer matches stops the build before any file is touched
     for gone in ("shop.html", "product.html", "shipping-returns.html"):   # the store pages, removed for the go-live
         (OUT / gone).unlink(missing_ok=True)
     if not DISCLAIMER:
@@ -671,7 +702,6 @@ if __name__ == "__main__":
     for a in ARTICLES:
         page_article(a)
     page_contact()
-    pol = policies()
     for slug, wp, _ in pol:
         page_policy(slug, wp, pol)
     page_gone(404, "This page isn’t here.", "The page you’re looking for has moved or no longer exists.")
