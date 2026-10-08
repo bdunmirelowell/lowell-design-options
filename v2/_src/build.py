@@ -20,7 +20,7 @@ from html.parser import HTMLParser
 VER = "v16"
 # The one go-live switch. False = preview: noindex on every page, the preview ribbon, "(v2 preview)" titles.
 # Set True at cutover sheet step 4 (after the netlify.app checks, before the DNS change), rebuild, commit, push: indexable pages with canonical URLs on www.lowellherbco.com.
-LIVE = False
+LIVE = True
 SRC = pathlib.Path(__file__).resolve().parent
 OUT = SRC.parent
 SITE = "https://www.lowellherbco.com/"
